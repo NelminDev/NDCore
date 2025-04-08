@@ -1,7 +1,9 @@
-name: Nelmin Plugin Core
-version: '1.0'
-main: dev.nelmin.minecraft.NelminPluginCore
+name: NDCore
+version: '${version}'
+main: dev.nelmin.spigot.NDCore
 api-version: '1.21'
 authors: [ Nelmin ]
 description: The Core of all Plugins by Nelmin
 website: https://nelmin.dev/projects/minecraft/core
+libraries:
+  - org.reflections:reflections:0.10.2

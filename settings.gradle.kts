@@ -1,1 +1,1 @@
-rootProject.name = "Nelmin Plugin Core"
+rootProject.name = "NDCore"

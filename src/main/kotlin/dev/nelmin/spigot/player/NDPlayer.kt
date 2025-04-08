@@ -1,4 +1,5 @@
 package dev.nelmin.spigot.player
 
-class NDPlayer {
-}
+import org.bukkit.entity.Player
+
+abstract class NDPlayer : Player
