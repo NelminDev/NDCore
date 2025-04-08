@@ -1,0 +1,58 @@
+# NDCore v1.0.0 - Initial Release
+
+## 🎯 Release Overview
+
+First stable release of NDCore, providing essential functionality for nelmin's plugin ecosystem. This core dependency plugin establishes the foundation for future plugin development.
+
+## 🚀 Key Features
+
+- **Configuration System**:
+- Centralized configuration management
+- Default prefix system with customization support
+- YAML configuration integration
+
+- **Core Utilities**:
+- Essential utility functions for plugin development
+- Integration with Lumina logging system
+- Streamlined dependency management
+
+## 🛠️ Technical Components
+
+- **Framework Features**:
+- Lightweight plugin architecture
+- Zero-configuration design
+- Efficient resource management
+- Cross-plugin compatibility support
+
+## 📦 Installation
+
+1. Download `NDCore.jar`
+2. Place in your server's `plugins` folder
+3. Restart your server
+4. Plugin will initialize automatically as a dependency
+
+## 💻 System Requirements
+
+- Java 21 or higher
+- Bukkit/Spigot/Paper server
+- No additional plugin dependencies required
+
+## 📝 For Developers
+
+- Add as dependency in plugin.yml:
+```yaml
+depend: [NDCore]
+```
+- [NDCConfig.kt](src/main/kotlin/dev/nelmin/spigot/NDCConfig.kt) for configuration utilities
+- Integrates [Lumina](https://github.com/NelminDev/Lumina) logging system
+
+## 📌 Important Notes
+
+- This is a dependency-only plugin
+- No standalone features included
+- Required for all nelmin plugins
+- Licensed under GPL-3.0
+
+## 🔄 Future Updates
+
+Future versions will expand utility functions and enhance cross-plugin integration capabilities while maintaining the zero-configuration approach.
