@@ -53,17 +53,17 @@ jobs:
       - name: Generate checksum
         id: hash_calculation
         run: |
-          SHA=$(sha256sum build/libs/PwnedCraft.jar | cut -d ' ' -f 1)
+          SHA=$(sha256sum build/libs/NDCore.jar | cut -d ' ' -f 1)
           echo "hash=$SHA" >> $GITHUB_OUTPUT
-          echo "$SHA" > build/libs/PwnedCraft.jar.sha256
+          echo "$SHA" > build/libs/NDCore.jar.sha256
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PwnedCraft-${{ github.run_id }}
+          name: NDCore-${{ github.run_id }}
           path: |
-            build/libs/PwnedCraft.jar
-            build/libs/PwnedCraft.jar.sha256
+            build/libs/NDCore.jar
+            build/libs/NDCore.jar.sha256
 
 release:
   needs: [check_should_run, build]
@@ -79,13 +79,13 @@ release:
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
-          name: PwnedCraft-${{ github.run_id }}
+          name: NDCore-${{ github.run_id }}
           path: build/libs
 
       - name: Validate checksum
         run: |
           cd build/libs
-          echo "$(cat PwnedCraft.jar.sha256)  PwnedCraft.jar" | sha256sum -c
+          echo "$(cat NDCore.jar.sha256)  NDCore.jar" | sha256sum -c
 
       - name: Import GPG Key
         id: import_gpg
@@ -104,16 +104,16 @@ release:
               --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
               --detach-sign --armor \
               --local-user ${{ secrets.GPG_KEY_ID }} \
-              --output build/libs/PwnedCraft.jar.asc \
-              build/libs/PwnedCraft.jar
+              --output build/libs/NDCore.jar.asc \
+              build/libs/NDCore.jar
 
-          gpg --verify build/libs/PwnedCraft.jar.asc build/libs/PwnedCraft.jar
+          gpg --verify build/libs/NDCore.jar.asc build/libs/NDCore.jar
 
       - name: Prepare Release Assets
         run: |
           mkdir -p release_files
           cp public-gpg-key.asc release_files/
-          cp build/libs/PwnedCraft.* release_files/
+          cp build/libs/NDCore.* release_files/
 
       - name: Extract Version
         id: version
@@ -162,11 +162,11 @@ release:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          name: 🎮 PwnedCraft v${{ steps.version.outputs.version }}
+          name: 🎮 NDCore v${{ steps.version.outputs.version }}
           body_path: release_notes.md
           files: |
-            release_files/PwnedCraft.jar
-            release_files/PwnedCraft.jar.asc
+            release_files/NDCore.jar
+            release_files/NDCore.jar.asc
             release_files/public-gpg-key.asc
           draft: false
           prerelease: false
