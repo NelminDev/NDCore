@@ -18,7 +18,7 @@ jobs:
   check_should_run:
     runs-on: ubuntu-latest
     outputs:
-      should_run: ${{ github.event_name == 'workflow_dispatch' || (contains(github.event.head_commit.message, 'release(') && endsWith(github.event.head_commit.message, ')')) }}
+      should_run: ${{ github.event_name == 'workflow_dispatch' || (startsWith(github.event.head_commit.message, 'release(') && endsWith(github.event.head_commit.message, ')')) }}
     steps:
       - run: echo "Checking if workflow should run"
 

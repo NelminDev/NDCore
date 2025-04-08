@@ -40,6 +40,7 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("shaded")
+        archiveVersion.set("")
         dependencies {
             exclude(dependency("io.papermc.paper:paper-api:.*"))
         }
