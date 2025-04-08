@@ -53,15 +53,15 @@ jobs:
       - name: Generate checksum
         run: |
           cd build/libs
-          sha256sum NDCore.jar > NDCore.jar.sha25
+          sha256sum NDCore-shaded.jar > NDCore-shaded.jar.sha25
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: NDCore-${{ github.run_id }}
           path: |
-            build/libs/NDCore.jar
-            build/libs/NDCore.jar.sha256
+            build/libs/NDCore-shaded.jar
+            build/libs/NDCore-shaded.jar.sha256
 
   release:
     needs: [check_should_run, build]
@@ -83,7 +83,7 @@ jobs:
       - name: Validate checksum
         run: |
           cd build/libs
-          sha256sum -c NDCore.jar.sha256
+          sha256sum -c NDCore-shaded.jar.sha256
 
       - name: Import GPG Key
         id: import_gpg
@@ -102,10 +102,10 @@ jobs:
               --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
               --detach-sign --armor \
               --local-user ${{ secrets.GPG_KEY_ID }} \
-              --output build/libs/NDCore.jar.asc \
-              build/libs/NDCore.jar
+              --output build/libs/NDCore-shaded.jar.asc \
+              build/libs/NDCore-shaded.jar
 
-          gpg --verify build/libs/NDCore.jar.asc build/libs/NDCore.jar
+          gpg --verify build/libs/NDCore-shaded.jar.asc build/libs/NDCore-shaded.jar
 
       - name: Prepare Release Assets
         run: |
@@ -126,6 +126,12 @@ jobs:
 
       - name: Prepare Release Notes
         run: cat "descriptions/${{ steps.version.outputs.version }}.txt" > release_notes.md
+
+      - name: Prepare release files
+        run: |
+          cd release_files
+          mv NDCore-shaded.jar NDCore.jar
+          sha256sum NDCore.jar > NDCore.jar.sha256    
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
