@@ -26,10 +26,6 @@ jobs:
     needs: check_should_run
     if: needs.check_should_run.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-
-    outputs:
-      jar_hash: ${{ steps.hash_calculation.outputs.hash }}
-
     steps:
       - uses: actions/checkout@v4
 
@@ -50,18 +46,11 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean shadowJar
 
-      - name: Generate checksum
-        run: |
-          cd build/libs
-          sha256sum NDCore-shaded.jar > NDCore-shaded.jar.sha25
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: NDCore-${{ github.run_id }}
-          path: |
-            build/libs/NDCore-shaded.jar
-            build/libs/NDCore-shaded.jar.sha256
+          path: build/libs/NDCore-shaded.jar
 
   release:
     needs: [check_should_run, build]
@@ -80,11 +69,6 @@ jobs:
           name: NDCore-${{ github.run_id }}
           path: build/libs
 
-      - name: Validate checksum
-        run: |
-          cd build/libs
-          sha256sum -c NDCore-shaded.jar.sha256
-
       - name: Import GPG Key
         id: import_gpg
         env:
@@ -98,20 +82,24 @@ jobs:
 
       - name: Sign JAR
         run: |
+          cd build/libs
+          mv NDCore-shaded.jar NDCore.jar
           gpg --batch --pinentry-mode loopback \
               --passphrase "${{ secrets.GPG_PASSPHRASE }}" \
               --detach-sign --armor \
               --local-user ${{ secrets.GPG_KEY_ID }} \
-              --output build/libs/NDCore-shaded.jar.asc \
-              build/libs/NDCore-shaded.jar
+              --output NDCore.jar.asc \
+              NDCore.jar
 
-          gpg --verify build/libs/NDCore-shaded.jar.asc build/libs/NDCore-shaded.jar
+          gpg --verify NDCore.jar.asc NDCore.jar
 
       - name: Prepare Release Assets
         run: |
           mkdir -p release_files
           cp public-gpg-key.asc release_files/
-          cp build/libs/NDCore.* release_files/
+          cp build/libs/NDCore.jar release_files/
+          cp build/libs/NDCore.jar.asc release_files/
+          cd release_files
 
       - name: Extract Version
         id: version
@@ -119,19 +107,12 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
           else
-            # Get version from gradle.properties
             VERSION=$(grep "project.version" gradle.properties | cut -d'=' -f2)
             echo "version=$VERSION" >> $GITHUB_OUTPUT
           fi
 
       - name: Prepare Release Notes
         run: cat "descriptions/${{ steps.version.outputs.version }}.txt" > release_notes.md
-
-      - name: Prepare release files
-        run: |
-          cd release_files
-          mv NDCore-shaded.jar NDCore.jar
-          sha256sum NDCore.jar > NDCore.jar.sha256    
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
