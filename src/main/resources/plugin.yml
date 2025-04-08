@@ -1,0 +1,7 @@
+name: Nelmin Plugin Core
+version: '1.0'
+main: dev.nelmin.minecraft.NelminPluginCore
+api-version: '1.21'
+authors: [ Nelmin ]
+description: The Core of all Plugins by Nelmin
+website: https://nelmin.dev/projects/minecraft/core
