@@ -4,7 +4,7 @@ NDCore is the core dependency plugin that provides essential functionality for p
 
 ## Overview
 
-NDCore is intentionally designed to be a lightweight core plugin that operates silently in the background. While it doesn't provide any standalone features, it serves as an essential backbone for nelmin's plugin ecosystem by providing common utility functions and features that other plugins can leverage.
+NDCore is intentionally designed to be a lightweight core plugin that operates silently in the background. While it doesn't provide any standalone features, it serves as an essential backbone for nelmin's plugin ecosystem by providing common utility functions and features that other plugins can leverage. It also handles some required events.
 
 ## Key Characteristics
 

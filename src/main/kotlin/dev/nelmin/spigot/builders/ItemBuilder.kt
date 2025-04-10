@@ -11,39 +11,28 @@ import org.bukkit.inventory.meta.SkullMeta
 import java.util.*
 
 /**
- * A utility class for constructing and modifying `ItemStack` objects in a fluent and readable manner.
- * Provides methods for customizing item properties such as name, lore, enchantments, and additional metadata.
  *
- * @param material The material type of the `ItemStack`.
- * @param amount The quantity of items in the stack. Defaults to 1.
  */
 open class ItemBuilder(material: Material, amount: Int = 1) {
     /**
-     * Represents the internal mutable `ItemStack` instance being constructed and customized by the `ItemBuilder`.
-     *
-     * This variable holds the foundational item stack object, which can be modified through various builder methods
-     * such as setting the item's metadata, enchantments, lore, flags, and more. The final state of `itemStack` is
-     * returned by the `toItem()` method, providing the fully customized item.
+     * Represents the underlying `ItemStack` object being built or modified by the `ItemBuilder`.
+     * This variable is used to store and manage the state of the item, including its material type,
+     * amount, meta data, and other properties like enchantments, lore, and flags.
      */
     val itemStack: ItemStack = ItemStack(material, amount)
 
     /**
-     * A reference to the `ItemMeta` of the `itemStack` being manipulated by the `ItemBuilder`.
-     *
-     * This property is used to modify various metadata attributes of an item, such as its
-     * display name, lore, enchantments, custom model data, item flags, and more, based on
-     * the provided fluent API methods within the `ItemBuilder`.
-     *
-     * The `itemMeta` is always non-null, as it is initialized with the `ItemMeta` obtained
-     * from the `itemStack` at the time of the `ItemBuilder`'s creation.
+     * Holds the metadata of the `ItemStack` being built.
+     * Used to configure various properties of the `ItemStack` such as display name, lore,
+     * custom model data, enchantments, and more.
      */
     private val itemMeta: ItemMeta = itemStack.itemMeta!!
 
     /**
-     * Sets the display name for the item.
+     * Sets the display name for the item being built.
      *
-     * @param displayName The string to be used as the new display name for the item.
-     * @return The current instance of [ItemBuilder] to allow for method chaining.
+     * @param displayName The display name to set on the item.
+     * @return The current instance of [ItemBuilder] to allow method chaining.
      */
     fun setDisplayName(displayName: String): ItemBuilder {
         itemMeta.setDisplayName(displayName)
@@ -51,13 +40,10 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Adds a new line to the lore of the item metadata.
+     * Adds a new line to the item's lore.
      *
-     * The lore is a list of strings used to display additional information about the item.
-     * If the item's lore is not already initialized, it creates a new mutable list before adding the line.
-     *
-     * @param line The string to be added as a new line to the item's lore.
-     * @return The current instance of [ItemBuilder] for chaining further modifications.
+     * @param line The line of text to add to the item's lore.
+     * @return The current instance of [ItemBuilder] for method chaining.
      */
     fun addLoreLine(line: String): ItemBuilder {
         val lore = itemMeta.lore ?: mutableListOf()
@@ -67,10 +53,10 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Sets the lore (a list of descriptive strings) for the item being built.
+     * Sets the lore (additional text information) for the item.
      *
-     * @param lore A list of strings representing the lore to be applied to the item.
-     * @return The current instance of [ItemBuilder] for chaining further modifications.
+     * @param lore A list of strings representing the lore to be displayed on the item.
+     * @return The current instance of [ItemBuilder] for method chaining.
      */
     fun setLore(lore: List<String>): ItemBuilder {
         itemMeta.lore = lore
@@ -78,12 +64,12 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Adds an enchantment to the item with the specified level and level restriction settings.
+     * Adds an enchantment to the item with the specified level and optionally ignores level restrictions.
      *
-     * @param enchantment The enchantment to be added to the item.
-     * @param level The level of the enchantment to be applied.
-     * @param ignoreLevelRestriction Whether to ignore the level restrictions for the enchantment (true to ignore, false otherwise).
-     * @return The current instance of [ItemBuilder] for method chaining.
+     * @param enchantment The enchantment to add to the item.
+     * @param level The level of the enchantment to apply.
+     * @param ignoreLevelRestriction A boolean indicating whether to bypass the enchantment level restrictions.
+     * @return The current instance of [ItemBuilder], for method chaining.
      */
     fun addEnchant(enchantment: Enchantment, level: Int, ignoreLevelRestriction: Boolean): ItemBuilder {
         itemMeta.addEnchant(enchantment, level, ignoreLevelRestriction)
@@ -91,9 +77,9 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Clears all enchantments from the item associated with this `ItemBuilder` instance.
+     * Removes all enchantments from the item's metadata.
      *
-     * @return This `ItemBuilder` instance for method chaining.
+     * @return The current instance of [ItemBuilder], allowing for method chaining.
      */
     fun clearEnchantments(): ItemBuilder {
         itemMeta.removeEnchantments()
@@ -101,10 +87,9 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Applies a glowing effect to the item by adding the `UNBREAKING` enchantment (with level 1)
-     * and hiding the enchantment flag if no enchantments are already present.
+     * Adds a "glow" effect to the item by applying a hidden unbreaking enchantment if no enchantments are present.
      *
-     * @return The current instance of [ItemBuilder] for method chaining.
+     * @return The current instance of [ItemBuilder] to allow method chaining.
      */
     fun glow(): ItemBuilder {
         if (itemMeta.enchants.isEmpty()) {
@@ -115,10 +100,7 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Sets the custom model data for the item being built.
      *
-     * @param data The integer value representing the custom model data to be set.
-     * @return The current instance of [ItemBuilder] for method chaining.
      */
     fun setCustomModelData(data: Int): ItemBuilder {
         itemMeta.setCustomModelData(data)
@@ -128,24 +110,19 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     /**
      * Adds the specified item flags to the item's metadata.
      *
-     * This method allows adding one or more `ItemFlag`s to the item's metadata,
-     * which can be used to hide certain attributes or properties of the item
-     * when viewed in the inventory by a player.
-     *
-     * @param flags The item flags to be added to the item's metadata.
-     *              Multiple flags can be specified as vararg parameters.
-     * @return The current instance of `ItemBuilder` for method chaining.
-     */
+     * Item flags allow certain properties or visual elements of the item to be hidden
+     * when viewed in the player's inventory. This can be used to control what information
+     * is displayed to the player, such as enchantments, attributes, or*/
     fun addItemFlags(vararg flags: ItemFlag): ItemBuilder {
         itemMeta.addItemFlags(*flags)
         return this
     }
 
     /**
-     * Sets the unbreakable status for the item being built.
+     * Sets whether the item should be unbreakable.
      *
-     * @param unbreakable A boolean indicating whether the item should be unbreakable (true) or not (false).
-     * @return The current instance of [ItemBuilder] to allow for method chaining.
+     * @param unbreakable A boolean indicating whether the item should be unbreakable.
+     * @return The current instance of [ItemBuilder] for method chaining.
      */
     fun setUnbreakable(unbreakable: Boolean): ItemBuilder {
         itemMeta.isUnbreakable = unbreakable
@@ -153,9 +130,9 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * Converts the current state of the `ItemBuilder` into an `ItemStack` with applied metadata.
+     * Converts the current state of the `ItemBuilder` to an `ItemStack` with the configured properties.
      *
-     * @return The constructed `ItemStack` with properties and metadata set using the `ItemBuilder`.
+     * @return An `ItemStack` instance that reflects the properties set in the `ItemBuilder`.
      */
     open fun toItem(): ItemStack {
         itemStack.itemMeta = itemMeta
@@ -163,26 +140,21 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     }
 
     /**
-     * A builder class for creating and customizing `PLAYER_HEAD` items in Minecraft.
-     *
-     * The `Head` class extends the functionality of the `ItemBuilder` class, specifically designed
-     * to construct and manipulate player head items (`Material.PLAYER_HEAD`) with additional options
-     * for setting ownership and customizing attributes.
+     * A specialized implementation of the `ItemBuilder` class for constructing `PLAYER_HEAD` items.
+     * Provides convenience methods to set the player head's owner using different input types.
      */
     class Head : ItemBuilder(Material.PLAYER_HEAD) {
         /**
-         * Represents the metadata for a player head item in Minecraft.
+         * Represents the metadata of a player head item (`SkullMeta`) for customization.
+         * This variable holds the current state of the SkullMeta associated with the item stack.
          *
-         * This property is cast from the item stack's metadata and provides access to specific methods and attributes
-         * for modifying the player head, such as setting the owner of the skull.
+         * Used within the [Head] class to modify or manage properties such as owner details
+         * for player heads in Minecraft.
          */
         private val skullMeta: SkullMeta = itemStack.itemMeta as SkullMeta
 
         /**
-         * Sets the owner of the player head using the provided player's name.
          *
-         * @param owner The name of the player whose head should be set as the owner.
-         * @return The current instance of [Head] with the updated owner.
          */
         @Deprecated(
             "since 1.12.1",
@@ -195,10 +167,10 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
         }
 
         /**
-         * Sets the owner of the player head to the specified OfflinePlayer.
+         * Sets the owner of the head item to the provided OfflinePlayer instance.
          *
-         * @param owner The [OfflinePlayer] to be set as the owner of the player head.
-         * @return The current instance of [Head] to allow for method chaining.
+         * @param owner The OfflinePlayer to be set as the owner of the head.
+         * @return The current instance of [Head] for method chaining.
          */
         fun setOwner(owner: OfflinePlayer): Head {
             skullMeta.owningPlayer = owner
@@ -206,20 +178,20 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
         }
 
         /**
-         * Sets the owner of the player head based on the provided UUID.
+         * Sets the owner of the player head using the specified UUID.
          *
-         * @param uuid The UUID of the player whose head will be set as the owner.
-         * @return The current instance of [Head] for method chaining.
+         * @param uuid The UUID of the player to be set as the owner of the player head.
+         * @return The current instance of [Head] to allow method chaining.
          */
         fun setOwner(uuid: UUID): Head {
-            skullMeta.owningPlayer = NDCore.instance.server.getOfflinePlayer(uuid)
+            skullMeta.owningPlayer = NDCore.instance().server.getOfflinePlayer(uuid)
             return this
         }
 
         /**
-         * Converts the current builder object into an instance of ItemStack, applying the configured item metadata.
+         * Converts the current instance into an ItemStack with updated metadata.
          *
-         * @return The resulting ItemStack instance with the applied metadata.
+         * @return The ItemStack representation of the current item with its metadata set.
          */
         override fun toItem(): ItemStack {
             itemStack.itemMeta = skullMeta

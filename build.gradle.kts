@@ -1,6 +1,21 @@
 import com.vanniktech.maven.publish.SonatypeHost
 import java.util.Calendar
 
+/**
+ * Configures the plugins used in the project.
+ * - Applies the Kotlin JVM plugin for building Kotlin JVM targets.
+ * - Adds the Kotlin Serialization plugin for working with serialization.
+ * - Integrates the Shadow plugin for creating a shaded JAR file.
+ * - Uses the Run Paper plugin for running a Minecraft Paper server.
+ * - Configures Maven Publishing for publishing the artifact.
+ * - Enables signing of published artifacts.
+ * - Uses the Vanniktech Maven Publish Gradle Plugin for simplifying publication.
+ */
+
+/**
+ *
+ */
+
 plugins {
     kotlin("jvm") version "2.1.20"
     kotlin("plugin.serialization") version "2.1.20"
@@ -21,15 +36,23 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-cio-jvm:3.1.2")
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+
+    // Ktor Client
     implementation("io.ktor:ktor-client-core:3.1.2")
     implementation("io.ktor:ktor-client-cio:3.1.2")
     implementation("io.ktor:ktor-client-content-negotiation:3.1.2")
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
+
+    // Nelmins APIs
     api("dev.nelmin:lumina:1.0.2")
 }
 
@@ -39,7 +62,7 @@ tasks {
     }
 
     shadowJar {
-        archiveClassifier.set("shaded")
+        archiveClassifier.set("Spigot")
         archiveVersion.set("")
         dependencies {
             exclude(dependency("io.papermc.paper:paper-api:.*"))

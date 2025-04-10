@@ -1,62 +1,99 @@
 package dev.nelmin.spigot
 
 import dev.nelmin.logger.Logger
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import dev.nelmin.spigot.listeners.PlayerFreezeListener
+import dev.nelmin.spigot.listeners.PlayerUnfreezeListener
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.sync.Mutex
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
-import java.io.InputStreamReader
-import java.util.*
 
 /**
- * The NDCore class serves as the main entry point for the plugin, extending the Bukkit API class JavaPlugin.
- * It manages the plugin's initialization and teardown processes through the `onEnable` and `onDisable` lifecycle methods.
- *
- * This class also provides a singleton instance which can be accessed globally during the plugin's execution.
+ * NDCore is the main plugin class for managing the core functionalities of the plugin.
+ * It extends the `JavaPlugin` class and provides lifecycle management, event registration,
+ * and configuration management for the plugin.
  */
 class NDCore : JavaPlugin() {
 
     /**
-     * Companion object for the NDCore class, providing access to a shared, globally available instance
-     * of the NDCore plugin. Facilitates interactions with the plugin instance from other parts of the codebase.
+     * Companion object for the NDCore class.
+     * Provides shared functionality, properties, and configuration
+     * management for the NDCore plugin.
      */
     companion object {
         /**
-         * Singleton instance of the `NDCore` plugin class.
-         * This property is initialized when the plugin is enabled and is used to provide
-         * access to the core functionalities of the plugin throughout the application.
-         * It must be referenced only after being properly initialized within the `onEnable()` method.
+         * Singleton instance of the NDCore plugin.
+         * Initialized during the plugin's `onEnable` lifecycle method.
          */
-        lateinit var instance: NDCore
+        private lateinit var instance: NDCore
+        /**
+         * Returns the current instance of the `NDCore` plugin.
+         * This method allows access to the singleton instance of the plugin.
+         *
+         * @return The `NDCore` instance.
+         */
+        fun instance() = instance
+
+        /**
+         * A shared [CoroutineScope] instance backed by a [SupervisorJob].
+         * This scope can be used to launch coroutines that are lifecycle-aware
+         * and tied to the [NDCore] plugin lifecycle.
+         * Coroutines launched in this scope will not be cancelled if one of its child
+         * coroutines fails, due to the behavior of [SupervisorJob].
+         */
+        val coroutineScope = CoroutineScope(SupervisorJob())
+
+        /**
+         * A mutex used to synchronize access to shared resources or critical sections
+         * within the application. This prevents race conditions and ensures thread-safe
+         * operations where concurrent access could occur.
+         */
+        val mutex = Mutex()
+        
+        /**
+         * Represents the configuration data for the plugin.
+         * This variable is expected to hold the parsed YAML configuration file.
+         * It can be null if the configuration has not been loaded or initialized.
+         */
+        var config: YamlConfiguration? = null
+
+        /**
+         * The prefix used for messages within the plugin. It is retrieved from the configuration file using the key "prefix".
+         * If the value is missing or empty in the configuration, it defaults to "&9&lNelmin &8&l»&r".
+         */
+        var prefix: String = config?.getString("prefix").takeIf { !it.isNullOrEmpty() } ?: "&9&lNelmin &8&l»&r"
     }
 
     /**
-     * Handles the initialization process when the plugin is enabled.
+     * Provides access to the server's plugin manager, allowing for registration
+     * and management of plugins and their related operations within the server.
+     */
+    val pluginManager = server.pluginManager
+
+    /**
+     * Handles the initialization of the plugin when it is enabled.
+     * Sets up the plugin's instance, logging configuration, and event listeners. Also checks for plugin updates.
      *
-     * This function sets the static `instance` property to the current plugin instance,
-     * allowing other parts of the application to access the main plugin class.
-     * It also configures the Logger with a specific name for log entries
-     * related to this plugin and outputs an informational message indicating
-     * that the plugin has been successfully enabled.
+     * Key functionalities include:
+     * - Setting the singleton instance of the plugin.
+     * - Defining the logger's name to identify logs from the plugin.
+     * - Registering event listeners for managing custom player actions such as freezing and unfreezing.
+     * - Printing log messages to confirm successful plugin loading.
+     * - Initiating a check to verify if the plugin is up-to-date by interacting with a GitHub repository,
+     *   and logging relevant information about update availability.
      */
     override fun onEnable() {
         instance = this
-
         Logger.setName("NDCore")
+        
+        pluginManager.registerEvents(PlayerFreezeListener(), this)
+        pluginManager.registerEvents(PlayerUnfreezeListener(), this)
+
         Logger.info("Plugin enabled!")
 
         Logger.info("Checking for updates...")
-        checkForUpdates(callback = { (hasUpdate, updateType) ->
+        NDUtils.checkForPluginUpdates(callback = { (hasUpdate, updateType) ->
             if (hasUpdate) {
                 Logger.warn("An update is available for NDCore (${instance.description.version} -> $updateType)")
             } else {
@@ -66,112 +103,11 @@ class NDCore : JavaPlugin() {
     }
 
     /**
-     * This method is called when the plugin is disabled.
-     * It performs any necessary shutdown tasks and logs the disabling of the plugin.
+     * Called when the plugin is disabled by the server.
+     * This method is triggered as part of the plugin lifecycle and is commonly used to release
+     * resources, save plugin state, or perform cleanup operations before the plugin fully unloads.
      */
     override fun onDisable() {
         Logger.info("Plugin disabled!")
     }
-
-    fun checkForUpdates(
-        name: String = "NDCore",
-        organizationOrUser: String = "NelminDev",
-        callback: (Pair<Boolean, String?>) -> Unit
-    ) =
-        CoroutineScope(Dispatchers.Default).launch {
-            val client = HttpClient(CIO) {
-                install(ContentNegotiation) {
-                    json()
-                }
-                install(HttpTimeout) {
-                    requestTimeoutMillis = 10000
-                }
-            }
-
-            try {
-                // Use javaClass instead of this::class.java
-                val pluginYml = javaClass.classLoader.getResourceAsStream("plugin.yml")?.use { stream ->
-                    Properties().apply { load(InputStreamReader(stream, Charsets.UTF_8)) }
-                } ?: run {
-                    Logger.warn("Could not load plugin.yml")
-                    return@launch callback(Pair(false, null))
-                }
-
-                val currentVersion = pluginYml.getProperty("version") ?: run {
-                    Logger.warn("Version not found in plugin.yml")
-                    return@launch callback(Pair(false, null))
-                }
-
-                val githubApiUrl = "https://api.github.com/repos/$organizationOrUser/$name/releases/latest"
-
-                val response: JsonObject = try {
-                    client.get(githubApiUrl) {
-                        headers {
-                            append(HttpHeaders.Accept, "application/vnd.github.v3+json")
-                        }
-                    }.body()
-                } catch (e: ClientRequestException) {
-                    when (e.response.status) {
-                        HttpStatusCode.NotFound -> Logger.warn("No releases found for $organizationOrUser/$name")
-                        else -> Logger.error("GitHub API request failed: ${e.message}")
-                    }
-                    return@launch callback(Pair(false, null))
-                } catch (e: Exception) {
-                    Logger.error("Failed to fetch release info: ${e.message}")
-                    return@launch callback(Pair(false, null))
-                }
-
-                val latestVersion = response["tag_name"]?.jsonPrimitive?.content ?: run {
-                    Logger.warn("No tag_name found in GitHub response")
-                    return@launch (callback(Pair(false, null)))
-                }
-
-                compareVersions(currentVersion, latestVersion.removePrefix("v"))
-            } catch (e: Exception) {
-                Logger.error("Update check failed: ${e.message}")
-                Logger.stacktrace(e)
-                callback(Pair(false, null))
-            } finally {
-                try {
-                    client.close()
-                } catch (e: Exception) {
-                    Logger.error("Failed to close HTTP client: ${e.message}")
-                    Logger.stacktrace(e)
-                }
-            }
-        }
-
-    private fun compareVersions(current: String, latest: String): Pair<Boolean, String?> {
-        try {
-            val currentParts = current.split("-")[0].split(".")
-            val latestParts = latest.split("-")[0].split(".")
-
-            val normalizedCurrentParts = currentParts.take(3).map { it.toIntOrNull() ?: 0 }
-            val normalizedLatestParts = latestParts.take(3).map { it.toIntOrNull() ?: 0 }
-
-            for (i in 0..2) {
-                val currentNum = normalizedCurrentParts.getOrNull(i) ?: 0
-                val latestNum = normalizedLatestParts.getOrNull(i) ?: 0
-
-                when {
-                    latestNum > currentNum -> return Pair(true, null)
-                    currentNum > latestNum -> return Pair(false, null)
-                }
-            }
-
-            return when {
-                isPreRelease(current) && !isPreRelease(latest) -> Pair(true, "Stable")
-                !isPreRelease(current) && latest.contains("SNAPSHOT", ignoreCase = true) -> Pair(true, "Snapshot")
-                !isPreRelease(current) && latest.contains("ALPHA", ignoreCase = true) -> Pair(true, "Alpha")
-                else -> Pair(false, null)
-            }
-        } catch (e: Exception) {
-            Logger.error("Version comparison failed: ${e.message}")
-            return Pair(false, null)
-        }
-    }
-
-    private fun isPreRelease(version: String): Boolean =
-        version.contains("SNAPSHOT", ignoreCase = true) ||
-                version.contains("ALPHA", ignoreCase = true)
 }
