@@ -27,6 +27,39 @@ To use NDCore as a dependency, add the following to your `plugin.yml`:
 depend: [NDCore]
 ```
 
+and import it via maven central:
+
+<details>
+<summary>Gradle</summary>
+
+````gradle
+implementation 'dev.nelmin.spigot:core:1.0.0'
+````
+
+</details>
+
+<details>
+<summary>Gradle (Kotlin)</summary>
+
+````kts
+implementation("dev.nelmin.spigot:core:VERSION")
+````
+
+</details>
+
+<details>
+<summary>Maven</summary>
+
+````xml
+<dependency>
+    <groupId>dev.nelmin.spigot</groupId>
+    <artifactId>core</artifactId>
+    <version>VERSION</version>
+</dependency>
+````
+
+</details>
+
 ## System Requirements
 
 - Java 21 or higher
