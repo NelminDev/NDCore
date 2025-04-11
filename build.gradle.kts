@@ -31,15 +31,15 @@ version = project.property("project.version").toString()
 
 repositories {
     mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/groups/public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // Ktor Client
     implementation("io.ktor:ktor-client-core:3.1.2")
@@ -53,12 +53,12 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.38")
 
     // Nelmins APIs
-    api("dev.nelmin:lumina:1.0.2")
+    api("dev.nelmin:lumina:1.0.3")
 }
 
 tasks {
     runServer {
-        minecraftVersion("1.21")
+        minecraftVersion("1.21.4")
     }
 
     shadowJar {
