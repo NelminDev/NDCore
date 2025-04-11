@@ -174,6 +174,7 @@ enum class EconomyPayResponse(val success: Boolean, val message: String) {
      * @property message A string describing the reason for the rejection: "Cannot pay yourself".
      */
     CANNOT_PAY_SELF(success = false, message = "Cannot pay yourself"),
+
     /**
      * Represents a response indicating that a payment operation has failed due to insufficient funds.
      *
@@ -185,6 +186,7 @@ enum class EconomyPayResponse(val success: Boolean, val message: String) {
      * @property message Provides a descriptive message, "Insufficient funds", explaining the failure reason.
      */
     INSUFFICIENT_FUNDS(success = false, message = "Insufficient funds"),
+
     /**
      * Represents a failure response when a payment amount is invalid.
      *
@@ -193,6 +195,7 @@ enum class EconomyPayResponse(val success: Boolean, val message: String) {
      * used for payment transactions, preventing invalid operations.
      */
     INVALID_PAYMENT_AMOUNT(success = false, message = "Invalid payment amount"),
+
     /**
      * Indicates that the payment cannot be completed because the receiver has reached the maximum
      * allowable cash limit. This response is returned when attempting to transfer funds to a player
@@ -202,6 +205,7 @@ enum class EconomyPayResponse(val success: Boolean, val message: String) {
      * @property message Describes the reason for the failure: "Receiver has too much cash to accept payment".
      */
     RECEIVER_FULL(success = false, message = "Receiver has too much cash to accept payment"),
+
     /**
      * Represents a successful payment response in the economy system.
      *

@@ -7,11 +7,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import org.bukkit.NamespacedKey
-import org.bukkit.persistence.PersistentDataAdapterContext
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
-import kotlin.collections.toMutableList
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

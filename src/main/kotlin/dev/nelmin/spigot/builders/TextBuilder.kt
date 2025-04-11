@@ -150,7 +150,10 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     @Deprecated(
         message = "colorizeLegacy has been deprecated in favor of colorize (Adventure API). See dev.nelmin.spigot.builders.TextBuilder.colorize for the Adventure API equivalent.",
         level = DeprecationLevel.WARNING,
-        replaceWith = ReplaceWith("dev.nelmin.spigot.builders.TextBuilder.colorize(legacyCharacter, prefixOnNewLine)", "dev.nelmin.spigot.builders.TextBuilder.colorize")
+        replaceWith = ReplaceWith(
+            "dev.nelmin.spigot.builders.TextBuilder.colorize(legacyCharacter, prefixOnNewLine)",
+            "dev.nelmin.spigot.builders.TextBuilder.colorize"
+        )
     )
     fun colorizeLegacy(legacyCharacter: Char = '&', prefixOnNewLine: Boolean = true): String {
         return ChatColor.translateAlternateColorCodes(legacyCharacter, get(prefixOnNewLine))

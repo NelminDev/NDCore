@@ -20,6 +20,7 @@ class LocalizedMessage {
      * It can be modified or accessed via dedicated methods in the containing class.
      */
     private var fallbackLanguageCode: String = "en"
+
     /**
      * Holds the default fallback message to be used when no translation is available
      * for the requested language code.
@@ -39,6 +40,7 @@ class LocalizedMessage {
         this.fallbackLanguageCode = languageCode
         return this
     }
+
     /**
      * Retrieves the fallback language code that is used when a localized message
      * translation is not found for a specified language.
@@ -57,6 +59,7 @@ class LocalizedMessage {
         this.fallbackMessage = message
         return this
     }
+
     /**
      * Retrieves the fallback message that is used when no translation is found for the requested message.
      *

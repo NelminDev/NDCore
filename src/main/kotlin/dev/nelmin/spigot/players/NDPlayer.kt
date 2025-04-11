@@ -1,18 +1,15 @@
 package dev.nelmin.spigot.players
 
 import dev.nelmin.spigot.NDCore
-import dev.nelmin.spigot.NDUtils
 import dev.nelmin.spigot.events.PlayerFreezeEvent
 import dev.nelmin.spigot.events.PlayerUnfreezeEvent
 import dev.nelmin.spigot.objects.LocalizedMessage
 import dev.nelmin.spigot.persistence.PersistentListDataType
-import dev.nelmin.spigot.persistence.PersistentListProperty
 import dev.nelmin.spigot.persistence.PersistentMutableListProperty
 import dev.nelmin.spigot.persistence.PersistentProperty
 import kotlinx.datetime.Clock
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.persistence.ListPersistentDataType
 import org.bukkit.persistence.PersistentDataType
 
 /**

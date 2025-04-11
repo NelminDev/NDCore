@@ -50,6 +50,7 @@ data class SemanticVersion(val version: String) {
      * For the version string `2.5.1`, the `major` version is `2`.
      */
     val major: Int
+
     /**
      * Represents the minor version component of a semantic version.
      * It is a non-negative integer that indicates backward-compatible new features
@@ -59,6 +60,7 @@ data class SemanticVersion(val version: String) {
      * It is extracted from the version string during the initialization of the `SemanticVersion` class.
      */
     val minor: Int
+
     /**
      * The patch version number of the semantic version.
      * This variable represents the third segment in the semantic version format (major.minor.patch).
@@ -67,6 +69,7 @@ data class SemanticVersion(val version: String) {
      * It defaults to `0` if the patch segment is absent in the version string.
      */
     val patch: Int
+
     /**
      * Represents the pre-release metadata associated with a semantic version.
      * This property holds an optional string that indicates whether the version
