@@ -7,9 +7,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import org.bukkit.NamespacedKey
+import org.bukkit.persistence.PersistentDataAdapterContext
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
+import kotlin.collections.toMutableList
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -28,7 +30,7 @@ import kotlin.reflect.KProperty
  * @param defaultValue The default value for the property if no explicit value is found in the container.
  * @param container The container where data will be persisted.
  */
-class PersistentProperty<P, C : Any>(
+open class PersistentProperty<P : Any, C : Any>(
     private val namespacedKey: NamespacedKey,
     private val type: PersistentDataType<P, C>,
     private val defaultValue: C,
@@ -53,19 +55,30 @@ class PersistentProperty<P, C : Any>(
         defaultValue: C,
         container: PersistentDataContainer,
         plugin: Plugin = NDCore.instance()
-    )
-            : this(NDUtils.getNamespacedKey(namespacedKeyName, plugin), type, defaultValue, container)
+    ) : this(NDUtils.getNamespacedKey(namespacedKeyName, plugin), type, defaultValue, container)
 
     /**
-     * Retrieves the value of the property from the persistent data container associated with the delegate.
-     * If no value is found, the `defaultValue` is returned.
+     * Retrieves the value of a persistent property from the associated `PersistentDataContainer`.
+     * If the value does not exist, the property is initialized with a default value and stored back
+     * into the container before returning.
      *
-     * @param thisRef The object using the property delegate. Can be `null`.
-     * @param property Metadata about the property being accessed.
-     * @return The current value of the property from the persistent data container, or `defaultValue` if no value is present.
+     * This retrieval process is thread-safe and synchronizes using a mutex to prevent concurrent access issues.
+     *
+     * @param thisRef The reference to the object that delegates the property, or `null` for non-object properties.
+     * @param property Metadata about the property, such as its name and additional attributes.
+     * @return The value of the property retrieved from the container, or the default value if no existing value is found.
      */
     override fun getValue(thisRef: Any?, property: KProperty<*>): C {
-        return runBlocking { NDCore.mutex.withLock { container.getOrDefault(namespacedKey, type, defaultValue) } }
+        fun save(): C {
+            setValue(thisRef, property, defaultValue)
+            return defaultValue
+        }
+
+        return runBlocking {
+            NDCore.mutex.withLock {
+                container.get(namespacedKey, type) ?: save()
+            }
+        }
     }
 
     /**
