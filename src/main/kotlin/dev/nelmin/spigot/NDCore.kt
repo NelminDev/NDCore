@@ -1,6 +1,7 @@
 package dev.nelmin.spigot
 
 import dev.nelmin.logger.Logger
+import dev.nelmin.spigot.database.DatabaseStrategy
 import dev.nelmin.spigot.listeners.PlayerFreezeListener
 import dev.nelmin.spigot.listeners.PlayerUnfreezeListener
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +51,8 @@ class NDCore : JavaPlugin() {
          * operations where concurrent access could occur.
          */
         val mutex = Mutex()
+
+        val databaseStrategy: DatabaseStrategy? = null
         
         /**
          * Represents the configuration data for the plugin.

@@ -1,6 +1,8 @@
 package dev.nelmin.spigot.builders
 
 import dev.nelmin.spigot.NDCore
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -108,7 +110,7 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
      * @return the current instance of [TextBuilder] for method chaining.
      */
     fun sendTo(player: Player, colorized: Boolean = true, prefixOnNewLine: Boolean = true): TextBuilder {
-        player.sendMessage(if (colorized) colorize(prefixOnNewLine = prefixOnNewLine) else message)
+        player.sendMessage(if (colorized) colorize(prefixOnNewLine = prefixOnNewLine) else Component.text(message))
         return this
     }
 
@@ -122,7 +124,7 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
      */
     fun sendTo(players: List<Player>, colorized: Boolean = true, prefixOnNewLine: Boolean = true): TextBuilder {
         players.forEach { player: Player ->
-            player.sendMessage(if (colorized) colorize(prefixOnNewLine = prefixOnNewLine) else message)
+            sendTo(player, colorized, prefixOnNewLine)
         }
         return this
     }
@@ -139,15 +141,31 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Translates alternate color codes in the message using the specified legacy character
-     * and returns the formatted string.
+     * Converts legacy color codes in the message to a format recognizable by the Minecraft client.
      *
-     * @param legacyCharacter The character used for legacy color codes translation. Default is '&'.
-     * @param prefixOnNewLine Whether to apply the prefix on a new line. Default is true.
-     * @return The colorized message as a String.
+     * @param legacyCharacter The character used to denote color codes. Defaults to '&'.
+     * @param prefixOnNewLine Specifies whether a prefix should be applied to each new line. Defaults to true.
+     * @return The message string with the legacy color codes replaced with their Minecraft equivalents.
      */
-    fun colorize(legacyCharacter: Char = '&', prefixOnNewLine: Boolean = true): String {
+    @Deprecated(
+        message = "colorizeLegacy has been deprecated in favor of colorize (Adventure API). See dev.nelmin.spigot.builders.TextBuilder.colorize for the Adventure API equivalent.",
+        level = DeprecationLevel.WARNING,
+        replaceWith = ReplaceWith("dev.nelmin.spigot.builders.TextBuilder.colorize(legacyCharacter, prefixOnNewLine)", "dev.nelmin.spigot.builders.TextBuilder.colorize")
+    )
+    fun colorizeLegacy(legacyCharacter: Char = '&', prefixOnNewLine: Boolean = true): String {
         return ChatColor.translateAlternateColorCodes(legacyCharacter, get(prefixOnNewLine))
+    }
+
+    /**
+     * Converts the current message into an Adventure `Component` with optional legacy character-based colorization
+     * and optional prefix handling on new lines.
+     *
+     * @param legacyCharacter The character used to denote color codes in the legacy format. Defaults to '&'.
+     * @param prefixOnNewLine Determines whether the prefix should be added to the start of each new line in the message. Defaults to true.
+     * @return A `Component` representation of the message, with colorization and optional prefix applied.
+     */
+    fun colorize(legacyCharacter: Char = '&', prefixOnNewLine: Boolean = true): Component {
+        return LegacyComponentSerializer.legacy(legacyCharacter).deserialize(get(prefixOnNewLine))
     }
 
     /**
@@ -176,6 +194,6 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
      * @return A string representation of the TextBuilder, with optional color formatting applied.
      */
     override fun toString(): String {
-        return colorize(prefixOnNewLine = false)
+        return colorizeLegacy(prefixOnNewLine = false)
     }
 }
