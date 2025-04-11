@@ -1,8 +1,9 @@
 package dev.nelmin.spigot
 
 import dev.nelmin.logger.Logger
-import dev.nelmin.spigot.database.DatabaseStrategy
 import dev.nelmin.spigot.listeners.PlayerFreezeListener
+import dev.nelmin.spigot.listeners.PlayerJoinListener
+import dev.nelmin.spigot.listeners.PlayerQuitListener
 import dev.nelmin.spigot.listeners.PlayerUnfreezeListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -28,6 +29,7 @@ class NDCore : JavaPlugin() {
          * Initialized during the plugin's `onEnable` lifecycle method.
          */
         private lateinit var instance: NDCore
+
         /**
          * Returns the current instance of the `NDCore` plugin.
          * This method allows access to the singleton instance of the plugin.
@@ -52,8 +54,6 @@ class NDCore : JavaPlugin() {
          */
         val mutex = Mutex()
 
-        val databaseStrategy: DatabaseStrategy? = null
-        
         /**
          * Represents the configuration data for the plugin.
          * This variable is expected to hold the parsed YAML configuration file.
@@ -89,9 +89,13 @@ class NDCore : JavaPlugin() {
     override fun onEnable() {
         instance = this
         Logger.setName("NDCore")
-        
+
         pluginManager.registerEvents(PlayerFreezeListener(), this)
         pluginManager.registerEvents(PlayerUnfreezeListener(), this)
+        pluginManager.registerEvents(PlayerJoinListener(), this)
+        pluginManager.registerEvents(PlayerQuitListener(), this)
+
+        // pluginManager.registerEvents(EventListenerForLogging(), this)
 
         Logger.info("Plugin enabled!")
 
