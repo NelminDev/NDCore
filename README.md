@@ -4,22 +4,34 @@ NDCore is the core dependency plugin that provides essential functionality for p
 
 ## Overview
 
-NDCore is intentionally designed to be a lightweight core plugin that operates silently in the background. While it doesn't provide any standalone features, it serves as an essential backbone for nelmin's plugin ecosystem by providing common utility functions and features that other plugins can leverage. It also handles some required events.
+NDCore is intentionally designed to be a lightweight core plugin that operates silently in the background. It provides essential backbone functionality for nelmin's plugin ecosystem, including persistent data management, localization support, comprehensive event logging, and secure player management. While primarily serving as a dependency, it now includes enhanced player data management, security features, and monitoring capabilities.
 
-## Key Characteristics
+## Key Features
 
+- Persistent data management with support for list properties
+- Advanced text handling using Adventure API
+- Comprehensive localization system
+- Enhanced player data tracking and statistics
+- Secure password management using Argon2
+- Player data conversion utilities
 - Functions as a dependency-only plugin
 - Requires no configuration
-- Provides essential utility functions for dependent plugins
 - Lightweight and efficient design
-- Zero standalone features
 
 ## For Developers
 
 Developers interested in utilizing NDCore's functionality should look into:
 
-1. [NDCConfig.kt](src/main/kotlin/dev/nelmin/spigot/NDCConfig.kt) for configuration utilities
-2. [Lumina](https://github.com/NelminDev/Lumina) project for logging capabilities
+- The [Lumina](https://github.com/NelminDev/Lumina) project for logging capabilities
+
+Key components:
+- `PersistentProperty` for managing persistent data
+- `PersistentListProperty` and `PersistentMutableListProperty` for managing persistent list data
+- `TextBuilder` for Adventure API-based text formatting
+- `LocalizedMessage` for translation management
+- `NDPlayer` for extensive player data management with conversion methods:
+    - `economy()` for economic functionality
+    - `security()` for secure player management
 
 To use NDCore as a dependency, add the following to your `plugin.yml`:
 
@@ -32,38 +44,38 @@ and import it via maven central:
 <details>
 <summary>Gradle</summary>
 
-````gradle
-implementation 'dev.nelmin.spigot:core:1.0.0'
-````
+```gradle
+implementation 'dev.nelmin.spigot:core:2.2.0'
+```
 
 </details>
 
 <details>
 <summary>Gradle (Kotlin)</summary>
 
-````kts
-implementation("dev.nelmin.spigot:core:VERSION")
-````
+```kts
+implementation("dev.nelmin.spigot:core:2.2.0")
+```
 
 </details>
 
 <details>
 <summary>Maven</summary>
 
-````xml
+```xml
 <dependency>
     <groupId>dev.nelmin.spigot</groupId>
     <artifactId>core</artifactId>
-    <version>VERSION</version>
+    <version>2.2.0</version>
 </dependency>
-````
+```
 
 </details>
 
 ## System Requirements
 
 - Java 21 or higher
-- Compatible with Bukkit/Spigot/Paper servers
+- Compatible with PaperMC 1.21.4 or higher
 
 ## Installation
 
