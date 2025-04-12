@@ -40,6 +40,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+    implementation("de.mkammerer:argon2-jvm:2.12")
 
     // Ktor Client
     implementation("io.ktor:ktor-client-core:3.1.2")
@@ -62,7 +63,7 @@ tasks {
     }
 
     shadowJar {
-        archiveClassifier.set("Spigot")
+        archiveClassifier.set("Paper")
         archiveVersion.set("")
         dependencies {
             exclude(dependency("io.papermc.paper:paper-api:.*"))

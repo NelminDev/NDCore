@@ -1,5 +1,7 @@
 package dev.nelmin.spigot
 
+import de.mkammerer.argon2.Argon2
+import de.mkammerer.argon2.Argon2Factory
 import dev.nelmin.logger.Logger
 import dev.nelmin.spigot.listeners.PlayerFreezeListener
 import dev.nelmin.spigot.listeners.PlayerJoinListener
@@ -53,6 +55,13 @@ class NDCore : JavaPlugin() {
          * operations where concurrent access could occur.
          */
         val mutex = Mutex()
+
+        private val argon2: Argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id)
+
+        fun hashPassword(password: String): String = hashPassword(password.toCharArray())
+        fun hashPassword(passwordCharArray: CharArray): String = argon2.hash(4, 65536, 1, passwordCharArray)
+        fun verifyPassword(password: String, hash: String): Boolean = verifyPassword(password.toCharArray(), hash)
+        fun verifyPassword(passwordCharArray: CharArray, hash: String): Boolean = argon2.verify(hash, passwordCharArray)
 
         /**
          * Represents the configuration data for the plugin.
