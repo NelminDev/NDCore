@@ -1,35 +1,14 @@
 ## 🎯 Release Overview
 
-Version 2.2.0 brings significant enhancements to NDCore with improved security features, expanded data management capabilities, and continued optimization of core functionalities.
+Version 2.2.1 focuses on improving the logging system for better scalability and maintainability.
 
-## 🚀 Key Features
+## 🚀 Key Changes
 
-- **Enhanced Data Persistence**:
-  - New persistent list property system
-  - Thread-safe property management
-  - Improved data type handling
-
-- **Security Enhancements**:
-  - New secure password management using Argon2
-  - Enhanced player security features
-  - Player data conversion utilities
-
-- **Platform Support**:
-  - Support for PaperMC 1.21.4 or higher
-  - Java 21 compatibility
-  - Zero configuration requirement
-
-- **Player Experience**:
-  - Advanced text handling with Adventure API
-  - Comprehensive localization system
-  - Extended player data management
-  - Player statistics tracking
-  - New economy functionality through NDPlayer
-
-- **Monitoring & Logging**:
-  - Detailed player activity logging
-  - Enhanced event tracking system
-  - Improved debugging capabilities
+- **Refactored Logging System**:
+  - Replaced direct logging calls (e.g., `Logger.infoSilent`) with a queued logging system (`Logger.queueInfo`) for
+    improved log management.
+  - Implemented coroutines for asynchronous log handling.
+  - Updated plugin lifecycle behavior to utilize the new logging system.
 
 ## 📦 Installation
 
@@ -65,7 +44,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core:2.2.0'
+implementation 'dev.nelmin.minecraft:core:2.2.1'
 ```
 
 </details>
@@ -74,7 +53,7 @@ implementation 'dev.nelmin.minecraft:core:2.2.0'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core:2.2.0")
+implementation("dev.nelmin.minecraft:core:2.2.1")
 ```
 
 </details>
@@ -85,8 +64,8 @@ implementation("dev.nelmin.minecraft:core:2.2.0")
 ```xml
 <dependency>
   <groupId>dev.nelmin.minecraft</groupId>
-    <artifactId>core</artifactId>
-    <version>2.2.0</version>
+  <artifactId>core</artifactId>
+  <version>2.2.1</version>
 </dependency>
 ```
 
