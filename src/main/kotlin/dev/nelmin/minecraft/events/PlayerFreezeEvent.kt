@@ -1,6 +1,6 @@
-package dev.nelmin.spigot.events
+package dev.nelmin.minecraft.events
 
-import dev.nelmin.spigot.players.NDPlayer
+import dev.nelmin.minecraft.players.NDPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList

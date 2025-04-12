@@ -1,6 +1,6 @@
-package dev.nelmin.spigot.builders
+package dev.nelmin.minecraft.builders
 
-import dev.nelmin.spigot.NDCore
+import dev.nelmin.minecraft.NDCore
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit

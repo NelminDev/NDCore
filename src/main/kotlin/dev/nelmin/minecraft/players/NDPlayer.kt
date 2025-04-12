@@ -1,10 +1,10 @@
-package dev.nelmin.spigot.players
+package dev.nelmin.minecraft.players
 
-import dev.nelmin.spigot.NDCore
-import dev.nelmin.spigot.events.PlayerFreezeEvent
-import dev.nelmin.spigot.events.PlayerUnfreezeEvent
-import dev.nelmin.spigot.objects.LocalizedMessage
-import dev.nelmin.spigot.persistence.PersistentProperty
+import dev.nelmin.minecraft.NDCore
+import dev.nelmin.minecraft.events.PlayerFreezeEvent
+import dev.nelmin.minecraft.events.PlayerUnfreezeEvent
+import dev.nelmin.minecraft.objects.LocalizedMessage
+import dev.nelmin.minecraft.persistence.PersistentProperty
 import kotlinx.datetime.Clock
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player

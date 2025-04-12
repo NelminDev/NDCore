@@ -1,6 +1,6 @@
-package dev.nelmin.spigot.listeners
+package dev.nelmin.minecraft.listeners
 
-import dev.nelmin.spigot.players.NDPlayer
+import dev.nelmin.minecraft.players.NDPlayer
 
 class PlayerQuitListener : org.bukkit.event.Listener {
 

@@ -1,4 +1,4 @@
-package dev.nelmin.spigot.objects
+package dev.nelmin.minecraft.objects
 
 import org.bukkit.configuration.file.YamlConfiguration
 import java.nio.file.Path

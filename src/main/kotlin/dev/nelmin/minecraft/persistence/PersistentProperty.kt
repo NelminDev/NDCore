@@ -1,7 +1,7 @@
-package dev.nelmin.spigot.persistence
+package dev.nelmin.minecraft.persistence
 
-import dev.nelmin.spigot.NDCore
-import dev.nelmin.spigot.NDUtils
+import dev.nelmin.minecraft.NDCore
+import dev.nelmin.minecraft.NDUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

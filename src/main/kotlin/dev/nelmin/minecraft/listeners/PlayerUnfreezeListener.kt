@@ -1,7 +1,7 @@
-package dev.nelmin.spigot.listeners
+package dev.nelmin.minecraft.listeners
 
 import dev.nelmin.logger.Logger
-import dev.nelmin.spigot.events.PlayerUnfreezeEvent
+import dev.nelmin.minecraft.events.PlayerUnfreezeEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.potion.PotionEffectType
 

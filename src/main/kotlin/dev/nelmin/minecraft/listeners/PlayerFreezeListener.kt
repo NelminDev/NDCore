@@ -1,9 +1,9 @@
-package dev.nelmin.spigot.listeners
+package dev.nelmin.minecraft.listeners
 
 import dev.nelmin.logger.Logger
-import dev.nelmin.spigot.builders.PotionEffectBuilder
-import dev.nelmin.spigot.events.PlayerFreezeEvent
-import dev.nelmin.spigot.players.NDPlayer
+import dev.nelmin.minecraft.builders.PotionEffectBuilder
+import dev.nelmin.minecraft.events.PlayerFreezeEvent
+import dev.nelmin.minecraft.players.NDPlayer
 import org.bukkit.event.EventHandler
 import org.bukkit.potion.PotionEffectType
 

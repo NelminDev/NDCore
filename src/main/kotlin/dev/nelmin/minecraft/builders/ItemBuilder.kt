@@ -1,6 +1,6 @@
-package dev.nelmin.spigot.builders
+package dev.nelmin.minecraft.builders
 
-import dev.nelmin.spigot.NDCore
+import dev.nelmin.minecraft.NDCore
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.enchantments.Enchantment

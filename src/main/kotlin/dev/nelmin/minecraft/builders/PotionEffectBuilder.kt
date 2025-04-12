@@ -1,4 +1,4 @@
-package dev.nelmin.spigot.builders
+package dev.nelmin.minecraft.builders
 
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType

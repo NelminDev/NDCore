@@ -1,4 +1,4 @@
-package dev.nelmin.spigot
+package dev.nelmin.minecraft
 
 import dev.nelmin.logger.Logger
 import io.ktor.client.*

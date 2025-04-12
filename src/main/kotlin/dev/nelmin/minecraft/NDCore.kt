@@ -1,12 +1,12 @@
-package dev.nelmin.spigot
+package dev.nelmin.minecraft
 
 import de.mkammerer.argon2.Argon2
 import de.mkammerer.argon2.Argon2Factory
 import dev.nelmin.logger.Logger
-import dev.nelmin.spigot.listeners.PlayerFreezeListener
-import dev.nelmin.spigot.listeners.PlayerJoinListener
-import dev.nelmin.spigot.listeners.PlayerQuitListener
-import dev.nelmin.spigot.listeners.PlayerUnfreezeListener
+import dev.nelmin.minecraft.listeners.PlayerFreezeListener
+import dev.nelmin.minecraft.listeners.PlayerJoinListener
+import dev.nelmin.minecraft.listeners.PlayerQuitListener
+import dev.nelmin.minecraft.listeners.PlayerUnfreezeListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.sync.Mutex

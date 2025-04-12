@@ -1,4 +1,4 @@
-package dev.nelmin.spigot.listeners
+package dev.nelmin.minecraft.listeners
 
 import dev.nelmin.logger.Logger
 import org.bukkit.event.EventHandler

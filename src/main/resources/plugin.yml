@@ -1,6 +1,6 @@
 name: NDCore
 version: '${version}'
-main: dev.nelmin.spigot.NDCore
+main: dev.nelmin.minecraft.NDCore
 api-version: '1.21'
 authors: [ Nelmin ]
 description: The Core of all Plugins by Nelmin

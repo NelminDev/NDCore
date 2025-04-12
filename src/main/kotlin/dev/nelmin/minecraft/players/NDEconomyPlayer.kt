@@ -1,8 +1,7 @@
-package dev.nelmin.spigot.players
+package dev.nelmin.minecraft.players
 
-import dev.nelmin.spigot.NDCore
-import dev.nelmin.spigot.persistence.PersistentProperty
-import dev.nelmin.spigot.players.NDSecurityPlayer
+import dev.nelmin.minecraft.NDCore
+import dev.nelmin.minecraft.persistence.PersistentProperty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext

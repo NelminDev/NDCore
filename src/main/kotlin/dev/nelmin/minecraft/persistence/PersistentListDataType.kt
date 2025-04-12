@@ -1,4 +1,4 @@
-package dev.nelmin.spigot.persistence
+package dev.nelmin.minecraft.persistence
 
 import org.bukkit.persistence.PersistentDataType
 
