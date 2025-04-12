@@ -2,6 +2,7 @@ package dev.nelmin.spigot.players
 
 import dev.nelmin.spigot.NDCore
 import dev.nelmin.spigot.persistence.PersistentProperty
+import dev.nelmin.spigot.players.NDSecurityPlayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext

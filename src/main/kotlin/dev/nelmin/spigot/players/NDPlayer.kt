@@ -233,25 +233,6 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents a mutable list of home locations associated with a player.
-     *
-     * This property is delegated by `PersistentMutableListProperty` to persistently store
-     * and retrieve the list of homes in a `PersistentDataContainer`.
-     *
-     * Key characteristics:
-     * - The list elements are of type `String`.
-     * - Changes to this property are automatically persisted.
-     * - Default value is an empty mutable list.
-     * - Used for maintaining player-specific home locations in a persistent manner.
-     */
-    var homes: MutableList<String> by PersistentMutableListProperty(
-        "homes",
-        PersistentListDataType.STRING,
-        mutableListOf<String>(),
-        persistentDataContainer
-    )
-
-    /**
      * Indicates whether the player is currently frozen and unable to move.
      *
      * This property is stored persistently using a `PersistentDataContainer` and is
@@ -350,4 +331,21 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
         0,
         persistentDataContainer
     )
+
+    /**
+     * Converts the current `NDPlayer` instance into an `NDEconomyPlayer` instance.
+     *
+     * This method creates and returns a new `NDEconomyPlayer`, which extends the base functionality
+     * of `NDPlayer` by adding economy-related features such as managing cash, bank balances,
+     * and other economic properties.
+     *
+     * @return A new `NDEconomyPlayer` instance initialized with the current player's data.
+     */
+    fun economy(): NDEconomyPlayer = NDEconomyPlayer(this)
+    /**
+     * Converts the current `NDPlayer` instance to an `NDSecurityPlayer` instance.
+     *
+     * @return A new instance of `NDSecurityPlayer` initialized with the current player data.
+     */
+    fun security(): NDSecurityPlayer = NDSecurityPlayer(this)
 }
