@@ -101,7 +101,7 @@ data class SemanticVersion(val version: String) {
      */
     fun isPreRelease(): Boolean = preRelease?.let {
         it.contains("SNAPSHOT", true) || it.contains("ALPHA", true)
-    } ?: false
+    } == true
 }
 
 /**
@@ -213,7 +213,7 @@ object NDUtils {
             }
         } catch (e: Exception) {
             val errorMsg = "Version comparison failed: ${e.message}"
-            Logger.error(errorMsg)
+            Logger.queueError(errorMsg)
             UpdateCheckResult(needsUpdate = false, error = errorMsg)
         }
     }

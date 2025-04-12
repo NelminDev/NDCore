@@ -65,7 +65,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.spigot:core:2.2.0'
+implementation 'dev.nelmin.minecraft:core:2.2.0'
 ```
 
 </details>
@@ -74,7 +74,7 @@ implementation 'dev.nelmin.spigot:core:2.2.0'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.spigot:core:2.2.0")
+implementation("dev.nelmin.minecraft:core:2.2.0")
 ```
 
 </details>
@@ -84,7 +84,7 @@ implementation("dev.nelmin.spigot:core:2.2.0")
 
 ```xml
 <dependency>
-    <groupId>dev.nelmin.spigot</groupId>
+  <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core</artifactId>
     <version>2.2.0</version>
 </dependency>

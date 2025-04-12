@@ -1,5 +1,8 @@
 package dev.nelmin.spigot.objects
 
+import org.bukkit.configuration.file.YamlConfiguration
+import java.nio.file.Path
+
 /**
  * Represents a localized message system that manages translations for different language codes.
  * Provides functionality to define translations, fallback settings, and retrieve messages.
@@ -99,4 +102,24 @@ class LocalizedMessage {
      * @return true if a translation exists for the given language code, false otherwise.
      */
     fun hasTranslation(languageCode: String): Boolean = messages.containsKey(languageCode)
+
+    /**
+     * Retrieves a value from a YAML configuration file based on the given key and language code.
+     *
+     * @param key The key to look up in the YAML file.
+     * @param languageCode The language code used to determine the specific YAML file.
+     * @param path The base directory path where the YAML files are located.
+     * @param fileFormat The format of the YAML file name. Defaults to "message-%lang.yml", where "%lang" is replaced with the language code.
+     * @return The value associated with the specified key in the YAML file, or the fallback message if the key is not found.
+     */
+    fun getYamlFromFile(
+        key: String,
+        languageCode: String,
+        path: Path,
+        fileFormat: String = "message-%lang.yml"
+    ): String? {
+        val yamlConfiguration =
+            YamlConfiguration().apply { load(path.resolve(fileFormat.replace("%lang", languageCode)).toFile()) }
+        return yamlConfiguration.getString(key) ?: fallbackMessage
+    }
 }

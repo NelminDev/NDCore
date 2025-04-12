@@ -4,8 +4,6 @@ import dev.nelmin.spigot.NDCore
 import dev.nelmin.spigot.events.PlayerFreezeEvent
 import dev.nelmin.spigot.events.PlayerUnfreezeEvent
 import dev.nelmin.spigot.objects.LocalizedMessage
-import dev.nelmin.spigot.persistence.PersistentListDataType
-import dev.nelmin.spigot.persistence.PersistentMutableListProperty
 import dev.nelmin.spigot.persistence.PersistentProperty
 import kotlinx.datetime.Clock
 import org.bukkit.Bukkit

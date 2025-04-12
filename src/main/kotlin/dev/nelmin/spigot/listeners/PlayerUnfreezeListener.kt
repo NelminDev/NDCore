@@ -1,5 +1,6 @@
 package dev.nelmin.spigot.listeners
 
+import dev.nelmin.logger.Logger
 import dev.nelmin.spigot.events.PlayerUnfreezeEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.potion.PotionEffectType
@@ -18,7 +19,7 @@ class PlayerUnfreezeListener : org.bukkit.event.Listener {
      *              including the player instance and an optional message to display.
      */
     @EventHandler
-    fun onPlayerFreeze(event: PlayerUnfreezeEvent) {
+    fun onPlayerUnfreeze(event: PlayerUnfreezeEvent) {
         event.player.apply {
             removePotionEffect(
                 PotionEffectType.BLINDNESS
@@ -34,5 +35,7 @@ class PlayerUnfreezeListener : org.bukkit.event.Listener {
         if (!event.message.isNullOrEmpty()) {
             event.player.sendMessage(event.message)
         }
+
+        Logger.queueInfo("The player ${event.player.name} has been unfrozen.")
     }
 }

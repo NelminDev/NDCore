@@ -1,6 +1,8 @@
 # NDCore
 
-NDCore is the core dependency plugin that provides essential functionality for plugins developed by nelmin. This plugin serves as a foundational library, offering crucial utility functions while maintaining zero configuration requirements.
+NDCore is the core dependency plugin that provides essential functionality for plugins developed by nelmin, but it is
+available for everyone to use. This plugin serves as a foundational library, offering crucial utility functions while
+maintaining zero configuration requirements.
 
 ## Overview
 
@@ -30,8 +32,8 @@ Key components:
 - `TextBuilder` for Adventure API-based text formatting
 - `LocalizedMessage` for translation management
 - `NDPlayer` for extensive player data management with conversion methods:
-    - `economy()` for economic functionality
-    - `security()` for secure player management
+  - `economy()` for economic functionality
+  - `security()` for secure player management
 
 To use NDCore as a dependency, add the following to your `plugin.yml`:
 
@@ -45,7 +47,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.spigot:core:2.2.0'
+implementation 'dev.nelmin.minecraft:core:VERSION'
 ```
 
 </details>
@@ -54,7 +56,7 @@ implementation 'dev.nelmin.spigot:core:2.2.0'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.spigot:core:2.2.0")
+implementation("dev.nelmin.minecraft:core:VERSION")
 ```
 
 </details>
@@ -64,9 +66,9 @@ implementation("dev.nelmin.spigot:core:2.2.0")
 
 ```xml
 <dependency>
-    <groupId>dev.nelmin.spigot</groupId>
+  <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core</artifactId>
-    <version>2.2.0</version>
+  <version>VERSION</version>
 </dependency>
 ```
 
@@ -75,19 +77,15 @@ implementation("dev.nelmin.spigot:core:2.2.0")
 ## System Requirements
 
 - Java 21 or higher
-- Compatible with PaperMC 1.21.4 or higher
+- Compatible with the latest PaperMC version
 
 ## Installation
 
 1. Download NDCore from the releases page
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
-4. The plugin will load automatically as a dependency
+4. The plugin will load automatically
 
 ## License
 
 This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For issues, questions, or contributions, please use the GitHub repository's issue tracker.

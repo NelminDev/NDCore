@@ -1,5 +1,5 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import java.util.Calendar
+import java.util.*
 
 /**
  * Configures the plugins used in the project.
@@ -53,8 +53,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")
 
-    // Nelmins APIs
-    api("dev.nelmin:lumina:1.0.3")
+    // Nelmin APIs
+    api("dev.nelmin:lumina:2.0.3") // Logger
 }
 
 tasks {

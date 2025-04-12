@@ -1,5 +1,6 @@
 package dev.nelmin.spigot.listeners
 
+import dev.nelmin.logger.Logger
 import dev.nelmin.spigot.builders.PotionEffectBuilder
 import dev.nelmin.spigot.events.PlayerFreezeEvent
 import dev.nelmin.spigot.players.NDPlayer
@@ -36,6 +37,8 @@ class PlayerFreezeListener : org.bukkit.event.Listener {
         if (!event.message.isNullOrEmpty()) {
             event.player.sendMessage(event.message)
         }
+
+        Logger.queueInfo("The player ${event.player.name} has been frozen.")
     }
 
     /**

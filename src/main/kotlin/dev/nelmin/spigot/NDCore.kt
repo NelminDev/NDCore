@@ -97,7 +97,11 @@ class NDCore : JavaPlugin() {
      */
     override fun onEnable() {
         instance = this
+
         Logger.setName("NDCore")
+        Logger.coroutineScope = coroutineScope
+
+        Logger.startListeningForLogMessages(coroutineScope)
 
         pluginManager.registerEvents(PlayerFreezeListener(), this)
         pluginManager.registerEvents(PlayerUnfreezeListener(), this)
@@ -106,14 +110,14 @@ class NDCore : JavaPlugin() {
 
         // pluginManager.registerEvents(EventListenerForLogging(), this)
 
-        Logger.info("Plugin enabled!")
+        Logger.queueInfo("Plugin enabled!")
 
-        Logger.info("Checking for updates...")
+        Logger.queueInfo("Checking for updates...")
         NDUtils.checkForPluginUpdates(callback = { (hasUpdate, updateType) ->
             if (hasUpdate) {
-                Logger.warn("An update is available for NDCore (${instance.description.version} -> $updateType)")
+                Logger.queueWarn("An update is available for NDCore (${instance.description.version} -> $updateType)")
             } else {
-                Logger.info("You are running the latest version of NDCore (${instance.description.version})")
+                Logger.queueInfo("You are running the latest version of NDCore (${instance.description.version})")
             }
         })
     }
@@ -124,6 +128,7 @@ class NDCore : JavaPlugin() {
      * resources, save plugin state, or perform cleanup operations before the plugin fully unloads.
      */
     override fun onDisable() {
-        Logger.info("Plugin disabled!")
+        Logger.queueInfo("Plugin disabled!")
+        Logger.stopListeningForLogMessages()
     }
 }
