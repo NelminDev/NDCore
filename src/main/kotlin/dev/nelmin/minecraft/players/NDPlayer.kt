@@ -9,6 +9,7 @@ import kotlinx.datetime.Clock
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.plugin.java.JavaPlugin
 
 /**
  * Represents a player in the NDCore system and provides additional properties and behaviors
@@ -98,9 +99,11 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
             _vanish = value
 
             if (value)
-                Bukkit.getOnlinePlayers().forEach { player -> player.hidePlayer(NDCore.instance(), bukkitPlayer) }
+                Bukkit.getOnlinePlayers()
+                    .forEach { player -> player.hidePlayer(JavaPlugin.getPlugin(NDCore::class.java), bukkitPlayer) }
             else
-                Bukkit.getOnlinePlayers().forEach { player -> player.showPlayer(NDCore.instance(), bukkitPlayer) }
+                Bukkit.getOnlinePlayers()
+                    .forEach { player -> player.showPlayer(JavaPlugin.getPlugin(NDCore::class.java), bukkitPlayer) }
         }
 
     /**
@@ -257,7 +260,7 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
      */
     fun freeze(message: String? = null) {
         isFrozenInPlace = true
-        NDCore.instance().pluginManager.callEvent(PlayerFreezeEvent(this, message))
+        JavaPlugin.getPlugin(NDCore::class.java).pluginManager.callEvent(PlayerFreezeEvent(this, message))
     }
 
     /**
@@ -269,7 +272,7 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
      */
     fun unfreeze(message: String? = null) {
         isFrozenInPlace = false
-        NDCore.instance().pluginManager.callEvent(PlayerUnfreezeEvent(this, message))
+        JavaPlugin.getPlugin(NDCore::class.java).pluginManager.callEvent(PlayerUnfreezeEvent(this, message))
     }
 
     /**
@@ -340,6 +343,7 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
      * @return A new `NDEconomyPlayer` instance initialized with the current player's data.
      */
     fun economy(): NDEconomyPlayer = NDEconomyPlayer(this)
+
     /**
      * Converts the current `NDPlayer` instance to an `NDSecurityPlayer` instance.
      *
@@ -347,3 +351,7 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
      */
     fun security(): NDSecurityPlayer = NDSecurityPlayer(this)
 }
+
+fun Player.toNDPlayer(): NDPlayer = NDPlayer(this)
+fun Player.toNDEconomyPlayer(): NDEconomyPlayer = NDEconomyPlayer(this)
+fun Player.toNDSecurityPlayer(): NDSecurityPlayer = NDSecurityPlayer(this)

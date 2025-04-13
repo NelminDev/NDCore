@@ -1,6 +1,6 @@
 package dev.nelmin.minecraft.builders
 
-import dev.nelmin.minecraft.NDCore
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.enchantments.Enchantment
@@ -184,7 +184,7 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
          * @return The current instance of [Head] to allow method chaining.
          */
         fun setOwner(uuid: UUID): Head {
-            skullMeta.owningPlayer = NDCore.instance().server.getOfflinePlayer(uuid)
+            skullMeta.owningPlayer = Bukkit.getOfflinePlayer(uuid)
             return this
         }
 

@@ -13,10 +13,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
 
 /**
  * Represents the result of a plugin update check operation.
@@ -28,6 +30,7 @@ import org.bukkit.plugin.Plugin
  *                 Can be null if the operation completes successfully.
  */
 data class UpdateCheckResult(
+    val currentVersion: String,
     val needsUpdate: Boolean,
     val updateType: String? = null,
     val error: String? = null
@@ -131,7 +134,7 @@ object NDUtils {
      * @param plugin The plugin associated with the `NamespacedKey`. Defaults to the singleton instance of `NDCore`.
      * @return A new `NamespacedKey` instance associated with the specified key name and plugin.
      */
-    fun getNamespacedKey(keyName: String, plugin: Plugin = NDCore.instance()) =
+    fun getNamespacedKey(keyName: String, plugin: Plugin = JavaPlugin.getPlugin(NDCore::class.java)) =
         NamespacedKey(plugin, keyName)
 
     /**
@@ -148,13 +151,10 @@ object NDUtils {
     fun checkForPluginUpdates(
         name: String = "NDCore",
         organizationOrUser: String = "NelminDev",
+        currentVersion: String,
         callback: (UpdateCheckResult) -> Unit
     ) = NDCore.coroutineScope.launch(Dispatchers.IO) {
         runCatching {
-            val currentVersion = NDCore.instance().description.version.let {
-                SemanticVersion(it)
-            }
-
             val response: JsonObject = httpClient
                 .get("https://api.github.com/repos/$organizationOrUser/$name/releases/latest") {
                     headers { append(HttpHeaders.Accept, "application/vnd.github.v3+json") }
@@ -172,7 +172,7 @@ object NDUtils {
                 }
 
             val latestVersion = SemanticVersion(latestVersionStr.removePrefix("v"))
-            callback(compareVersions(currentVersion, latestVersion))
+            callback(compareVersions(SemanticVersion(currentVersion), latestVersion))
         }.onFailure { e ->
             val errorMsg = "Update check failed: ${e.message}"
             Logger.error(errorMsg)
@@ -224,7 +224,7 @@ object NDUtils {
      * @param material The material representing the type of item to be removed from players' inventories.
      */
     fun removeItemFromAllPlayers(material: Material) {
-        for (player in NDCore.instance().server.onlinePlayers) {
+        for (player in Bukkit.getOnlinePlayers()) {
             player.inventory.remove(material)
         }
     }

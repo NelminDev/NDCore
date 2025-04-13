@@ -10,6 +10,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -52,7 +53,7 @@ class PersistentMutableListProperty<P, C : Any>(
         type: PersistentDataType<List<P>, List<C>>,
         defaultValue: MutableList<C>,
         container: PersistentDataContainer,
-        plugin: Plugin = NDCore.instance()
+        plugin: Plugin = JavaPlugin.getPlugin(NDCore::class.java)
     ) : this(NDUtils.getNamespacedKey(namespacedKeyName, plugin), type, defaultValue, container)
 
     /**
