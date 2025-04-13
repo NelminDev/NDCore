@@ -3,7 +3,7 @@ package dev.nelmin.minecraft.listeners
 import dev.nelmin.logger.Logger
 import dev.nelmin.minecraft.builders.PotionEffectBuilder
 import dev.nelmin.minecraft.events.PlayerFreezeEvent
-import dev.nelmin.minecraft.players.NDPlayer
+import dev.nelmin.minecraft.players.toNDPlayer
 import org.bukkit.event.EventHandler
 import org.bukkit.potion.PotionEffectType
 
@@ -51,6 +51,6 @@ class PlayerFreezeListener : org.bukkit.event.Listener {
      */
     @EventHandler
     fun onPlayerMoveWhileFrozen(event: org.bukkit.event.player.PlayerMoveEvent) {
-        event.isCancelled = NDPlayer(event.player).isFrozenInPlace
+        event.isCancelled = event.player.toNDPlayer().isFrozenInPlace
     }
 }

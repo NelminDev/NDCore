@@ -2,6 +2,7 @@ package dev.nelmin.minecraft.events
 
 import dev.nelmin.minecraft.menus.Menu
 import dev.nelmin.minecraft.players.NDPlayer
+import dev.nelmin.minecraft.players.toNDPlayer
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
@@ -15,7 +16,7 @@ class MenuClickEvent(
     val slot: Int,
     val menu: Menu,
     val item: ItemStack? = null,
-    val ndPlayer: NDPlayer = NDPlayer(player)
+    val ndPlayer: NDPlayer = player.toNDPlayer()
 ) : Event(), Cancellable {
     /**
      * Flag indicating whether the event has been cancelled.

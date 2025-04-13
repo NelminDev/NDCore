@@ -1,6 +1,7 @@
 package dev.nelmin.minecraft.events
 
 import dev.nelmin.minecraft.players.NDPlayer
+import dev.nelmin.minecraft.players.toNDPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList
@@ -20,7 +21,7 @@ import org.bukkit.event.player.PlayerEvent
  *                 extended functionality for handling persistent data beyond
  *                 standard Bukkit player operations.
  */
-class PlayerUnfreezeEvent(player: Player, val message: String?, val ndPlayer: NDPlayer = NDPlayer(player)) :
+class PlayerUnfreezeEvent(player: Player, val message: String?, val ndPlayer: NDPlayer = player.toNDPlayer()) :
     PlayerEvent(player), Cancellable {
     /**
      * Indicates whether the event has been cancelled.

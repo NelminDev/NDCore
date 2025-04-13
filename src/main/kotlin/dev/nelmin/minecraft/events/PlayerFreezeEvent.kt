@@ -1,6 +1,7 @@
 package dev.nelmin.minecraft.events
 
 import dev.nelmin.minecraft.players.NDPlayer
+import dev.nelmin.minecraft.players.toNDPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList
@@ -19,7 +20,7 @@ import org.bukkit.event.player.PlayerEvent
  * @param ndPlayer An `NDPlayer` instance representing the player, which
  *                 provides extended functionalities and properties for event handling.
  */
-class PlayerFreezeEvent(player: Player, val message: String?, val ndPlayer: NDPlayer = NDPlayer(player)) :
+class PlayerFreezeEvent(player: Player, val message: String?, val ndPlayer: NDPlayer = player.toNDPlayer()) :
     PlayerEvent(player), Cancellable {
     /**
      * Flag indicating whether the event has been cancelled.
