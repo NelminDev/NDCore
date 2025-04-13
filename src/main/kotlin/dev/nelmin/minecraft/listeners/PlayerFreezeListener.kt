@@ -51,6 +51,6 @@ class PlayerFreezeListener : org.bukkit.event.Listener {
      */
     @EventHandler
     fun onPlayerMoveWhileFrozen(event: org.bukkit.event.player.PlayerMoveEvent) {
-        event.isCancelled = event.player.toNDPlayer()._isFrozenInPlace
+        event.isCancelled = event.player.toNDPlayer().isFrozenInPlace
     }
 }

@@ -9,51 +9,58 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
 /**
- * Represents a custom menu interface that extends the functionality of `MenuInterface`.
- * This class is designed to manage an interactive inventory menu with a given title and specified number of rows.
- * It provides functionality to handle click actions, set items in inventory slots, and associate actions with specific slots.
+ * Represents a customizable menu that implements the `MenuInterface` to handle inventory-based interactions
+ * in a Minecraft plugin. This class provides functionalities for managing menu items, player clicks,
+ * and row-based inventory configurations.
  *
- * @constructor Creates a `Menu` instance with a `Component` title and specified rows.
- * @param title The title of the inventory menu as a `Component`.
- * @param rows The number of rows in the inventory menu, constrained by the `Rows` enum.
+ * @property title The title of the inventory, represented as a `Component`.
+ * @constructor Creates a menu with the specified title and number of rows.
+ * @param rows An instance of `Rows` enum defining the number of rows for the inventory.
  */
-class Menu(
+open class Menu(
     private val title: Component,
     rows: Rows,
 ) : MenuInterface {
     /**
-     * A map that associates inventory slot indices with actions to be executed when the slot is interacted with.
-     * The key represents the slot index, while the value is a function that takes a Player as a parameter and
-     * defines the action to be executed upon interaction.
+     * A mutable map that associates inventory slot indices with their respective click actions.
+     * The actions are functions executed when a player interacts with the corresponding slot in the menu.
      *
-     * This property allows dynamic definition and execution of slot-specific behaviors within a menu system.
-     * It is used in conjunction with methods such as `setItem` to associate actions with specific items in the inventory.
+     * Keys in this map represent the slot indices within the inventory, while the values are lambda functions
+     * that accept a `Player` parameter. These lambdas define the behavior that should occur when a player clicks
+     * the corresponding slot in the menu.
+     *
+     * This property is primarily utilized in the `click` and `setItem` methods to manage interactions
+     * within the menu.
      */
     private val actions = mutableMapOf<Int, (Player) -> Unit>()
 
     /**
-     * Represents the inventory associated with the menu, initialized with the specified number of rows
-     * and title. The inventory is created using the Bukkit API and serves as the underlying storage
-     * mechanism for the menu's items.
+     * Represents the inventory associated with this menu instance.
+     * The inventory is created with the specified number of rows and a title,
+     * and is used to manage the items and interactions within the menu.
+     *
+     * This inventory is the core of the menu's functionality, allowing developers
+     * to customize and control the behavior of items and slots for players.
      */
     private val inventory: Inventory = Bukkit.createInventory(this, rows.size, title)
 
     /**
-     * Secondary constructor for the `Menu` class.
-     * Initializes a `Menu` instance by accepting a title as a `String` and the number of rows as an `Int`.
+     * Secondary constructor for the `Menu` class that allows instantiation
+     * using a plain string for the menu title and an integer for the number of rows.
+     * Converts the provided title into a formatted `Component` and maps the integer
+     * into the corresponding `Rows` enum value.
      *
-     * @param title The title of the menu provided as a `String`. This will be transformed into a `Component` via `TextBuilder.colorize()`.
-     * @param rows The number of rows for the menu provided as an `Int`. This will be mapped to a `Rows` enumeration using `Rows.of()`.
+     * @param title The title of the menu as a plain string.
+     * @param rows The number of rows in the menu, which will be mapped to a `Rows` enum.
      */
     constructor(title: String, rows: Int) : this(TextBuilder(title).colorize(), Rows.of(rows))
 
     /**
-     * Handles a player's click action within the menu at a specific slot.
-     * Executes the corresponding action assigned to the slot, if any,
-     * and triggers a `MenuClickEvent`.
+     * Handles the click action performed by a player on a specific menu slot.
+     * Executes the action mapped to the clicked slot, if any, and triggers a `MenuClickEvent`.
      *
-     * @param player The player who performed the click action.
-     * @param slot The index of the slot within the menu that the player clicked.
+     * @param player The player performing the click action.
+     * @param slot The slot index that was clicked within the menu.
      */
     override fun click(player: Player, slot: Int) {
         val action = actions[slot] ?: return
@@ -62,21 +69,21 @@ class Menu(
     }
 
     /**
-     * Sets an item in the specified inventory slot.
-     * This implementation invokes an overload with an empty action.
+     * Sets an item in the specified slot of the menu's inventory. If an action is associated
+     * with the slot, it will be executed when the item in the slot is clicked.
      *
-     * @param slot The inventory slot where the item will be placed.
-     * @param item The item to be placed in the specified slot.
+     * @param slot The index of the slot where the item should be placed.
+     * @param item The ItemStack to place in the specified slot.
      */
     override fun setItem(slot: Int, item: ItemStack) = setItem(slot, item) { }
 
     /**
-     * Sets an item in the specified inventory slot and associates an action
-     * to be executed when the item is interacted with by a player.
+     * Sets an item in the specified inventory slot and assigns an action to be executed
+     * when the item is interacted with by a player.
      *
-     * @param slot The index of the inventory slot where the item will be placed.
-     * @param item The item to be placed in the specified slot.
-     * @param action The action to be executed when a player clicks the item.
+     * @param slot The slot index in the inventory where the item should be placed.
+     * @param item The ItemStack to be placed in the specified slot.
+     * @param action The action to be executed when a player interacts with the item.
      */
     override fun setItem(
         slot: Int,
@@ -88,12 +95,12 @@ class Menu(
     }
 
     /**
-     * Invoked to execute custom logic or preparations before items are added to the inventory.
-     * This method is typically used to configure the state of the menu, populate inventory slots,
-     * or associate actions with specific items prior to the inventory being opened to players.
+     * Called prior to setting items in the menu's inventory.
+     * This method is designed to provide a hook for preparations or custom logic
+     * before items are placed into the inventory slots.
      *
-     * It is recommended to override this method in subclasses of `Menu` to define specific behavior
-     * for item setup in different menu implementations.
+     * Intended to be overridden in subclasses to define specific behavior or setup
+     * that needs to occur when the menu's inventory is initialized or updated.
      */
     override fun onSetItem() {
     }
@@ -101,74 +108,83 @@ class Menu(
     /**
      * Retrieves the inventory associated with this menu.
      *
-     * @return The current inventory instance linked to this menu.
+     * @return The inventory instance managed by this menu.
      */
     override fun getInventory(): Inventory = inventory
 
     /**
-     * Represents the number of rows in a menu, with each row containing 9 slots.
-     * This class is used to define and manage the size of an inventory menu.
+     * Represents the number of rows in a menu or inventory and provides
+     * utility methods for interacting with row sizes.
      *
-     * @param rows The number of rows represented by this instance.
+     * Each row corresponds to a specific number of inventory slots, calculated
+     * as rows multiplied by 9. The class also includes a companion object
+     * for convenient mapping and retrieval of Rows instances.
+     *
+     * @property size The total number of slots in the inventory for the given number of rows.
      */
     enum class Rows(rows: Int) {
         /**
-         * Represents a single row configuration with a predefined constant.
-         * This enumeration value corresponds to a row count of 1.
+         * Represents a single-row inventory layout.
+         *
+         * This enum constant is part of the `Rows` enumeration and is used to define a menu
+         * layout with one row. Each row consists of 9 slots.
+         *
+         * @param rows The number of rows in the inventory layout.
          */
         ONE(1),
 
         /**
-         * Represents the second row configuration in a menu system.
-         * Each row corresponds to nine slots, and this enum constant represents two rows, equating to 18 slots.
+         * Represents a row configuration with two rows in the inventory system.
+         * Each row contains 9 slots, resulting in a total of 18 slots for this configuration.
          */
         TWO(2),
 
         /**
-         * Represents an enumeration value corresponding to a menu with three rows.
+         * Represents the third row configuration in a menu system.
+         * Equivalent to three rows or a total of 27 slots.
          */
         THREE(3),
 
         /**
-         * Represents the fourth defined row configuration in the menu system.
-         * Each row consists of a defined number of inventory slots, calculated by multiplying the row count by 9.
+         * Represents a row configuration with four rows in the inventory menu.
+         * Each row consists of nine slots, making the total size of this configuration 36 slots.
          */
         FOUR(4),
 
         /**
-         * Enum class FIVE represents a numeric constant with the value 5.
+         * Represents an option specifying a menu with five rows. This constant can be used
+         * to define inventories or menus that require exactly five rows, equating to a size
+         * of 45 slots.
          *
-         * This enumeration can be used where numerical constants are
-         * represented as predefined named values for improved readability
-         * and maintainability within the codebase.
-         *
-         * @property value The numerical value associated with the enum constant FIVE.
+         * @property size The size of the inventory, calculated as the number of rows multiplied by 9.
          */
         FIVE(5);
 
         /**
-         * Represents the calculated size based on the number of rows.
-         * This value is determined by multiplying the number of rows by 9.
+         * Represents the total size of the menu inventory, defined as the number of rows multiplied by 9.
+         * This value determines the capacity of the inventory in terms of slots.
          */
         val size: Int = rows * 9
 
         /**
-         * Companion object providing helper methods related to the Rows enum.
+         * Companion object for the `Rows` enum, providing utility functions for mapping
+         * and retrieving `Rows` instances based on defined sizes.
          */
         companion object {
             /**
-             * Maps the calculated `size` property of `Rows` enum constants to their corresponding `Rows` instance.
+             * A map that associates the size of a row (in slots) to its corresponding [Rows] enum instance.
+             * Designed to enable quick lookup of a [Rows] instance based on the size of the inventory.
              *
-             * This mapping is constructed by associating each `Rows` enum constant with its `size` property.
-             * It is used to efficiently retrieve a `Rows` instance based on a specific inventory size.
+             * Key: The size of the inventory (calculated as `rows * 9`).
+             * Value: The corresponding [Rows] enum instance.
              */
             private val sizeToRowsMap = entries.associateBy { it.size }
 
             /**
-             * Retrieves the corresponding Rows object based on the given number of rows.
+             * Fetches a Rows object corresponding to the given number of rows.
              *
-             * @param rows The number of rows to lookup and calculate the corresponding Rows object.
-             * @return The Rows object associated with the given number of rows.
+             * @param rows The number of rows for which the Rows object is to be retrieved.
+             * @return The Rows object corresponding to the given number of rows.
              */
             fun of(rows: Int): Rows = sizeToRowsMap.getValue(rows * 9)
         }
