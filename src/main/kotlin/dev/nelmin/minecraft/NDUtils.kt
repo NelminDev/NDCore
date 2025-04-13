@@ -21,13 +21,16 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 
 /**
- * Represents the result of a plugin update check operation.
+ * Represents the result of checking for plugin updates. This class encapsulates
+ * the information about whether an update is needed, the type of update, any errors
+ * encountered during the update check, and the current version of the plugin.
  *
- * @property needsUpdate Indicates whether an update is required for the plugin.
- * @property updateType Specifies the type of update available, such as "Stable", "Snapshot", or "Alpha".
- *                      Can be null if no update is needed or if the type is unspecified.
- * @property error Provides details about any error encountered during the update check.
- *                 Can be null if the operation completes successfully.
+ * @property needsUpdate Indicates if an update is required for the plugin.
+ * @property updateType Specifies the type or severity of the update (e.g., major, minor, patch).
+ *                      Null if no update is necessary or the type could not be determined.
+ * @property error Describes any error encountered while checking for updates.
+ *                 Null if no error occurred during the process.
+ * @property currentVersion The current version of the plugin as retrieved from the plugin's metadata.
  */
 data class UpdateCheckResult(
     val needsUpdate: Boolean,
@@ -37,46 +40,49 @@ data class UpdateCheckResult(
 )
 
 /**
- * Represents a semantic versioning implementation for parsing and handling version strings.
- * The semantic versioning format is typically `MAJOR.MINOR.PATCH` with an optional pre-release identifier.
+ * Represents a semantic version number adhering to the format "MAJOR.MINOR.PATCH[-PRERELEASE]".
+ * The version string is parsed into its individual components: major, minor, patch, and an optional pre-release identifier.
  *
- **/
+ * Semantic versioning is a standard for version numbers that conveys meaning about the underlying changes.
+ */
 data class SemanticVersion(val version: String) {
     /**
-     * Represents the major version number in a semantic versioning scheme.
+     * Represents the major version number of a semantic version.
      *
-     * This value corresponds to the first segment of a version string in the format `x.y.z`,
-     * where `x` is the major version. A higher major version generally indicates significant
-     * changes, breaking backward compatibility with previous versions.
-     *
-     * Example:
-     * For the version string `2.5.1`, the `major` version is `2`.
+     * This value is typically the first number in a version string following the semantic versioning format (e.g., "1" in "1.0.0").
+     * It signifies backward-incompatible changes or significant updates in the software.
      */
     val major: Int
 
     /**
-     * Represents the minor version component of a semantic version.
-     * It is a non-negative integer that indicates backward-compatible new features
-     * or enhancements introduced in the software since the last major version increment.
+     * Represents the minor version component of the semantic version.
      *
-     * For example, in a version string "1.2.3", the value of `minor` would be 2.
-     * It is extracted from the version string during the initialization of the `SemanticVersion` class.
+     * This value corresponds to the second segment of the version number in the format `MAJOR.MINOR.PATCH`.
+     * It indicates backward-compatible functionality additions or enhancements within the version.
+     *
+     * For example, in version `1.2.3`, the minor version is `2`.
      */
     val minor: Int
 
     /**
-     * The patch version number of the semantic version.
-     * This variable represents the third segment in the semantic version format (major.minor.patch).
+     * Represents the patch version number in a semantic versioning scheme.
      *
-     * For instance, in a version "1.2.3", `patch` would be `3`.
-     * It defaults to `0` if the patch segment is absent in the version string.
+     * The patch version is intended to increment for backward-compatible bug fixes.
+     * It is extracted from the version string provided during the initialization
+     * of the `SemanticVersion` class.
      */
     val patch: Int
 
     /**
-     * Represents the pre-release metadata associated with a semantic version.
-     * This property holds an optional string that indicates whether the version
-     * is a pre-release and specifies the type or stage*/
+     * Represents the optional pre-release information of a semantic version.
+     *
+     * This value is derived from a version string when a pre-release segment exists.
+     * The pre-release segment is generally denoted following a hyphen, e.g., "1.0.0-alpha".
+     * It may include identifiers such as "SNAPSHOT", "ALPHA", or other custom labels,
+     * and can be used to determine whether the version is a pre-release.
+     *
+     * If no pre-release segment is specified in the version string, this value will be `null`.
+     */
     val preRelease: String?
 
     init {
@@ -96,11 +102,12 @@ data class SemanticVersion(val version: String) {
     }
 
     /**
-     * Determines whether the version is a pre-release based on the presence of specific keywords
-     * in the `preRelease` identifier. A version is considered a pre-release if the `preRelease`
-     * identifier contains "SNAPSHOT" or "ALPHA" (case-insensitive).
+     * Determines whether the current Semantic Version instance represents a pre-release version.
      *
-     * @return `true` if the version is a pre-release, otherwise `false`.
+     * A version is considered a pre-release if the `preRelease` component of the version contains
+     * either "SNAPSHOT" or "ALPHA", case-insensitively.
+     *
+     * @return true if the version is a pre-release, false otherwise
      */
     fun isPreRelease(): Boolean = preRelease?.let {
         it.contains("SNAPSHOT", true) || it.contains("ALPHA", true)
@@ -108,19 +115,20 @@ data class SemanticVersion(val version: String) {
 }
 
 /**
- * Utility object containing various helper methods for plugin and namespace management
- * including features such as namespaced key generation, version checks, and bulk item removal.
+ * Utility object providing a set of functions commonly used in plugin development.
+ * Includes operations for managing items in player inventories, namespace key generation,
+ * plugin update checks, and more.
  */
 object NDUtils {
     /**
-     * A configured instance of the `HttpClient` utilizing the `CIO` engine.
+     * Represents an HTTP client configured with the CIO engine.
      *
-     * This client is set up with the following features:
-     * - `ContentNegotiation` with JSON support for seamless serialization and deserialization of JSON payloads.
-     * - `HttpTimeout` with a request timeout of 10 seconds to handle request operations gracefully under time constraints.
+     * This `httpClient` is set up with the following features:
+     * - **Content Negotiation**: Automatically handles JSON serialization and deserialization.
+     * - **Timeout configuration**: The request timeout is set to 10 seconds (10,000 milliseconds).
      *
-     * This instance is utilized for making HTTP requests, such as fetching the latest plugin release information
-     * from external sources, e.g., GitHub API.
+     * Used for making HTTP requests, such as fetching data from external APIs like GitHub.
+     * It is initialized with built-in plugins for efficient network communication and data handling.
      */
     private val httpClient = HttpClient(CIO) {
         install(ContentNegotiation) { json() }
@@ -128,25 +136,22 @@ object NDUtils {
     }
 
     /**
-     * Creates a new `NamespacedKey` using the specified key name and plugin.
+     * Generates a `NamespacedKey` for the specified key name using the provided plugin or the default NDCore plugin.
      *
-     * @param keyName The name of the key to be used for the `NamespacedKey`.
-     * @param plugin The plugin associated with the `NamespacedKey`. Defaults to the singleton instance of `NDCore`.
-     * @return A new `NamespacedKey` instance associated with the specified key name and plugin.
+     * @param keyName The name of the key to be used for generating the `NamespacedKey`.
+     * @param plugin The plugin instance used for creating the `NamespacedKey`. Defaults to the NDCore plugin instance.
+     * @return A `NamespacedKey` object that combines the plugin namespace with the provided key name.
      */
     fun getNamespacedKey(keyName: String, plugin: Plugin = JavaPlugin.getPlugin(NDCore::class.java)) =
         NamespacedKey(plugin, keyName)
 
     /**
-     * Checks for plugin updates by comparing the current version of the plugin with the latest
-     * version available on GitHub. The comparison is performed asynchronously within a coroutine
-     * on the IO dispatcher.
+     * Checks for updates to a specified plugin using the GitHub API and notifies the result via a callback.
      *
-     * @param name The repository name of the plugin. Defaults to "NDCore".
-     * @param organizationOrUser The organization or username that owns the repository. Defaults to "NelminDev".
-     * @param callback A function that receives the result of the update check. The result is an instance
-     * of `UpdateCheckResult`, which contains information about whether an update is needed and any
-     * associated error messages.
+     * @param name The name of the plugin repository. Defaults to "NDCore".
+     * @param organizationOrUser The organization or user that owns the plugin repository. Defaults to "NelminDev".
+     * @param currentVersion The current version of the plugin in use.
+     * @param callback A callback function that receives the result of the update check as an instance of [UpdateCheckResult].
      */
     fun checkForPluginUpdates(
         name: String = "NDCore",
@@ -182,11 +187,13 @@ object NDUtils {
     }
 
     /**
-     * Compares two semantic version objects to determine if an update is needed.
+     * Compares two semantic versions to determine if an update is needed.
      *
-     * The function compares the major, minor, and patch versions of the provided `current` and `latest`
-     * versions. If `latest` is greater in terms of versioning, it returns an `UpdateCheckResult` indicating
-     * that an update is required. If*/
+     * @param current the current version of the application.
+     * @param latest the latest available version to compare against.
+     * @return an instance of [UpdateCheckResult], indicating whether an update is needed,
+     *         the type of update if applicable, or an error message if the comparison fails.
+     */
     private fun compareVersions(
         current: SemanticVersion,
         latest: SemanticVersion
@@ -219,9 +226,9 @@ object NDUtils {
     }
 
     /**
-     * Removes the specified item from the inventory of all online players on the server.
+     * Removes the specified item from the inventory of all online players.
      *
-     * @param material The material representing the type of item to be removed from players' inventories.
+     * @param material the item material to be removed from all player inventories
      */
     fun removeItemFromAllPlayers(material: Material) {
         for (player in Bukkit.getOnlinePlayers()) {
@@ -230,10 +237,10 @@ object NDUtils {
     }
 
     /**
-     * Removes a specified material item from the inventory of each player in the provided player list.
+     * Removes a specified material from the inventory of all players in the provided list.
      *
-     * @param playerList A list of players whose inventories will be checked for the specified material.
-     * @param material The material item to be removed from each player's inventory.
+     * @param playerList The list of players whose inventories will be updated.
+     * @param material The material to be removed from the players' inventories.
      */
     fun removeItemFromPlayers(playerList: List<Player>, material: Material) {
         for (player in playerList) {

@@ -10,6 +10,21 @@ import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import org.bukkit.inventory.ItemStack
 
+/**
+ * Represents an event triggered when a player clicks on a slot in a custom menu.
+ * This event contains detailed information about the click action, including the player
+ * involved, the menu instance, the slot clicked, and the item present in the slot.
+ *
+ * The event extends the `Event` class and implements the `Cancellable` interface, allowing
+ * the ability to cancel the event and prevent the associated action from being executed.
+ *
+ * @param player The player who triggered the menu click event.
+ * @param title The title of the menu as a `Component`.
+ * @param slot The slot index within the menu that was clicked.
+ * @param menu The custom `Menu` instance where the click occurred.
+ * @param item The `ItemStack` present in the clicked slot, or null if the slot was empty.
+ * @param ndPlayer The custom representation of the player as an `NDPlayer` instance.
+ */
 class MenuClickEvent(
     player: Player,
     val title: Component,
@@ -19,17 +34,22 @@ class MenuClickEvent(
     val ndPlayer: NDPlayer = player.toNDPlayer()
 ) : Event(), Cancellable {
     /**
-     * Flag indicating whether the event has been cancelled.
+     * Indicates whether the event has been cancelled.
      *
-     * When set to `true`, the event is considered cancelled, and the associated actions will not proceed.
-     * This flag is used by the `setCancelled` and `isCancelled` methods to manage the event's cancellation state.
+     * This property is used to manage the cancellation state of the event. When set to `true`,
+     * the event is considered cancelled, preventing any further actions or behaviors associated
+     * with the event from being executed. The value of this property is typically managed
+     * via the `isCancelled` and `setCancelled` methods.
      */
     private var isCancelled = false
 
     /**
-     * Retrieves the list of handlers associated with this event.
+     * Retrieves the list of handlers for this event.
      *
-     * @return The HandlerList for this event.
+     * This method is required for all Bukkit events to allow the registration
+     * and management of event handlers associated with this specific event type.
+     *
+     * @return The HandlerList instance managing the handlers for this event.
      */
     override fun getHandlers(): HandlerList {
         return handlerList
@@ -48,32 +68,33 @@ class MenuClickEvent(
      * Sets the cancellation state of the event.
      *
      * @param cancel A boolean value indicating whether the event should be cancelled.
-     *               If true, the event is considered cancelled and any subsequent actions
-     *               or behaviors associated with the event will be halted.
+     *               If true, the event is considered cancelled, and any associated actions will be halted.
      */
     override fun setCancelled(cancel: Boolean) {
         isCancelled = cancel
     }
 
     /**
-     * Companion object for `PlayerFreezeEvent` that provides access to the associated `HandlerList`.
+     * Companion object for `MenuClickEvent` that provides access to the associated `HandlerList`.
      *
-     * The companion contains static methods and properties required by the Bukkit event system.
+     * This companion object contains static properties and methods required by the Bukkit event system to
+     * register and manage event handlers for this specific event type.
      */
     companion object {
         /**
-         * Holds a static reference to the `HandlerList` for managing event handlers
-         * associated with this event type.
+         * A static `HandlerList` instance used to manage the registration and retrieval
+         * of event handlers for this specific event type.
          *
-         * This property is used to register and retrieve handlers for the event,
-         * enabling the Bukkit event system to correctly process the event when triggered.
+         * This property is required by the Bukkit event system to handle events appropriately.
+         * It ensures that all registered event listeners are properly invoked when the event is triggered.
          */
         private val handlerList = HandlerList()
 
         /**
          * Retrieves the handler list for this event type.
-         * The handler list is a static, shared object that manages the registration
-         * and execution of event handlers for this specific event.
+         * The handler list is a static object used by the Bukkit event system
+         * to manage the registration and invocation of event handlers associated
+         * with this specific event.
          *
          * @return The static HandlerList instance associated with this event type.
          */

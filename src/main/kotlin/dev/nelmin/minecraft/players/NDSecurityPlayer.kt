@@ -6,33 +6,23 @@ import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
 /**
- * Represents a secure player in the context of the Nucleoid security system. Extends the base NDPlayer functionality
- * by providing features for handling hashed passwords and password verification.
+ * Represents a secured version of NDPlayer, adding functionality for password management.
+ * This class manages a hashed password for the player and provides utility methods
+ * for password verification and secure password generation.
  *
- * This class is designed to store and manage password data securely, using hashed passwords
- * and providing utilities for password generation and verification.
- *
- * @constructor Creates a new instance of NDSecurityPlayer.
- * @param bukkitPlayer The associated Bukkit Player instance.
+ * @constructor Creates an instance of NDSecurityPlayer with the associated Bukkit Player.
+ * @param bukkitPlayer The Bukkit Player object associated with this NDSecurityPlayer.
  */
 open class NDSecurityPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
     /**
-     * Represents a securely stored password for the `NDSecurityPlayer`.
+     * A private variable that securely stores the hashed password for a player entity.
      *
-     * This variable is a delegated property using `PersistentProperty`,
-     * allowing the password to persist across sessions by storing it in
-     * a `PersistentDataContainer`. The password is stored in a hashed
-     * format to enhance security.
+     * This delegated property uses `PersistentProperty` to persistently store and retrieve
+     * the hashed password in a `PersistentDataContainer`. The hashed password is identified
+     * within the container using the key `"hashedPassword"` and is stored as a `PersistentDataType.STRING`.
      *
-     * The underlying data key for this property is `hashedPassword`, and
-     * it is stored as a `PersistentDataType.STRING`.
-     *
-     * This variable should only be modified through the higher-level
-     * operations defined in the `hashedPassword` property or by specifically
-     * interacting with the associated container for advanced use cases.
-     *
-     * Default behavior initializes the password as an empty string if no
-     * value is currently present in the container.
+     * The initial value of the hashed password is an empty string. This value is stored in a
+     * thread-safe manner, ensuring data consistency during read and write operations.
      */
     private var _hashedPassword: String by PersistentProperty(
         "hashedPassword",
@@ -43,9 +33,12 @@ open class NDSecurityPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
 
     /**
      * Represents the hashed version of a user's password.
-     * Setting this property automatically hashes the provided password
-     * using the `NDCore.hashPassword` method.
-     * The hashed password is securely stored and used for verifying user authentication.
+     *
+     * This property uses a secure hashing mechanism to store passwords, ensuring
+     * that the actual password value is never stored in plain text. Assigning a
+     * value to this variable automatically hashes the password using `NDCore.hashPassword`.
+     *
+     * The hashed password is used for secure authentication and password verification purposes.
      */
     var hashedPassword: String
         get() = _hashedPassword
@@ -54,21 +47,23 @@ open class NDSecurityPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
         }
 
     /**
-     * Verifies if the provided password matches the stored hashed password.
+     * Verifies whether the provided plain text password matches the stored hashed password.
      *
-     * @param password The plain text password provided for verification.
-     * @return true if the provided password matches the stored hash, false otherwise.
+     * @param password the plain text password to verify.
+     * @return true if the password matches the stored hash, false otherwise.
      */
     fun verifyPassword(password: String): Boolean = NDCore.verifyPassword(password, _hashedPassword)
 
     /**
-     * Generates a secure password containing at least one uppercase letter, one lowercase letter, one digit,
-     * and one special character. The remaining characters are randomly selected from all allowed character types.
+     * Generates a secure password with a mix of uppercase letters, lowercase letters, numbers,
+     * and special characters. The generated password's length is customizable, and it ensures
+     * the inclusion of at least one character from each category for added security.
      *
-     * @param length The total length of the generated password. Defaults to 16 if not specified.
-     * @param automaticallySetPassword A flag indicating whether the generated password should be
-     * automatically hashed and set as the user's password. Defaults to true.
-     * @return A randomly generated secure password as a string.
+     * @param length The desired length of the password. Defaults to 16. Must be 4 or greater
+     *               to ensure all character categories are included.
+     * @param automaticallySetPassword If true, automatically sets the generated password as
+     *                                 the hashedPassword for the associated user. Defaults to true.
+     * @return The generated secure password as a String.
      */
     fun generateSecurePassword(length: Int = 16, automaticallySetPassword: Boolean = true): String {
         val upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -10,28 +10,19 @@ import org.bukkit.persistence.PersistentDataType
 import kotlin.reflect.KMutableProperty0
 
 /**
- * Represents an economy-centric player that extends `NDPlayer` functionality.
- * It incorporates additional economic properties and actions relevant for managing
- * in-game currency via cash and bank balances.
- *
- * This class leverages persistent data storage to store and retrieve economic properties for the player,
- * ensuring all data is persistent and survives across sessions.
- *
- * @constructor Initializes an `NDEconomyPlayer` by wrapping a Bukkit `Player` instance.
- * @param bukkitPlayer The wrapped Bukkit `Player` instance providing base player functionality.
+ * Represents an economy player within the game, extending from the base player class NDPlayer.
+ * This class provides functionality for managing an economy system, including cash and bank balances,
+ * as well as transferring funds between players.
  */
 open class NDEconomyPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
     /**
-     * Represents the in-hand cash balance of the player.
+     * Represents the cash balance for an instance of `NDEconomyPlayer`.
      *
-     * This property stores the amount of cash a player holds outside of their bank account.
-     * The value is persisted using the provided `PersistentDataContainer` and can be accessed
-     * or modified through the delegated property mechanism.
+     * This property is backed by a `PersistentProperty` and stored in the `PersistentDataContainer`,
+     * ensuring that the cash value persists across sessions.
      *
-     * Default Value: 0.0
-     *
-     * The `cash` property is thread-safe and ensures consistent updates and retrievals
-     * through the use of mutex locks during operations.
+     * The cash balance is of type `Double`, initialized with a default value of `0.0`.
+     * It is used to manage the player's available currency within the economy system.
      */
     var cash: Double by PersistentProperty(
         "cash",
@@ -41,16 +32,16 @@ open class NDEconomyPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
     )
 
     /**
-     * Represents the player's bank balance stored persistently using a `PersistentDataContainer`.
+     * Represents the bank value associated with an `NDEconomyPlayer`.
      *
-     * The bank balance is managed persistently, allowing the value to be saved and loaded across server sessions.
-     * It utilizes a `PersistentProperty` delegation to link the player's bank balance to a specific namespaced key
-     * and datatype within the persistent data storage.
+     * This property is persisted using a `PersistentDataContainer`, allowing the value
+     * to persist across sessions. The type of the value is `Double`, with a default
+     * value of `0.0` if no existing value is present in the container. The data is
+     * stored using the `PersistentProperty` delegate for efficient management.
      *
-     * Default value: `0.0`
-     * Storage type: `PersistentDataType.DOUBLE`
-     *
-     * This property is thread-safe and allows concurrent access through a mutex lock mechanism, ensuring data consistency.
+     * The `bank` value typically reflects the player's current bank account balance
+     * in the economy system. Modifications to this value are automatically updated
+     * in the persistent container.
      */
     var bank: Double by PersistentProperty(
         "bank",
@@ -60,15 +51,11 @@ open class NDEconomyPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
     )
 
     /**
-     * Represents the interest rate associated with an economy player.
+     * Represents the interest rate for an `NDEconomyPlayer`'s account.
      *
-     * This property is persistently stored and managed through a `PersistentDataContainer`.
-     * It is initialized with a default value of `0.0` and dynamically retrieves or updates its value
-     * from persistent storage as needed. The interest rate can be used to calculate earnings or payments
-     * related to banking or other economic activities.
-     *
-     * The underlying data type for this property is `Double`, and it ensures that the value is safely
-     * synchronized using thread-safe mechanisms during retrieval or assignment.
+     * This property is persisted in a `PersistentDataContainer` and signifies the
+     * rate at which interest is applied to the player's balance.
+     * The interest rate is stored as a `Double` and defaults to 0.0 if not set.
      */
     var interestRate: Double by PersistentProperty(
         "interestRate",
@@ -78,15 +65,15 @@ open class NDEconomyPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
     )
 
     /**
-     * Transfers money from the source player to the receiver player while updating their respective balances.
-     * Various validations are performed, such as ensuring the amount is positive, sufficient funds are available,
-     * and the receiver's balance does not exceed the maximum limit.
+     * Transfers a specified amount of money from the source player's balance to the receiver's balance.
+     * Ensures that the transfer adheres to constraints such as sufficient funds, valid payment amount,
+     * and receiver's balance limits.
      *
-     * @param amount The amount of money to transfer. It must be a positive value.
-     * @param receiver The player receiving the money. Must not be the same as the source player.
-     * @param sourceBalance A mutable reference to the source player's balance, which will be decremented by the transfer amount.
-     * @param targetBalance A mutable reference to the receiver player's balance, which will be incremented by the transfer amount.
-     * @return An `EconomyPayResponse` indicating the result of the operation, which could be success, insufficient funds, invalid amount, etc.
+     * @param amount The amount of money to transfer.
+     * @param receiver The player receiving the money.
+     * @param sourceBalance A reference to the source player's balance.
+     * @param targetBalance A reference to the receiver player's balance.
+     * @return An `EconomyPayResponse` indicating the result of the transfer operation.
      */
     private suspend fun transferMoney(
         amount: Double,
@@ -124,98 +111,72 @@ open class NDEconomyPlayer(bukkitPlayer: Player) : NDPlayer(bukkitPlayer) {
     }
 
     /**
-     * Processes a payment from this player to a specified receiver.
+     * Transfers a specified amount of cash from the current player to a designated receiver.
      *
-     * This method attempts to transfer the specified amount of cash from the caller's
-     * account to the receiver's account. Various checks are performed to ensure
-     * the validity and feasibility of the transaction, such as ensuring the
-     * payment amount is positive, the payer has sufficient funds, and the receiver
-     * can accommodate the transfer.
-     *
-     * @param amount The amount of cash to be transferred to the receiver. Must be a positive value.
-     * @param receiver The player to whom the payment is being made.
-     * @return An instance of `EconomyPayResponse` indicating the result of the payment operation.
+     * @param amount The amount of money to transfer. Must be greater than 0.
+     * @param receiver The target player to receive the payment.
+     * @return An EconomyPayResponse indicating the result of the transaction, such as success or failure reasons.
      */
     suspend fun pay(amount: Double, receiver: NDEconomyPlayer): EconomyPayResponse =
         transferMoney(amount, receiver, ::cash, receiver::cash)
 
     /**
-     * Transfers a specified amount of money from the current player's bank balance to another player's bank balance.
+     * Transfers a specified amount of money from the current player's bank balance to the receiver's bank balance.
      *
-     * This method attempts to wire the specified amount to the receiver's bank.
-     * It validates the transaction before processing, ensuring conditions such as sufficient funds
-     * and valid payment amounts are met. The outcome of the operation is returned as an `EconomyPayResponse`.
-     *
-     * @param amount The amount of money to transfer. Must be greater than zero.
-     * @param receiver The player who will receive the money.
-     * @return An `EconomyPayResponse` representing the result of the operation,
-     * which may indicate success, insufficiency of funds, invalid payment amounts,
-     * or other conditions related to the transaction.
+     * @param amount The amount of money to be transferred. Must be greater than 0 and less than or equal to the sender's bank balance.
+     * @param receiver The recipient of the transfer. Must not be the sender themselves.
+     * @return An instance of [EconomyPayResponse] indicating the success or failure of the transfer operation.
      */
     suspend fun wire(amount: Double, receiver: NDEconomyPlayer): EconomyPayResponse =
         transferMoney(amount, receiver, ::bank, receiver::bank)
 }
 
 /**
- * Represents the result of an economy payment operation between two players.
+ * Represents the response for an economy payment transaction.
  *
- * This enum encapsulates potential outcomes of the payment process, providing a
- * boolean value to indicate success and a descriptive message explaining the result.
+ * This enum provides predefined responses indicating the outcome of the transaction,
+ * including whether it succeeded or failed, along with an appropriate message.
+ *
+ * @property success Indicates whether the payment transaction was successful.
+ * @property message Provides a descriptive message about the response.
  */
 enum class EconomyPayResponse(val success: Boolean, val message: String) {
     /**
-     * Represents a response indicating that a payment operation cannot be performed
-     * because the payer attempted to pay themselves.
+     * Represents a failure response when a user attempts to make a payment to themselves.
+     * This response indicates that the operation is not allowed and the payment was not processed.
      *
-     * This response is used in scenarios where a player tries to transfer money to their
-     * own account, which is regarded as an invalid transaction in this system.
-     *
-     * @property success Always false for this response type, as the operation is not allowed.
-     * @property message A string describing the reason for the rejection: "Cannot pay yourself".
+     * @property success Indicates whether the operation was successful. Always `false` for this response type.
+     * @property message Provides a descriptive message explaining the failure reason, "Cannot pay yourself".
      */
     CANNOT_PAY_SELF(success = false, message = "Cannot pay yourself"),
 
     /**
-     * Represents a response indicating that a payment operation has failed due to insufficient funds.
-     *
-     * This status is used in scenarios where the payer does not have enough balance
-     * to cover the payment amount. It ensures that the transaction is halted and
-     * provides feedback about the reason for failure.
-     *
-     * @property success Indicates the success status of the operation, always `false` for this response type.
-     * @property message Provides a descriptive message, "Insufficient funds", explaining the failure reason.
+     * Represents a payment response indicating that the payer has insufficient funds to complete the transaction.
+     * This response is unsuccessful.
      */
     INSUFFICIENT_FUNDS(success = false, message = "Insufficient funds"),
 
     /**
-     * Represents a failure response when a payment amount is invalid.
+     * Represents a response indicating that the payment amount is invalid.
      *
-     * This response is returned when an attempt is made to process a payment with an amount
-     * that is less than or equal to zero. It ensures that only valid, positive amounts can be
-     * used for payment transactions, preventing invalid operations.
+     * This is used to signify that the provided payment amount does not meet the required
+     * conditions for processing, such as being less than or equal to zero.
      */
     INVALID_PAYMENT_AMOUNT(success = false, message = "Invalid payment amount"),
 
     /**
-     * Indicates that the payment cannot be completed because the receiver has reached the maximum
-     * allowable cash limit. This response is returned when attempting to transfer funds to a player
-     * whose cash balance cannot accommodate the additional amount without exceeding the maximum threshold.
+     * Indicates that the payment could not be completed because the receiver has reached their maximum allowable cash limit.
      *
-     * @property success Always `false` for this status, as the payment attempt is unsuccessful.
-     * @property message Describes the reason for the failure: "Receiver has too much cash to accept payment".
+     * @property success Represents the failure status of the transaction; always `false` in this case.
+     * @property message Provides a descriptive message explaining the reason for the failure.
      */
     RECEIVER_FULL(success = false, message = "Receiver has too much cash to accept payment"),
 
     /**
-     * Represents a successful payment response in the economy system.
+     * Indicates a successful payment operation.
      *
-     * This response is returned when a payment is processed successfully
-     * with no errors or issues. The associated message indicates that
-     * the payment was accepted.
-     *
-     * @property success Indicates that the payment operation was successful.
-     * @property message Describes the result of the operation, specifying that
-     * the payment was accepted.
+     * @property success A boolean value representing the success status of the payment operation.
+     * @property message A string message conveying additional details about the outcome of the payment.
      */
     SUCCESS(success = true, message = "Payment was accepted")
 }

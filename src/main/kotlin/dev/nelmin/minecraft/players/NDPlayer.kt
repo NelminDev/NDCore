@@ -12,21 +12,21 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 
 /**
- * Represents a player in the NDCore system and provides additional properties and behaviors
- * beyond those of a standard Bukkit `Player`. This class uses Kotlin property delegation
- * to manage persistent player-specific data through `PersistentDataContainer`.
+ * Represents an extended player entity for managing custom player data and behaviors.
+ * This class delegates standard player functionality to the wrapped Bukkit `Player` instance
+ * and provides additional properties and methods for handling custom persistent data and actions.
  *
- * @constructor Initializes an `NDPlayer` instance.
  * @property bukkitPlayer The underlying Bukkit `Player` instance.
  */
 open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     /**
-     * Represents a persistent property for storing and retrieving the preferred language of the player.
+     * Stores the player's preferred language setting.
      *
-     * The `language` property is backed by a `PersistentDataContainer` and is used to persist the player's
-     * language preference across sessions. If no value is explicitly set, a default value of `"en"` (English)
-     * is used. This property is implemented as a delegate using the `PersistentProperty` class, allowing
-     * thread-safe read and write operations.
+     * This property persists the language configuration using a `PersistentDataContainer`, allowing
+     * it to be retained across server restarts or player sessions. By default, it is set to "en"
+     * (English) unless another value is explicitly set.
+     *
+     * Delegated by the `PersistentProperty` class to handle storage and retrieval efficiently.
      */
     var language: String by PersistentProperty(
         "language",
@@ -36,14 +36,12 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents a persistent property that tracks whether the "message toggled" state is enabled or disabled.
+     * Indicates whether messages are toggled for the player.
      *
-     * This property is stored in a `PersistentDataContainer` using the `PersistentProperty` delegate mechanism
-     * and maintains its state across server restarts or player sessions.
+     * This is a persistent property stored in the `PersistentDataContainer` associated with the player.
+     * The property default value is `false`, meaning messages are not toggled unless explicitly set.
      *
-     * The value is of type `Boolean` and defaults to `false` if not explicitly set in the data container.
-     *
-     * Usage is tied to the owning class, providing automatic management of the message toggling state.
+     * It is utilized to manage message-related preferences for the player.
      */
     var msgToggled: Boolean by PersistentProperty(
         "msgToggled",
@@ -53,13 +51,12 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents the rank of the player.
+     * Represents the rank of the player as a persistent property.
      *
-     * This property is persisted within a `PersistentDataContainer` using a `PersistentProperty` delegate.
-     * The rank is stored as a `String` and defaults to "default" if no value is explicitly set.
-     *
-     * The value of this property is asynchronously retrieved or updated in a thread-safe manner.
-     * It allows for simplified management and persistence of the player's rank across sessions.
+     * The rank is stored in a `PersistentDataContainer` and is automatically persisted across sessions.
+     * It is initialized with a default value of "default" if no value is already present in the container.
+     * The property is backed by the `PersistentProperty` delegate, which ensures thread-safe
+     * retrieval and storage of data.
      */
     var rank: String by PersistentProperty(
         "rank",
@@ -69,14 +66,18 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Stores the persistent "vanish" state of the player.
+     * A private backing property used to persist the "vanish" state of the player.
      *
-     * This property determines whether the player is in a vanished state
-     * (hidden from others) or visible. The value is persisted using the
-     * Bukkit `PersistentDataContainer` and defaults to `false` if not set.
+     * This property determines whether the player is in a vanished state, meaning they
+     * are hidden from other players. The value is backed by a `PersistentDataContainer`
+     * using the `PersistentProperty` delegate. It provides automatic persistence and
+     * retrieval of the vanish state across game sessions.
      *
-     * Delegated via the `PersistentProperty` to handle storing and retrieving
-     * the value with thread safety and persistence capabilities.
+     * Default value: `false`
+     *
+     * Uses:
+     * - `namespacedKeyName`: "vanish"
+     * - `type`: `PersistentDataType.BOOLEAN`
      */
     private var _vanish: Boolean by PersistentProperty(
         "vanish",
@@ -86,12 +87,14 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents the vanished state of the player.
+     * Determines whether the player is in vanish mode.
      *
-     * When set to `true`, the player is hidden from all other online players.
-     * When set to `false`, the player becomes visible to other online players again.
-     * Changes to this property automatically invoke methods to hide or show the player
-     * for all connected players on the server.
+     * When set to `true`, the player is hidden from all online players,
+     * effectively making them invisible. When set to `false`, the player
+     * becomes visible to all online players.
+     *
+     * Changing this value automatically updates the visibility state
+     * of the player for all currently online players on the server.
      */
     var vanish: Boolean
         get() = _vanish
@@ -107,12 +110,13 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
         }
 
     /**
-     * Represents the timestamp of the first time the player joined the server.
+     * Represents the timestamp of the first time a player joined.
      *
-     * This property is stored persistently using a `PersistentDataContainer`, allowing it to
-     * retain its value across server restarts. It is initialized to the current system time in
-     * milliseconds since epoch if no value is already set. The value can be updated or retrieved
-     * programmatically and is represented as a `Long`.
+     * This property is stored persistently in a `PersistentDataContainer` and uses epoch milliseconds
+     * to denote the time. If no value exists, it defaults to the current system time when initialized.
+     *
+     * The `PersistentProperty` delegate ensures that the value is safely retrieved and stored in
+     * the underlying container, supporting thread-safe read and write operations.
      */
     var firstJoinTimestamp: Long by PersistentProperty(
         "firstJoinTimestamp",
@@ -122,14 +126,11 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents a timestamp indicating the last time the player joined the server.
+     * Represents the timestamp of the player's most recent join in milliseconds since the Unix epoch.
      *
-     * This property is stored persistently using the player's `PersistentDataContainer`, allowing the data
-     * to persist across server restarts or player relogs. The timestamp is expressed in milliseconds since
-     * the epoch (1970-01-01T00:00:00Z), retrieved using the system clock at the time of instance initialization.
-     *
-     * The default value for this property is the current system time in milliseconds if no previous data
-     * exists in the container.
+     * This property is persisted using the `PersistentDataContainer`, ensuring the value is retained
+     * across server restarts and player sessions. If no previous value exists, it defaults to the
+     * current system time in milliseconds.
      */
     var lastJoinTimestamp: Long by PersistentProperty(
         "lastJoinTimestamp",
@@ -139,12 +140,18 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Tracks the total playtime of the player in milliseconds, stored persistently using a `PersistentDataContainer`.
+     * Stores the total playtime of a player as a timestamp in milliseconds.
      *
-     * This property leverages the `PersistentProperty` delegate to store and retrieve data in a persistent
-     * container, ensuring the value is retained across sessions. It represents the timestamp of the player's
-     * accumulated playtime and updates automatically when needed. The default value is the current system
-     * time in milliseconds at the moment of initialization.
+     * This property is backed by a `PersistentProperty` to persist the data within a
+     * `PersistentDataContainer`. The timestamp is automatically initialized with the current
+     * epoch milliseconds if no value exists in the container.
+     *
+     * The corresponding data is stored using a `PersistentDataType.LONG` type with a unique
+     * namespaced key "playTimeTimestamp". Changes to this property are automatically
+     * synchronized and persisted across sessions.
+     *
+     * Intended to track the cumulative playtime duration for the player as part of the
+     * `NDPlayer` class.
      */
     private var _totalPlayTimeTimestamp: Long by PersistentProperty(
         "playTimeTimestamp",
@@ -154,17 +161,18 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents the calculated total playtime of the player in milliseconds.
-     * Combines the stored playtime (`_totalPlayTimeTimestamp`) and the duration since the last join (`lastJoinTimestamp`),
-     * measured using the current system time.
+     * Represents the total playtime of the player in milliseconds. This value is calculated as the sum of
+     * the stored playtime and the elapsed time since the player's last login.
      */
     val totalPlayTimeTimestamp: Long
         get() = _totalPlayTimeTimestamp + (Clock.System.now().toEpochMilliseconds() - lastJoinTimestamp)
 
     /**
-     * Updates the player's total playtime by calculating the duration of the current session.
-     * The session duration is determined by subtracting the last join timestamp from the current system time.
-     * The calculated session duration is then added to the total playtime timestamp.
+     * Updates the total playtime of the player when they quit the session.
+     *
+     * This method calculates the duration of the current session by subtracting
+     * the timestamp of the last join event from the current time. The calculated
+     * session duration is then added to the player's total playtime.
      */
     fun updatePlayTimeOnQuit() {
         val sessionDuration = Clock.System.now().toEpochMilliseconds() - lastJoinTimestamp
@@ -174,9 +182,11 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     /**
      * Represents the number of kills associated with a player.
      *
-     * This property is backed by a `PersistentProperty` to store and retrieve the value
-     * from a `PersistentDataContainer`, allowing it to persist across server restarts.
-     * The default value is `0` if no data is found in the container.
+     * This variable is backed by a `PersistentProperty` that stores the value in a `PersistentDataContainer`,
+     * ensuring that the data is persistently saved and retrieved as needed. The type of this property is defined
+     * as an integer, and it defaults to `0` if no value is present in the container.
+     *
+     * This property allows for tracking the kill count of a player in a persistent and synchronized manner.
      */
     var kills: Int by PersistentProperty(
         "kills",
@@ -186,12 +196,12 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Tracks the number of mobs killed by the player.
+     * Tracks the number of mobs killed by a player.
      *
-     * This property is persisted in the player's `PersistentDataContainer` and is linked
-     * to the key "mobKills". It utilizes the `PersistentProperty` delegate to handle
-     * the storage and retrieval of the value. By default, if no value is found, it will
-     * initialize with 0.
+     * This property is stored persistently using the `PersistentDataContainer`
+     * and automatically uses a default value of `0` if no data is present.
+     * The value is updated and retrieved asynchronously, ensuring data consistency
+     * and thread safety.
      */
     var mobKills: Int by PersistentProperty(
         "mobKills",
@@ -201,13 +211,14 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * A property that represents the number of deaths for a player.
+     * Tracks the number of deaths for a player.
      *
-     * This value is stored persistently in a `PersistentDataContainer`, allowing it to
-     * be retained across server restarts or player sessions. The property is backed
-     * by the `PersistentProperty` delegate, which ensures thread-safe access and modification.
+     * This property uses a `PersistentDataContainer` to persist the death count of a player
+     * across different sessions. It is initialized with a default value of `0` if no prior
+     * value exists in the container.
      *
-     * By default, the number of deaths is initialized to `0`.
+     * The property is backed by a custom `PersistentProperty` delegate, providing automatic
+     * storage and retrieval functionality in synchronization with the player's data container.
      */
     var deaths: Int by PersistentProperty(
         "deaths",
@@ -217,14 +228,13 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Stores the last known location where the player died.
+     * Represents the location where the player last died, stored as a persistent property.
      *
-     * This property is persisted in the player's `PersistentDataContainer` and allows the
-     * retrieval or update of the player's last death location across sessions. The location
-     * is stored as a string in a predefined format.
+     * This property is managed through a `PersistentDataContainer`, allowing the location to
+     * persist across player sessions. If no value is explicitly set, the default is an empty string.
      *
-     * By default, the value is an empty string if the player has not died or no location
-     * has been recorded yet.
+     * The location is stored as a `String`, typically formatted to represent the coordinates
+     * or world name where the death occurred.
      */
     var lastDeathLocation: String by PersistentProperty(
         "lastDeathLocation",
@@ -234,17 +244,19 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Indicates whether the player is currently frozen and unable to move.
+     * Indicates whether the player is currently frozen in place.
      *
-     * This property is stored persistently using a `PersistentDataContainer` and is
-     * associated with the key "isFrozen." It controls whether the player's movement
-     * is restricted and can be updated dynamically at runtime. The default value
-     * for this property is `false`, meaning the player is not frozen by default.
+     * This property is used to determine if a player has been immobilized,
+     * preventing them from moving or performing certain actions. It is backed
+     * by a persistent data container, allowing its value to be saved and
+     * restored across server restarts.
      *
-     * Modifications to this property will be synchronized with the underlying
-     * persistent storage, ensuring consistent behavior across sessions.
+     * The default value is `false`, meaning the player is not frozen by default.
+     *
+     * When true, the player is considered frozen, and server logic should
+     * enforce the necessary restrictions on their movement and actions.
      */
-    var isFrozenInPlace: Boolean by PersistentProperty(
+    private var _isFrozenInPlace: Boolean by PersistentProperty(
         "isFrozen",
         PersistentDataType.BOOLEAN,
         false,
@@ -252,46 +264,52 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Freezes the player, preventing them from moving or interacting with the game world.
-     * This method marks the player as frozen in place and triggers a `PlayerFreezeEvent`.
+     * Indicates whether the player is currently frozen in place, preventing any movement.
      *
-     * @param message An optional message providing a reason or context for the freeze action.
-     *                This message can be displayed to the player or used for logging purposes.
+     * This property is typically managed by invoking the appropriate methods to freeze or unfreeze
+     * the player (e.g., `freeze()` and `unfreeze()`). When set to true, the player is restricted
+     * from moving within the game.
+     */
+    val isFrozenInPlace: Boolean
+        get() = _isFrozenInPlace
+
+    /**
+     * Freezes the player in place, preventing them from moving. Optionally, a message can be provided
+     * that will be associated with this action and passed to the related event.
+     *
+     * @param message An optional message that explains or describes the reason for freezing the player.
      */
     fun freeze(message: String? = null) {
-        isFrozenInPlace = true
+        _isFrozenInPlace = true
         JavaPlugin.getPlugin(NDCore::class.java).pluginManager.callEvent(PlayerFreezeEvent(this, message))
     }
 
     /**
-     * Unfreezes the player, allowing them to move freely in the game world.
-     * This method updates the player's frozen state and triggers the `PlayerUnfreezeEvent`.
+     * Unfreezes the player, allowing them to move again, and triggers the PlayerUnfreezeEvent.
      *
-     * @param message An optional string providing context or an explanation for unfreezing the player.
-     *                This can be used for logging purposes or to notify the player of the reason.
+     * @param message an optional message providing additional context or information about the unfreeze action;
+     *                defaults to null if no message is provided.
      */
     fun unfreeze(message: String? = null) {
-        isFrozenInPlace = false
+        _isFrozenInPlace = false
         JavaPlugin.getPlugin(NDCore::class.java).pluginManager.callEvent(PlayerUnfreezeEvent(this, message))
     }
 
     /**
-     * Sends a localized message to the player based on their preferred language.
+     * Sends a localized message to the player based on their language preference.
+     * If no translation is found for the player's language, a fallback message is sent.
      *
-     * If a translation for the specified language is not available, a fallback message
-     * from the `LocalizedMessage` instance will be sent instead.
-     *
-     * @param localizedMessage the `LocalizedMessage` instance containing translations and fallback information
+     * @param localizedMessage The localized message object containing translations and fallback settings.
      */
     fun sendLocalizedMessage(localizedMessage: LocalizedMessage) {
         bukkitPlayer.sendMessage(localizedMessage[language] ?: localizedMessage.fallbackMessage())
     }
 
     /**
-     * Tracks the number of mutes applied to the player.
+     * Tracks the number of times a player has been muted.
      *
-     * This property uses a `PersistentProperty` delegate to persist its value in a `PersistentDataContainer`.
-     * It ensures that the mute count is saved and retrievable across player sessions, defaulting to `0` if no value is set.
+     * This property is stored persistently using a `PersistentDataContainer`.
+     * It defaults to 0 if no other value is available in the container.
      */
     var muteCount: Int by PersistentProperty(
         "muteCount",
@@ -301,13 +319,14 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Tracks the number of warnings a player has received.
+     * Tracks the total number of warnings issued to the player.
      *
-     * This property is persisted in the player's `PersistentDataContainer` and allows
-     * tracking of warnings across sessions. If no value is present, it defaults to `0`.
+     * This property is persistently stored within a `PersistentDataContainer` and is automatically
+     * initialized with a default value of `0` if no value exists. Changes to this property are
+     * saved asynchronously to ensure data consistency and thread safety.
      *
-     * The value is managed with thread-safe read and write operations, ensuring consistency
-     * in concurrent environments.
+     * The `warnCount` can be used to monitor player behavior and enforce server rules by tracking
+     * the warnings accumulated by a player over time.
      */
     var warnCount: Int by PersistentProperty(
         "warnCount",
@@ -317,14 +336,11 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Represents the count of bans issued to a player.
+     * Represents the number of times a player has been banned.
      *
-     * This property is backed by a `PersistentProperty` to ensure that the value is persisted
-     * across sessions using the `PersistentDataContainer`. It keeps track of the total number
-     * of bans associated with a player and can be updated or retrieved as needed.
-     *
-     * The property is initialized with a default value of `0` if no value is found
-     * in the storage container.
+     * This property is persisted in a `PersistentDataContainer` and keeps track of the ban count
+     * for a player. It utilizes the `PersistentProperty` delegate to ensure the value is stored
+     * and retrieved safely, with a default value of 0 if no value exists in the container.
      */
     var banCount: Int by PersistentProperty(
         "banCount",
@@ -334,24 +350,49 @@ open class NDPlayer(val bukkitPlayer: Player) : Player by bukkitPlayer {
     )
 
     /**
-     * Converts the current `NDPlayer` instance into an `NDEconomyPlayer` instance.
+     * Returns an instance of `NDEconomyPlayer` associated with this player.
+     * This provides access to economy-related functionalities such as managing
+     * cash and bank balances, processing payments, and handling economic transactions.
      *
-     * This method creates and returns a new `NDEconomyPlayer`, which extends the base functionality
-     * of `NDPlayer` by adding economy-related features such as managing cash, bank balances,
-     * and other economic properties.
-     *
-     * @return A new `NDEconomyPlayer` instance initialized with the current player's data.
+     * @return The `NDEconomyPlayer` instance wrapping this player, allowing for
+     * economic operations and property management.
      */
     fun economy(): NDEconomyPlayer = NDEconomyPlayer(this)
 
     /**
-     * Converts the current `NDPlayer` instance to an `NDSecurityPlayer` instance.
+     * Provides access to the security-related functionality for the current NDPlayer instance.
+     * This includes features such as password management, verification, and secure password generation.
      *
-     * @return A new instance of `NDSecurityPlayer` initialized with the current player data.
+     * @return An instance of NDSecurityPlayer that represents the secured version of the current NDPlayer.
      */
     fun security(): NDSecurityPlayer = NDSecurityPlayer(this)
 }
 
+/**
+ * Converts the current Player instance to an NDPlayer instance.
+ *
+ * @return An NDPlayer instance wrapping the current Player.
+ */
 fun Player.toNDPlayer(): NDPlayer = NDPlayer(this)
+
+/**
+ * Converts a `Player` object into an `NDEconomyPlayer` instance.
+ *
+ * This method wraps a Bukkit `Player` object in an `NDEconomyPlayer`,
+ * which extends the functionality to include economy-related properties
+ * and methods, such as cash, bank balance, and interest rate management.
+ *
+ * @return An `NDEconomyPlayer` instance associated with the provided `Player`.
+ */
 fun Player.toNDEconomyPlayer(): NDEconomyPlayer = NDEconomyPlayer(this)
+
+/**
+ * Converts a Player instance into an NDSecurityPlayer.
+ *
+ * This method facilitates the transformation of a Player object into its secured counterpart,
+ * NDSecurityPlayer, which provides added functionality for password management such as password
+ * hashing, verification, and secure password generation.
+ *
+ * @return An NDSecurityPlayer instance associated with the given Player.
+ */
 fun Player.toNDSecurityPlayer(): NDSecurityPlayer = NDSecurityPlayer(this)

@@ -4,40 +4,36 @@ import org.bukkit.configuration.file.YamlConfiguration
 import java.nio.file.Path
 
 /**
- * Represents a localized message system that manages translations for different language codes.
- * Provides functionality to define translations, fallback settings, and retrieve messages.
+ * This class provides a mechanism for handling localized messages with optional fallback configurations.
+ * It supports setting translations for different language codes, retrieving localized messages,
+ * and specifying fallback behaviors for languages or messages not found.
  */
 class LocalizedMessage {
     /**
-     * A mutable map that stores localized message translations with their corresponding language codes.
-     * Keys represent language codes, and values represent the translated messages.
-     *
-     * This map is utilized to retrieve or store translations, check for the existence of a translation
-     * for a specific language code, or apply fallback mechanisms when a translation is not available.
+     * Stores a map of localized messages where the key represents the language code
+     * and the value is the message in the corresponding language. This serves as the
+     * primary data structure for managing translations within the `LocalizedMessage` class.
      */
     private val messages: MutableMap<String, String> = mutableMapOf()
 
     /**
-     * Holds the default fallback language code used when no translation is
-     * available for a specific language. By default, this value is set to "en".
-     * It can be modified or accessed via dedicated methods in the containing class.
+     * The language code used as a fallback when a message translation for the requested language is not available.
+     * Defaults to "en" (English).
      */
     private var fallbackLanguageCode: String = "en"
 
     /**
-     * Holds the default fallback message to be used when no translation is available
-     * for the requested language code.
-     *
-     * This message is returned as the default value when a translation is missing
-     * from the collection of localized messages.
+     * The default message used as a fallback when no translation is found for a given key.
+     * This message is utilized in scenarios where the requested translation or the specified language code
+     * is unavailable within the localized message repository.
      */
     private var fallbackMessage: String = "Sorry, no translation found for this message."
 
     /**
-     * Sets the fallback language code for the localized messages.
+     * Sets the fallback language code to be used when a message translation is unavailable.
      *
-     * @param languageCode The language code to set as the fallback.
-     * @return The updated instance of LocalizedMessage.
+     * @param languageCode The language code to set as the fallback language. For example, "en" for English.
+     * @return The current instance of [LocalizedMessage], allowing for method chaining.
      */
     fun fallbackLanguageCode(languageCode: String): LocalizedMessage {
         this.fallbackLanguageCode = languageCode
@@ -45,18 +41,17 @@ class LocalizedMessage {
     }
 
     /**
-     * Retrieves the fallback language code that is used when a localized message
-     * translation is not found for a specified language.
+     * Retrieves the fallback language code currently set for this instance.
      *
      * @return The fallback language code as a string.
      */
     fun fallbackLanguageCode(): String = fallbackLanguageCode
 
     /**
-     * Sets the fallback message to be used if no translation is found.
+     * Sets the fallback message to be used when no translation is found.
      *
-     * @param message the fallback message to set
-     * @return the instance of the current `LocalizedMessage` object
+     * @param message the fallback message to be used.
+     * @return the current instance of the LocalizedMessage class.
      */
     fun fallbackMessage(message: String): LocalizedMessage {
         this.fallbackMessage = message
@@ -64,31 +59,30 @@ class LocalizedMessage {
     }
 
     /**
-     * Retrieves the fallback message that is used when no translation is found for the requested message.
+     * Provides the default fallback message returned when no translation is found.
      *
      * @return The fallback message as a string.
      */
     fun fallbackMessage(): String = fallbackMessage
 
     /**
-     * Retrieves a localized message based on the given language code.
+     * Retrieves a localized message corresponding to the given language code.
+     * If no message is found for the specified language code, the message
+     * associated with the fallback language code is returned.
      *
-     * If a message corresponding to the specified language code is not found,
-     * the method returns the message associated with the fallback language code.
-     *
-     * @param languageCode The language code used to lookup the localized message.
-     * @return The localized message corresponding to the language code,
-     *         or the message for the fallback language code if the specified code is not available.
-     *         Returns null if no messages are defined.
+     * @param languageCode The language code to look up the message for.
+     * @return The localized message for the specified language code, or the
+     *         message for the fallback language code if no match is found. Returns
+     *         null if neither message exists.
      */
     operator fun get(languageCode: String): String? = messages[languageCode] ?: messages[fallbackLanguageCode]
 
     /**
-     * Sets a localized message for the specified language code.
+     * Adds or updates a localized message for the specified language code.
      *
      * @param languageCode The language code for which the message is being set.
-     * @param message The message in the specified language.
-     * @return The current instance of LocalizedMessage, allowing method chaining.
+     * @param message The localized message to be associated with the given language code.
+     * @return The instance of [LocalizedMessage], allowing chaining of method calls.
      */
     operator fun set(languageCode: String, message: String): LocalizedMessage {
         messages[languageCode] = message
@@ -96,20 +90,20 @@ class LocalizedMessage {
     }
 
     /**
-     * Checks whether a translation exists for the specified language code.
+     * Checks if a translation exists for the specified language code.
      *
-     * @param languageCode the language code to check for an existing translation.
+     * @param languageCode the language code to check for a corresponding translation.
      * @return true if a translation exists for the given language code, false otherwise.
      */
     fun hasTranslation(languageCode: String): Boolean = messages.containsKey(languageCode)
 
     /**
-     * Retrieves a value from a YAML configuration file based on the given key and language code.
+     * Retrieves a specific value from a YAML file based on the provided key and language code.
      *
-     * @param key The key to look up in the YAML file.
-     * @param languageCode The language code used to determine the specific YAML file.
-     * @param path The base directory path where the YAML files are located.
-     * @param fileFormat The format of the YAML file name. Defaults to "message-%lang.yml", where "%lang" is replaced with the language code.
+     * @param key The key to look for in the YAML file.
+     * @param languageCode The language code to replace in the file name pattern.
+     * @param path The base path where the YAML file is located.
+     * @param fileFormat The file name pattern for the YAML file, where "%lang" will be replaced with the language code. Defaults to "message-%lang.yml".
      * @return The value associated with the specified key in the YAML file, or the fallback message if the key is not found.
      */
     fun getYamlFromFile(
