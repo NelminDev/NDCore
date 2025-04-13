@@ -3,22 +3,39 @@ package dev.nelmin.minecraft.builders
 import dev.nelmin.minecraft.NDCore
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 
 /**
- * A utility class designed to build, modify, and send customizable text messages.
- * This class offers various methods to set prefixes, suffixes, and replace parts
- * of text while also providing support for color formatting and sending messages
- * to players or the console.
+ * A utility class for constructing and managing text messages with options for prefix, suffix, styling,
+ * and sending the message to players or the console.
+ *
+ * @property message The base string message to be transformed.
+ * @property prefixEnabled Determines if the default prefix should be applied to the message.
  */
 class TextBuilder(private var message: String, private var prefixEnabled: Boolean = true) {
     /**
-     * Disables or enables the prefix functionality for the text being built.
+     * Companion object for the TextBuilder class, providing utility functions.
+     */
+    companion object {
+        /**
+         * Converts a given `Component` into its plain text representation.
+         *
+         * @param component The `Component` object to be serialized into plain text.
+         * @return A `String` representing the plain text content of the provided `Component`.
+         */
+        fun componentToPlainText(component: Component): String {
+            return PlainTextComponentSerializer.plainText().serialize(component)
+        }
+    }
+
+    /**
+     * Disables the prefix feature for the `TextBuilder` instance.
      *
-     * @param prefixEnabled A boolean indicating whether the prefix should be enabled. Defaults to false.
-     * @return The current instance of [TextBuilder] for method chaining.
+     * @param prefixEnabled A boolean value to enable or disable prefix functionality.
+     *                       Default is `false`, which disables the prefix.
+     * @return The current instance of [TextBuilder], allowing for method chaining.
      */
     fun noPrefix(prefixEnabled: Boolean = false): TextBuilder {
         this.prefixEnabled = prefixEnabled
@@ -26,20 +43,20 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Adds a predefined prefix to the given message or to the default message.
+     * Adds a prefix to the given message.
      *
-     * @param message The message to which the prefix will be added. Defaults to the class's default message.
-     * @return A new string with the prefix prepended to the message.
+     * @param message The message to which the prefix will be added. Defaults to the value of `this.message`.
+     * @return A new string with the prefix added to the beginning of the provided message.
      */
     private fun addPrefix(message: String = this.message): String {
         return "${NDCore.prefix} $message"
     }
 
     /**
-     * Appends the specified prefix to the current message and updates the message content.
+     * Adds a prefix to the current message.
      *
-     * @param prefix The string to prepend to the message.
-     * @return The current instance of TextBuilder for method chaining.
+     * @param prefix The text to prepend to the current message.
+     * @return The current instance of [TextBuilder] to allow for method chaining.
      */
     fun prefix(prefix: String): TextBuilder {
         this.message = "$prefix $message"
@@ -47,10 +64,10 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Appends the specified suffix to the current message and updates the TextBuilder instance.
+     * Appends the specified suffix to the current message being built and updates the state of the builder.
      *
-     * @param suffix the string to append to the current message
-     * @return the updated TextBuilder instance with the suffix appended
+     * @param suffix The string to be appended to the existing message.
+     * @return The current instance of [TextBuilder] to allow method chaining.
      */
     fun suffix(suffix: String): TextBuilder {
         this.message = "$message $suffix"
@@ -58,10 +75,10 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Sets the content of the message and returns the current instance of TextBuilder.
+     * Sets the content of the text builder with the specified message.
      *
-     * @param message The message content to set.
-     * @return The current instance of TextBuilder.
+     * @param message The message to set as the content of the text builder.
+     * @return The current instance of [TextBuilder] for method chaining.
      */
     fun content(message: String): TextBuilder {
         this.message = message
@@ -69,19 +86,20 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Sets the message content for the TextBuilder.
+     * Updates the content of the `TextBuilder` with the provided message.
      *
-     * @param message The message to be set as the content.
-     * @return The updated instance of TextBuilder with the specified message.
+     * @param message The new message to be set as the content of the `TextBuilder`.
+     * @return The current instance of [TextBuilder] to allow method chaining.
      */
     fun message(message: String): TextBuilder = content(message)
 
     /**
-     * Replaces all occurrences of the specified search value in the current text with the given replacement value.
+     * Replaces all occurrences of the specified search value in the current message
+     * with the provided replacement value.
      *
-     * @param search The value to search for within the text.
-     * @param replacement The value to replace the search value with.
-     * @return The updated TextBuilder instance after the replacement is performed.
+     * @param search the value to be replaced in the message
+     * @param replacement the value to replace the search value with
+     * @return the updated TextBuilder instance with the replacements applied
      */
     fun replace(search: Any, replacement: Any): TextBuilder {
         this.message = this.message.replace(search.toString(), replacement.toString())
@@ -89,12 +107,11 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Replaces occurrences of specified keys in the text with their corresponding values
-     * from the provided map.
+     * Replaces occurrences of specified keys in the current text with their corresponding values.
      *
-     * @param map A map where keys represent the text to be replaced, and values represent
-     * the replacement text.
-     * @return The updated instance of TextBuilder after all replacements have been applied.
+     * @param map A map where each key represents the target to be replaced in the text, and
+     * each value is the replacement for that target.
+     * @return The updated instance of TextBuilder after performing the replacements.
      */
     fun replace(map: Map<Any, Any>): TextBuilder {
         map.forEach { (search, replacement) -> replace(search, replacement) }
@@ -102,12 +119,12 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Sends the constructed message to the specified player with optional formatting.
+     * Sends a message to the specified player, with optional colorization and prefix formatting.
      *
-     * @param player the player to whom the message should be sent.
-     * @param colorized specifies whether the message should be colorized. Default is true.
-     * @param prefixOnNewLine determines if the prefix should appear on a new line. Default is true.
-     * @return the current instance of [TextBuilder] for method chaining.
+     * @param player The player to whom the message will be sent.
+     * @param colorized A boolean indicating whether the message should be colorized. Defaults to true.
+     * @param prefixOnNewLine A boolean indicating whether the prefix should appear on a new line. Defaults to true.
+     * @return The current instance of [TextBuilder], allowing for method chaining.
      */
     fun sendTo(player: Player, colorized: Boolean = true, prefixOnNewLine: Boolean = true): TextBuilder {
         player.sendMessage(if (colorized) colorize(prefixOnNewLine = prefixOnNewLine) else Component.text(message))
@@ -115,12 +132,12 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Sends the message to a list of players.
+     * Sends the text content of the current instance to a list of players.
      *
-     * @param players The list of players to whom the message will be sent.
-     * @param colorized Determines if the message should be colorized. Default is true.
-     * @param prefixOnNewLine Determines if the prefix should appear on a new line. Default is true.
-     * @return The current instance of [TextBuilder].
+     * @param players The list of [Player] instances to send the message to.
+     * @param colorized A boolean indicating if the message should be colorized before sending. Defaults to true.
+     * @param prefixOnNewLine A boolean indicating if the prefix should appear on a new line. Defaults to true.
+     * @return The current instance of [TextBuilder], allowing for method chaining.
      */
     fun sendTo(players: List<Player>, colorized: Boolean = true, prefixOnNewLine: Boolean = true): TextBuilder {
         players.forEach { player: Player ->
@@ -130,10 +147,11 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Sends a colorized message, optionally including the prefix on a new line, to the console.
+     * Sends the current message to the server console.
      *
-     * @param prefixOnNewLine Determines whether the prefix is added on a new line before the message. Default is true.
-     * @return Returns the current instance of TextBuilder for method chaining.
+     * @param prefixOnNewLine Determines if the prefix should be placed on a new line.
+     *                        Defaults to true.
+     * @return The current instance of [TextBuilder] to allow method chaining.
      */
     fun sendToConsole(prefixOnNewLine: Boolean = true): TextBuilder {
         Bukkit.getConsoleSender().sendMessage(colorize(prefixOnNewLine = prefixOnNewLine))
@@ -141,42 +159,23 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Converts legacy color codes in the message to a format recognizable by the Minecraft client.
+     * Converts a text message into a component while applying legacy color codes.
      *
-     * @param legacyCharacter The character used to denote color codes. Defaults to '&'.
-     * @param prefixOnNewLine Specifies whether a prefix should be applied to each new line. Defaults to true.
-     * @return The message string with the legacy color codes replaced with their Minecraft equivalents.
-     */
-    @Deprecated(
-        message = "colorizeLegacy has been deprecated in favor of colorize (Adventure API). See dev.nelmin.spigot.builders.TextBuilder.colorize for the Adventure API equivalent.",
-        level = DeprecationLevel.WARNING,
-        replaceWith = ReplaceWith(
-            "dev.nelmin.spigot.builders.TextBuilder.colorize(legacyCharacter, prefixOnNewLine)",
-            "dev.nelmin.spigot.builders.TextBuilder.colorize"
-        )
-    )
-    fun colorizeLegacy(legacyCharacter: Char = '&', prefixOnNewLine: Boolean = true): String {
-        return ChatColor.translateAlternateColorCodes(legacyCharacter, get(prefixOnNewLine))
-    }
-
-    /**
-     * Converts the current message into an Adventure `Component` with optional legacy character-based colorization
-     * and optional prefix handling on new lines.
-     *
-     * @param legacyCharacter The character used to denote color codes in the legacy format. Defaults to '&'.
-     * @param prefixOnNewLine Determines whether the prefix should be added to the start of each new line in the message. Defaults to true.
-     * @return A `Component` representation of the message, with colorization and optional prefix applied.
+     * @param legacyCharacter The character used to denote legacy color codes in the message. Defaults to '&'.
+     * @param prefixOnNewLine Whether to add a prefix to new lines in the message. Defaults to true.
+     * @return A [Component] representing the colorized version of the text message.
      */
     fun colorize(legacyCharacter: Char = '&', prefixOnNewLine: Boolean = true): Component {
         return LegacyComponentSerializer.legacy(legacyCharacter).deserialize(get(prefixOnNewLine))
     }
 
     /**
-     * Retrieves the current message with an optional prefix applied.
-     * If the prefix is enabled and `prefixOnNewLine` is true, the prefix is added to each new line of the message.
+     * Retrieves the constructed or modified message, optionally adding a prefix and formatting it
+     * with specified preferences.
      *
-     * @param prefixOnNewLine Determines whether the prefix should be added to the start of each new line in the message. Defaults to true.
-     * @return The formatted message as a String, potentially with prefixes applied to new lines.
+     * @param prefixOnNewLine Determines whether the prefix, if enabled, should be added on a new line.
+     *                        Defaults to `true`.
+     * @return The formatted message as a [String].
      */
     fun get(prefixOnNewLine: Boolean = true): String {
         var message = this.message
@@ -192,11 +191,11 @@ class TextBuilder(private var message: String, private var prefixEnabled: Boolea
     }
 
     /**
-     * Converts the current state of the TextBuilder into a string representation with colorization applied.
+     * Converts the object to its string representation.
      *
-     * @return A string representation of the TextBuilder, with optional color formatting applied.
+     * @return A plain text representation of the object's components.
      */
     override fun toString(): String {
-        return colorizeLegacy(prefixOnNewLine = false)
+        return componentToPlainText(colorize(prefixOnNewLine = false))
     }
 }

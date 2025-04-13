@@ -12,5 +12,4 @@ object PersistentListDataType {
     val DOUBLE = PersistentDataType.LIST.listTypeFrom(PersistentDataType.DOUBLE)
     val BYTE_ARRAY = PersistentDataType.LIST.listTypeFrom(PersistentDataType.BYTE_ARRAY)
     val TAG_CONTAINER = PersistentDataType.LIST.listTypeFrom(PersistentDataType.TAG_CONTAINER)
-    val TAG_CONTAINER_ARRAY = PersistentDataType.LIST.listTypeFrom(PersistentDataType.TAG_CONTAINER_ARRAY)
 }

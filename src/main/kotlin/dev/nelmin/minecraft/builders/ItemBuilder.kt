@@ -1,5 +1,6 @@
 package dev.nelmin.minecraft.builders
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -17,7 +18,7 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
     /**
      * Represents the underlying `ItemStack` object being built or modified by the `ItemBuilder`.
      * This variable is used to store and manage the state of the item, including its material type,
-     * amount, meta data, and other properties like enchantments, lore, and flags.
+     * amount, metadata, and other properties like enchantments, lore, and flags.
      */
     val itemStack: ItemStack = ItemStack(material, amount)
 
@@ -34,8 +35,8 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
      * @param displayName The display name to set on the item.
      * @return The current instance of [ItemBuilder] to allow method chaining.
      */
-    fun setDisplayName(displayName: String): ItemBuilder {
-        itemMeta.setDisplayName(displayName)
+    fun setDisplayName(displayName: Component): ItemBuilder {
+        itemMeta.displayName(displayName)
         return this
     }
 
@@ -45,10 +46,10 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
      * @param line The line of text to add to the item's lore.
      * @return The current instance of [ItemBuilder] for method chaining.
      */
-    fun addLoreLine(line: String): ItemBuilder {
-        val lore = itemMeta.lore ?: mutableListOf()
+    fun addLoreLine(line: Component): ItemBuilder {
+        val lore = itemMeta.lore() ?: mutableListOf()
         lore.add(line)
-        itemMeta.lore = lore
+        itemMeta.lore(lore)
         return this
     }
 
@@ -58,8 +59,8 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
      * @param lore A list of strings representing the lore to be displayed on the item.
      * @return The current instance of [ItemBuilder] for method chaining.
      */
-    fun setLore(lore: List<String>): ItemBuilder {
-        itemMeta.lore = lore
+    fun setLore(lore: List<Component>): ItemBuilder {
+        itemMeta.lore(lore)
         return this
     }
 
@@ -162,7 +163,7 @@ open class ItemBuilder(material: Material, amount: Int = 1) {
             DeprecationLevel.WARNING
         )
         fun setOwner(owner: String): Head {
-            skullMeta.owner = owner
+            skullMeta.owningPlayer = Bukkit.getOfflinePlayer(owner)
             return this
         }
 

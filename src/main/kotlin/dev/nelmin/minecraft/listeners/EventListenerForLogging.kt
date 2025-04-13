@@ -1,6 +1,7 @@
 package dev.nelmin.minecraft.listeners
 
 import dev.nelmin.logger.Logger
+import dev.nelmin.minecraft.builders.TextBuilder
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerGameModeChangeEvent
@@ -23,7 +24,13 @@ class EventListenerForLogging : Listener {
 
     @EventHandler
     fun onPlayerKick(event: org.bukkit.event.player.PlayerKickEvent) {
-        Logger.queueInfo("Player ${event.player.name} was kicked from the game for ${event.reason}.")
+        Logger.queueInfo(
+            "Player ${event.player.name} was kicked from the game for ${
+                TextBuilder.componentToPlainText(
+                    event.reason()
+                )
+            }."
+        )
     }
 
     @EventHandler
