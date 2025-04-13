@@ -1,15 +1,13 @@
 # ⚙️ NDCore - Your Minecraft Plugin Foundation
 
-NDCore is a robust core dependency plugin designed to provide essential functionality for Minecraft plugins. Developed
-by nelmin, it's crafted to be a foundational library, offering crucial utility functions without requiring any
-configuration. It's available for everyone to use and enhance their plugin development experience.
+NDCore is a core dependency plugin crafted by nelmin to enhance Minecraft plugin development. It provides essential
+utility functions, requiring no configuration, and is designed to improve efficiency and functionality.
 
 ## 🚀 Overview
 
-NDCore is engineered as a lightweight, background-operating plugin, providing the backbone for nelmin's plugin
-ecosystem. It encompasses persistent data management, localization support, comprehensive event logging, secure player
-management, and advanced menu handling capabilities. It serves primarily as a dependency, enhancing player data
-management, security, monitoring, and menu interactions, all while remaining efficient and unobtrusive.
+NDCore operates as a lightweight plugin, supporting persistent data management, multilingual localization, secure player
+management, advanced menu handling, and efficient performance. It serves as a foundational library for nelmin's plugin
+ecosystem, streamlining player data management, security, and interactions.
 
 ## ✨ Key Features
 
@@ -76,7 +74,7 @@ implementation("dev.nelmin.minecraft:core:VERSION")
 ```xml
 <dependency>
   <groupId>dev.nelmin.minecraft</groupId>
-    <artifactId>core</artifactId>
+  <artifactId>core</artifactId>
   <version>VERSION</version>
 </dependency>
 ```

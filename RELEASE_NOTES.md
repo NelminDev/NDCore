@@ -1,6 +1,7 @@
 ## 🎯 Release Overview
 
 Version 2.2.2 introduces a new menu handling system, updates the package name, and improves plugin instance retrieval.
+Additionally, text handling has been refactored to use Adventure API components.
 
 ## 🚀 Key Changes
 
@@ -18,6 +19,11 @@ Version 2.2.2 introduces a new menu handling system, updates the package name, a
   - Introduced a `Menu` system with the `MenuInterface` for custom menu management.
   - Implemented `MenuClickEvent` and `MenuClickListener` to handle menu interactions, enabling custom actions per slot.
   - Updated `NDCore` to register the new listener and integrate menu functionalities.
+
+- **Adventure API Text Handling**:
+  - Refactored text handling to use Adventure API components for better text formatting and serialization.
+  - Replaced `String`-based text handling with Adventure's `Component`.
+  - Removed deprecated methods and updated APIs to align with the new component-based approach.
 
 ## 📦 Installation
 
