@@ -1,14 +1,23 @@
 ## 🎯 Release Overview
 
-Version 2.2.1 focuses on improving the logging system for better scalability and maintainability.
+Version 2.2.2 introduces a new menu handling system, updates the package name, and improves plugin instance retrieval.
 
 ## 🚀 Key Changes
 
-- **Refactored Logging System**:
-  - Replaced direct logging calls (e.g., `Logger.infoSilent`) with a queued logging system (`Logger.queueInfo`) for
-    improved log management.
-  - Implemented coroutines for asynchronous log handling.
-  - Updated plugin lifecycle behavior to utilize the new logging system.
+- **Package Rename**:
+  - Renamed package from `spigot` to `minecraft`.
+  - Updated all package declarations and imports.
+  - Adjusted the project group in `gradle.properties` and the main class path in `plugin.yml`.
+
+- **Improved Plugin Instance Retrieval**:
+  - Replaced `NDCore.instance()` with `JavaPlugin.getPlugin(NDCore::class.java)` for improved reliability and
+    consistency.
+  - Added utility conversion methods for `Player` to `NDPlayer`, `NDEconomyPlayer`, and `NDSecurityPlayer`.
+
+- **Menu Handling System**:
+  - Introduced a `Menu` system with the `MenuInterface` for custom menu management.
+  - Implemented `MenuClickEvent` and `MenuClickListener` to handle menu interactions, enabling custom actions per slot.
+  - Updated `NDCore` to register the new listener and integrate menu functionalities.
 
 ## 📦 Installation
 
@@ -44,7 +53,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core:2.2.1'
+implementation 'dev.nelmin.minecraft:core:2.2.2'
 ```
 
 </details>
@@ -53,7 +62,7 @@ implementation 'dev.nelmin.minecraft:core:2.2.1'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core:2.2.1")
+implementation("dev.nelmin.minecraft:core:2.2.2")
 ```
 
 </details>
@@ -65,7 +74,7 @@ implementation("dev.nelmin.minecraft:core:2.2.1")
 <dependency>
   <groupId>dev.nelmin.minecraft</groupId>
   <artifactId>core</artifactId>
-  <version>2.2.1</version>
+  <version>2.2.2</version>
 </dependency>
 ```
 

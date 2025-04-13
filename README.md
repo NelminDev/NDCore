@@ -1,39 +1,48 @@
-# NDCore
+# ⚙️ NDCore - Your Minecraft Plugin Foundation
 
-NDCore is the core dependency plugin that provides essential functionality for plugins developed by nelmin, but it is
-available for everyone to use. This plugin serves as a foundational library, offering crucial utility functions while
-maintaining zero configuration requirements.
+NDCore is a robust core dependency plugin designed to provide essential functionality for Minecraft plugins. Developed
+by nelmin, it's crafted to be a foundational library, offering crucial utility functions without requiring any
+configuration. It's available for everyone to use and enhance their plugin development experience.
 
-## Overview
+## 🚀 Overview
 
-NDCore is intentionally designed to be a lightweight core plugin that operates silently in the background. It provides essential backbone functionality for nelmin's plugin ecosystem, including persistent data management, localization support, comprehensive event logging, and secure player management. While primarily serving as a dependency, it now includes enhanced player data management, security features, and monitoring capabilities.
+NDCore is engineered as a lightweight, background-operating plugin, providing the backbone for nelmin's plugin
+ecosystem. It encompasses persistent data management, localization support, comprehensive event logging, secure player
+management, and advanced menu handling capabilities. It serves primarily as a dependency, enhancing player data
+management, security, monitoring, and menu interactions, all while remaining efficient and unobtrusive.
 
-## Key Features
+## ✨ Key Features
 
-- Persistent data management with support for list properties
-- Advanced text handling using Adventure API
-- Comprehensive localization system
-- Enhanced player data tracking and statistics
-- Secure password management using Argon2
-- Player data conversion utilities
-- Functions as a dependency-only plugin
-- Requires no configuration
-- Lightweight and efficient design
+- **Persistent Data Management**: Robust support for persistent data, including list properties.
+- **Adventure API Text Handling**: Advanced text formatting using the Adventure API.
+- **Comprehensive Localization**: Streamlined localization system for multilingual support.
+- **Enhanced Player Data**: In-depth player data tracking and statistics.
+- **Secure Password Management**: Argon2 encryption for secure password handling.
+- **Player Data Conversion**: Utilities for seamless player data conversion.
+- **Flexible Menu System**: Advanced menu handling with custom interactions.
+- **Dependency-Only Plugin**: Functions as a core dependency without extra overhead.
+- **Zero Configuration**: Ready to use out-of-the-box, no configuration needed.
+- **Lightweight & Efficient**: Designed for optimal performance and minimal footprint.
 
-## For Developers
+## 👨‍💻 For Developers
 
-Developers interested in utilizing NDCore's functionality should look into:
+Explore NDCore's capabilities and integrate it into your projects:
 
-- The [Lumina](https://github.com/NelminDev/Lumina) project for logging capabilities
+- **Lumina**: Leverage the [Lumina](https://github.com/NelminDev/Lumina) project for enhanced logging.
 
-Key components:
-- `PersistentProperty` for managing persistent data
-- `PersistentListProperty` and `PersistentMutableListProperty` for managing persistent list data
-- `TextBuilder` for Adventure API-based text formatting
-- `LocalizedMessage` for translation management
-- `NDPlayer` for extensive player data management with conversion methods:
-  - `economy()` for economic functionality
-  - `security()` for secure player management
+Key Components:
+
+- `PersistentProperty`: Manages persistent data storage.
+- `PersistentListProperty` & `PersistentMutableListProperty`: Handle persistent list data efficiently.
+- `TextBuilder`: Simplifies Adventure API-based text formatting.
+- `LocalizedMessage`: Manages translation and localization.
+- `NDPlayer`: Offers extensive player data management with:
+  - `.economy()`: Economic functionality integration.
+  - `.security()`: Secure player management tools.
+- `MenuInterface`: Create custom menu implementations.
+- `MenuClickEvent` & `MenuClickListener`: Handle menu interactions with ease.
+
+### 📦 Dependency Integration
 
 To use NDCore as a dependency, add the following to your `plugin.yml`:
 
@@ -41,7 +50,7 @@ To use NDCore as a dependency, add the following to your `plugin.yml`:
 depend: [NDCore]
 ```
 
-and import it via maven central:
+Import via Maven Central:
 
 <details>
 <summary>Gradle</summary>
@@ -74,18 +83,18 @@ implementation("dev.nelmin.minecraft:core:VERSION")
 
 </details>
 
-## System Requirements
+## ⚙️ System Requirements
 
 - Java 21 or higher
 - Compatible with the latest PaperMC version
 
-## Installation
+## 🛠️ Installation
 
-1. Download NDCore from the releases page
-2. Place the JAR file in your server's `plugins` folder
-3. Restart your server
-4. The plugin will load automatically
+1. Download NDCore from the releases page.
+2. Place the JAR file in your server's `plugins` folder.
+3. Restart your server.
+4. The plugin will load automatically.
 
-## License
+## 📜 License
 
 This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](LICENSE) file for details.

@@ -104,7 +104,7 @@ class NDCore : JavaPlugin() {
         Logger.queueInfo("Checking for updates...")
         NDUtils.checkForPluginUpdates(
             currentVersion = getPlugin(this::class.java).pluginMeta.version,
-            callback = { (currentVersion, hasUpdate, updateType) ->
+            callback = { (hasUpdate, updateType, _, currentVersion) ->
             if (hasUpdate) {
                 Logger.queueWarn("An update is available for NDCore ($currentVersion -> $updateType)")
             } else {

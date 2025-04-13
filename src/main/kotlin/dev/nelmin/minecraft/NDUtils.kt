@@ -30,10 +30,10 @@ import org.bukkit.plugin.java.JavaPlugin
  *                 Can be null if the operation completes successfully.
  */
 data class UpdateCheckResult(
-    val currentVersion: String,
     val needsUpdate: Boolean,
     val updateType: String? = null,
-    val error: String? = null
+    val error: String? = null,
+    val currentVersion: String = JavaPlugin.getPlugin(NDCore::class.java).pluginMeta.version
 )
 
 /**
