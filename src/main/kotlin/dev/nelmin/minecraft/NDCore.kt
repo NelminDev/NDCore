@@ -3,6 +3,7 @@ package dev.nelmin.minecraft
 import de.mkammerer.argon2.Argon2
 import de.mkammerer.argon2.Argon2Factory
 import dev.nelmin.logger.Logger
+import dev.nelmin.minecraft.listeners.MenuClickListener
 import dev.nelmin.minecraft.listeners.PlayerFreezeListener
 import dev.nelmin.minecraft.listeners.PlayerJoinListener
 import dev.nelmin.minecraft.listeners.PlayerQuitListener
@@ -12,6 +13,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.sync.Mutex
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
+import org.jetbrains.annotations.ApiStatus
 
 /**
  * NDCore is the main plugin class for managing the core functionalities of the plugin.
@@ -26,20 +28,6 @@ class NDCore : JavaPlugin() {
      * management for the NDCore plugin.
      */
     companion object {
-        /**
-         * Singleton instance of the NDCore plugin.
-         * Initialized during the plugin's `onEnable` lifecycle method.
-         */
-        private lateinit var instance: NDCore
-
-        /**
-         * Returns the current instance of the `NDCore` plugin.
-         * This method allows access to the singleton instance of the plugin.
-         *
-         * @return The `NDCore` instance.
-         */
-        fun instance() = instance
-
         /**
          * A shared [CoroutineScope] instance backed by a [SupervisorJob].
          * This scope can be used to launch coroutines that are lifecycle-aware
@@ -95,9 +83,8 @@ class NDCore : JavaPlugin() {
      * - Initiating a check to verify if the plugin is up-to-date by interacting with a GitHub repository,
      *   and logging relevant information about update availability.
      */
+    @ApiStatus.Experimental
     override fun onEnable() {
-        instance = this
-
         Logger.setName("NDCore")
         Logger.coroutineScope = coroutineScope
 
@@ -108,16 +95,20 @@ class NDCore : JavaPlugin() {
         pluginManager.registerEvents(PlayerJoinListener(), this)
         pluginManager.registerEvents(PlayerQuitListener(), this)
 
+        pluginManager.registerEvents(MenuClickListener(), this)
+
         // pluginManager.registerEvents(EventListenerForLogging(), this)
 
         Logger.queueInfo("Plugin enabled!")
 
         Logger.queueInfo("Checking for updates...")
-        NDUtils.checkForPluginUpdates(callback = { (hasUpdate, updateType) ->
+        NDUtils.checkForPluginUpdates(
+            currentVersion = getPlugin(this::class.java).pluginMeta.version,
+            callback = { (currentVersion, hasUpdate, updateType) ->
             if (hasUpdate) {
-                Logger.queueWarn("An update is available for NDCore (${instance.description.version} -> $updateType)")
+                Logger.queueWarn("An update is available for NDCore ($currentVersion -> $updateType)")
             } else {
-                Logger.queueInfo("You are running the latest version of NDCore (${instance.description.version})")
+                Logger.queueInfo("You are running the latest version of NDCore ($currentVersion)")
             }
         })
     }
