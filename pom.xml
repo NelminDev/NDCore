@@ -49,6 +49,7 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
+                    <pluginGroupId>dev.nelmin.minecraft</pluginGroupId>
                 </configuration>
             </plugin>
         </plugins>
