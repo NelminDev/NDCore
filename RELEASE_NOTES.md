@@ -23,22 +23,15 @@ retrieval, and provides better null safety with JetBrains annotations.
 
 ## 📦 Installation
 
-1. Download NDCore-Paper.jar
+1. Download NDCore-v3.0.0.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
 
 ## 💻 For Developers
 
-Developers interested in utilizing NDCore's functionality can now benefit from:
-
-- Integrated logging capabilities (formerly from the Lumina project, now merged into NDCore)
-
-Key components:
-- `PersistentProperty` for managing persistent data
-- `TextBuilder` for Adventure API-based text formatting
-- `LocalizedMessage` for translation management
-- `BasicNDPlayer` for player data management with language preferences and freeze state
+For comprehensive documentation on how to use NDCore, please refer to the [Introduction](usage/Introduction.md) in the
+usage directory.
 
 To use NDCore as a dependency, add the following to your `plugin.yml`:
 

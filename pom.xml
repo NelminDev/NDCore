@@ -4,12 +4,36 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.nelmin</groupId>
+    <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>NDCore</artifactId>
     <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <name>NDCore</name>
+    <description>Core library for Minecraft plugins development</description>
+    <url>https://github.com/NelminDev/NDCore</url>
+
+    <licenses>
+        <license>
+            <name>GPLv3 License</name>
+            <url>https://choosealicense.com/licenses/gpl-3.0/</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>NelminDev</name>
+            <email>me@nelmin.dev</email>
+            <organization>NelminDev</organization>
+            <organizationUrl>https://github.com/NelminDev/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/NelminDev/NDCore.git</connection>
+        <developerConnection>scm:git:ssh://github.com:NelminDev/NDCore.git</developerConnection>
+        <url>https://github.com/NelminDev/NDCore</url>
+    </scm>
 
     <properties>
         <java.version>21</java.version>
@@ -42,6 +66,55 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <doclint>none</doclint>
+                    <additionalJOptions>
+                        <additionalJOption>--enable-preview</additionalJOption>
+                        <additionalJOption>--add-modules</additionalJOption>
+                        <additionalJOption>jdk.incubator.vector</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
                 <version>0.7.0</version>
@@ -49,7 +122,6 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
-                    <pluginGroupId>dev.nelmin.minecraft</pluginGroupId>
                 </configuration>
             </plugin>
             <plugin>

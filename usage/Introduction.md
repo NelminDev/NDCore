@@ -15,7 +15,14 @@ The `/usage` directory serves as the central hub for all NDCore documentation. H
 
 ## Documentation Structure
 
-The documentation is organized into subdirectories that mirror the package structure of the NDCore library:
+The documentation includes standalone files for core components:
+
+- [**Integration.md**](Integration.md) - Guide for integrating NDCore into your projects
+- [**NDCore.md**](NDCore.md) - Documentation for the main NDCore class
+- [**NDPlugin.md**](NDPlugin.md) - Documentation for the NDPlugin base class
+
+Additionally, the documentation is organized into subdirectories that mirror the package structure of the NDCore
+library:
 
 1. [**builders/**](builders/Introduction.md) - Documentation for fluent builders (ItemBuilder, TextBuilder, etc.)
 2. [**events/**](events/Introduction.md) - Documentation for custom events (PlayerFreezeEvent, etc.)
@@ -28,12 +35,6 @@ The documentation is organized into subdirectories that mirror the package struc
 8. [**other/**](other/Introduction.md) - Documentation for general utility classes
 9. [**persistence/**](persistence/Introduction.md) - Documentation for data persistence
 10. [**players/**](players/Introduction.md) - Documentation for player management
-
-Additionally, there are standalone files for core components:
-
-- [**Integration.md**](Integration.md) - Guide for integrating NDCore into your projects
-- [**NDCore.md**](NDCore.md) - Documentation for the main NDCore class
-- [**NDPlugin.md**](NDPlugin.md) - Documentation for the NDPlugin base class
 
 ## How to Use This Documentation
 
