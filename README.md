@@ -30,21 +30,6 @@ The plugin architecture is built around two main classes:
 
 ## 👨‍💻 For Developers
 
-Explore NDCore's capabilities and integrate it into your projects:
-
-### Key Components:
-
-- `NDPlugin`: Abstract base class providing lifecycle management and enhanced logging.
-- `NDCore`: Core implementation managing player data and event listeners.
-- `PersistentProperty`: Manages persistent data storage with type safety.
-- `PersistentPropertyManager`: Creates and manages persistent properties for players.
-- `TextBuilder`: Simplifies Adventure API-based text formatting with support for gradients and replacements.
-- `LocalizedMessage`: Manages translation and localization with fallback support.
-- `LanguageCode`: Comprehensive enum of ISO 639-1 language codes.
-- `BasicNDPlayer`: Basic player wrapper with persistent property support.
-- `Menu` & `SimpleMenu`: Create custom menu implementations with click handling.
-- `NDLogger`: Integrated logging system with INFO, WARN, ERROR, and FATAL levels.
-
 ### 📚 Documentation & Usage Guides
 
 Dive into our magical world of code with our comprehensive documentation:
