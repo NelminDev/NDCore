@@ -65,6 +65,8 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 ### Structural Mandate
 
+DO NOT add any of those comments in the following code block to the real code:
+
 ```java
 // 1. Static variables
 private static final int MAX_PLAYERS = 100;

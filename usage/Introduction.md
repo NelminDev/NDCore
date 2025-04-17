@@ -50,7 +50,7 @@ Additionally, there are standalone files for core components:
 - If you need to create rich text with colors and formatting, check the [TextBuilder documentation](builders/TextBuilder.md)
 - If you want to create custom menus, explore the [menu package documentation](menu/Introduction.md)
 - If you need to store persistent player data, see the [persistence package documentation](persistence/Introduction.md)
-- If you're extending NDCore with your own plugin, refer to the [NDPlugin documentation](NDPlugin.md)
+- If you're using NDCore in your own plugin, refer to the [NDPlugin documentation](NDPlugin.md)
 
 ## Contributing to Documentation
 
