@@ -2,6 +2,12 @@ package dev.nelmin.ndcore.objects;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+/**
+ * Enumeration of language codes based on ISO 639-1 standard.
+ * Each enum constant represents a language with its corresponding two-letter code.
+ */
 public enum LanguageCode {
     ABKHAZIAN("ab"),
     AFAR("aa"),
@@ -186,10 +192,21 @@ public enum LanguageCode {
 
     private final String languageCode;
 
+    /**
+     * Constructs a LanguageCode enum constant with the specified ISO 639-1 language code.
+     *
+     * @param languageCode The two-letter ISO 639-1 language code
+     * @throws NullPointerException if languageCode is null
+     */
     LanguageCode(@NotNull String languageCode) {
-        this.languageCode = languageCode;
+        this.languageCode = Objects.requireNonNull(languageCode, "languageCode must not be null");
     }
 
+    /**
+     * Returns the ISO 639-1 language code associated with this enum constant.
+     *
+     * @return The two-letter language code
+     */
     public @NotNull String get() {
         return this.languageCode;
     }

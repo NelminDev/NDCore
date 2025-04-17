@@ -44,7 +44,7 @@ import dev.nelmin.ndcore.persistence.PersistentPropertyManager;
 // Getting a property manager for a player
 public void setupPlayerData(Player player) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
-    
+
     // Create properties for the player
     setupPlayerProperties(propertyManager);
 }
@@ -56,13 +56,13 @@ private void setupPlayerProperties(PersistentPropertyManager propertyManager) {
         "player.level", 
         1
     );
-    
+
     // Create a string property with default value
     PersistentProperty<String> rankProperty = propertyManager.create(
         "player.rank", 
         "Novice"
     );
-    
+
     // Create a boolean property with custom merge behavior
     PersistentProperty<Boolean> vipProperty = propertyManager.create(
         "player.vip",
@@ -75,7 +75,7 @@ private void setupPlayerProperties(PersistentPropertyManager propertyManager) {
 public int getPlayerLevel(Player player) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
     PersistentProperty<Integer> levelProperty = propertyManager.create("player.level", 1);
-    
+
     return levelProperty.get(e -> {
         getLogger().severe("Error getting player level: " + e.getMessage());
     });
@@ -85,7 +85,7 @@ public int getPlayerLevel(Player player) {
 public void setPlayerLevel(Player player, int level) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
     PersistentProperty<Integer> levelProperty = propertyManager.create("player.level", 1);
-    
+
     levelProperty.set(level, () -> {
         // This runs after the value is set
         player.sendMessage("Your level has been updated to " + level);
@@ -103,7 +103,7 @@ public void addPlayerCoins(Player player, int amount) {
         0,
         (newCoins, currentCoins) -> (currentCoins != null ? currentCoins : 0) + newCoins
     );
-    
+
     // This will add to the current value rather than replacing it
     coinsProperty.set(amount, () -> {
         int totalCoins = coinsProperty.get(e -> getLogger().severe("Error: " + e.getMessage()));
@@ -121,35 +121,35 @@ The persistence system is designed to work seamlessly with the NDPlugin system:
 ```java
 public class MyPlugin extends NDPlugin {
     private final Map<UUID, PersistentPropertyManager> propertyManagers = new HashMap<>();
-    
+
     @Override
     public void enable() {
         // Plugin initialization
     }
-    
+
     @Override
     public void disable() {
         // Plugin shutdown
     }
-    
+
     @Override
     public @NotNull Map<UUID, PersistentPropertyManager> getPlayerPropertyManagers() {
         return propertyManagers;
     }
-    
+
     // Example event handler that uses persistence
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
-        
+
         // Create or get a login count property
         PersistentProperty<Integer> loginCountProperty = propertyManager.create(
             "player.login_count",
             0,
             (newValue, currentValue) -> (currentValue != null ? currentValue : 0) + 1
         );
-        
+
         // Increment login count
         loginCountProperty.set(1);
     }

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -31,6 +32,9 @@ public class SkullBuilder extends ItemBuilder {
      */
     private final SkullMeta skullMeta;
 
+    /**
+     * Constructs a new SkullBuilder with a default player head item
+     */
     public SkullBuilder() {
         super(Material.PLAYER_HEAD, 1);
         this.itemStack = super.toItem();
@@ -38,36 +42,53 @@ public class SkullBuilder extends ItemBuilder {
     }
 
     /**
-     * Sets the skull's owner using a player name <p>
+     * Sets the skull's owner using a player name
+     *
+     * @param owner The name of the player to set as owner
+     * @return This builder instance
+     * @throws IllegalArgumentException if owner is null
      */
     public SkullBuilder owner(@NotNull String owner) {
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(owner));
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(Objects.requireNonNull(owner)));
         updateSuper();
         return this;
     }
 
     /**
-     * Sets the skull's owner using an OfflinePlayer instance <p>
+     * Sets the skull's owner using an OfflinePlayer instance
+     *
+     * @param owner The OfflinePlayer to set as owner
+     * @return This builder instance
+     * @throws IllegalArgumentException if owner is null
      */
     public SkullBuilder owner(@NotNull OfflinePlayer owner) {
-        skullMeta.setOwningPlayer(owner);
+        skullMeta.setOwningPlayer(Objects.requireNonNull(owner));
         updateSuper();
         return this;
     }
 
     /**
-     * Sets the skull's owner using a UUID <p>
+     * Sets the skull's owner using a UUID
+     *
+     * @param uuid The UUID of the player to set as owner
+     * @return This builder instance
+     * @throws IllegalArgumentException if uuid is null
      */
     public SkullBuilder owner(@NotNull UUID uuid) {
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(Objects.requireNonNull(uuid)));
         updateSuper();
         return this;
     }
 
     /**
-     * Sets the skull's texture using a URL <p>
+     * Sets the skull's texture using a URL
+     *
+     * @param texture The URL of the texture to apply
+     * @return This builder instance
+     * @throws IllegalArgumentException if texture is null or malformed
      */
-    public SkullBuilder texture(@NotNull String texture) {
+    public SkullBuilder texture(@NotNull String texture) throws IllegalArgumentException {
+        Objects.requireNonNull(texture);
         PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
         PlayerTextures textures = profile.getTextures();
         try {
@@ -80,6 +101,11 @@ public class SkullBuilder extends ItemBuilder {
         return this;
     }
 
+    /**
+     * Builds and returns the final skull ItemStack
+     *
+     * @return The constructed skull ItemStack with all applied modifications
+     */
     @Override
     @NotNull
     public ItemStack toItem() {
@@ -87,6 +113,9 @@ public class SkullBuilder extends ItemBuilder {
         return itemStack;
     }
 
+    /**
+     * Updates the super class with the current skull metadata
+     */
     private void updateSuper() {
         this.itemStack.setItemMeta(skullMeta);
         super.setItemMeta(skullMeta);

@@ -19,7 +19,7 @@ A class that manages individual persistent data properties with type safety and 
 public int getPlayerLevel(Player player) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
     PersistentProperty<Integer> levelProperty = propertyManager.create("player.level", 1);
-    
+
     return levelProperty.get(e -> {
         getLogger().severe("Error getting player level: " + e.getMessage());
     });
@@ -29,7 +29,7 @@ public int getPlayerLevel(Player player) {
 public void setPlayerLevel(Player player, int level) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
     PersistentProperty<Integer> levelProperty = propertyManager.create("player.level", 1);
-    
+
     levelProperty.set(level, () -> {
         // This runs after the value is set
         player.sendMessage("Your level has been updated to " + level);
@@ -47,7 +47,7 @@ public void addPlayerCoins(Player player, int amount) {
         0,
         (newCoins, currentCoins) -> (currentCoins != null ? currentCoins : 0) + newCoins
     );
-    
+
     // This will add to the current value rather than replacing it
     coinsProperty.set(amount, () -> {
         int totalCoins = coinsProperty.get(e -> getLogger().severe("Error: " + e.getMessage()));
@@ -61,11 +61,11 @@ public void addPlayerCoins(Player player, int amount) {
 public void resetPlayerRank(Player player) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
     PersistentProperty<String> rankProperty = propertyManager.create("player.rank", "Novice");
-    
+
     rankProperty.remove(e -> {
         getLogger().severe("Error removing player rank: " + e.getMessage());
     });
-    
+
     player.sendMessage("Your rank has been reset");
 }
 ```

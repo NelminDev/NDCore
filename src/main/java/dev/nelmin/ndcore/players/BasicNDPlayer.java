@@ -13,8 +13,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * Represents a basic player with persistent properties and localization support.
+ * <p>
+ * This class provides functionality for managing player state, including:
+ * <ul>
+ *   <li>Language preferences</li>
+ *   <li>Freeze state</li>
+ *   <li>Localized messaging</li>
+ * </ul>
+ */
 public class BasicNDPlayer {
     private final Player bukkitPlayer;
     private final PersistentPropertyManager propertyManager;
@@ -24,25 +35,54 @@ public class BasicNDPlayer {
     @Getter
     private PersistentProperty<Boolean> isFrozen;
 
+    /**
+     * Creates a new BasicNDPlayer instance.
+     *
+     * @param bukkitPlayer    The Bukkit player instance
+     * @param propertyManager The property manager for persistent data
+     * @throws NullPointerException if bukkitPlayer or propertyManager is null
+     */
     public BasicNDPlayer(@NotNull Player bukkitPlayer, @NotNull PersistentPropertyManager propertyManager) {
-        this.bukkitPlayer = bukkitPlayer;
-        this.propertyManager = propertyManager;
+        this.bukkitPlayer = Objects.requireNonNull(bukkitPlayer, "bukkitPlayer cannot be null");
+        this.propertyManager = Objects.requireNonNull(propertyManager, "propertyManager cannot be null");
 
         setupProperties();
     }
 
-    public static BasicNDPlayer of(Player player, NDPlugin plugin) {
+    /**
+     * Creates a BasicNDPlayer instance from a Player and NDPlugin.
+     *
+     * @param player The player to create the instance for
+     * @param plugin The plugin instance
+     * @return A new BasicNDPlayer instance
+     * @throws NullPointerException if player or plugin is null
+     */
+    public static @NotNull BasicNDPlayer of(@NotNull Player player, @NotNull NDPlugin plugin) {
+        Objects.requireNonNull(player, "player cannot be null");
+        Objects.requireNonNull(plugin, "plugin cannot be null");
         return new BasicNDPlayer(
                 player,
                 PersistentPropertyManager.of(player, plugin)
         );
     }
 
-    public void sendLocalizedMessage(LocalizedMessage localizedMessage, Consumer<Exception> errorHandler) {
+    /**
+     * Sends a localized message to the player.
+     *
+     * @param localizedMessage The message to send
+     * @param errorHandler     Handler for any exceptions during translation
+     * @throws NullPointerException if localizedMessage or errorHandler is null
+     */
+    public void sendLocalizedMessage(@NotNull LocalizedMessage localizedMessage, @NotNull Consumer<Exception> errorHandler) {
+        Objects.requireNonNull(localizedMessage, "localizedMessage cannot be null");
+        Objects.requireNonNull(errorHandler, "errorHandler cannot be null");
         new TextBuilder(localizedMessage.getTranslation(LanguageCode.valueOf(languageCode.get(errorHandler))))
                 .sendTo(bukkitPlayer, true);
     }
 
+    /**
+     * Sets up persistent properties for the player.
+     */
     private void setupProperties() {
         this.languageCode = propertyManager.create(
                 "languageCode",

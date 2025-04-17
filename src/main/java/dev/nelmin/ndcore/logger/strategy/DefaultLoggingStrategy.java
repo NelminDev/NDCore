@@ -15,14 +15,15 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
- * Default implementation of LoggingStrategy for handling log messages
+ * Default implementation of LoggingStrategy for handling log messages.
+ * Provides thread-safe logging with file output and optional console display.
  */
 public class DefaultLoggingStrategy implements LoggingStrategy {
-    // Variables
     private final @NotNull JavaPlugin plugin;
     private final @NotNull AtomicReference<String> format;
     private final @NotNull String loggerName;
@@ -30,7 +31,16 @@ public class DefaultLoggingStrategy implements LoggingStrategy {
     private final @NotNull String colorCode;
     private final @NotNull Path logBasePath;
 
-    // Constructor
+    /**
+     * Constructs a new DefaultLoggingStrategy with the specified parameters.
+     *
+     * @param plugin       The JavaPlugin instance for task scheduling
+     * @param format       The initial format pattern for log messages
+     * @param loggerName   The name of the logger instance
+     * @param strategyName The name of this logging strategy
+     * @param colorCode    The color code used for console output
+     * @throws NullPointerException if any parameter is null
+     */
     public DefaultLoggingStrategy(
             @NotNull JavaPlugin plugin,
             @NotNull String format,
@@ -38,24 +48,38 @@ public class DefaultLoggingStrategy implements LoggingStrategy {
             @NotNull String strategyName,
             @NotNull String colorCode
     ) {
-        this.plugin = plugin;
-        this.format = new AtomicReference<>(format);
-        this.loggerName = loggerName;
-        this.strategyName = strategyName;
-        this.colorCode = colorCode;
+        this.plugin = Objects.requireNonNull(plugin, "plugin cannot be null");
+        this.format = new AtomicReference<>(Objects.requireNonNull(format, "format cannot be null"));
+        this.loggerName = Objects.requireNonNull(loggerName, "loggerName cannot be null");
+        this.strategyName = Objects.requireNonNull(strategyName, "strategyName cannot be null");
+        this.colorCode = Objects.requireNonNull(colorCode, "colorCode cannot be null");
         this.logBasePath = Path.of(System.getProperty("user.dir"))
                 .resolve("logs")
                 .resolve("NDCore");
     }
 
-    // Functions
+    /**
+     * Updates the format pattern used for log messages.
+     *
+     * @param format The new format pattern to use
+     * @throws NullPointerException if format is null
+     */
     @Override
     public void format(@NotNull String format) {
-        this.format.set(format);
+        this.format.set(Objects.requireNonNull(format, "format cannot be null"));
     }
 
+    /**
+     * Logs the given content using the current format pattern.
+     * Can optionally suppress console output while still writing to file.
+     *
+     * @param silent  Whether to suppress console output
+     * @param content The content to log
+     * @throws NullPointerException if content is null
+     */
     @Override
     public void log(boolean silent, @NotNull Object... content) {
+        Objects.requireNonNull(content, "content cannot be null");
         Pair<String, TextBuilder> messagePair = generateMessage(content);
         if (messagePair.first() != null) {
             writeToFile(messagePair.first());
@@ -65,9 +89,17 @@ public class DefaultLoggingStrategy implements LoggingStrategy {
         }
     }
 
+    /**
+     * Generates a message pair containing the file log message and console message.
+     *
+     * @param content The content to include in the message
+     * @return A pair containing the file message and console TextBuilder
+     * @throws NullPointerException if content is null
+     */
     @Override
     @NotNull
     public Pair<String, TextBuilder> generateMessage(@NotNull Object... content) {
+        Objects.requireNonNull(content, "content cannot be null");
         String currentFormat = format.get();
         String message = Arrays.stream(content)
                 .map(Object::toString)
@@ -85,8 +117,16 @@ public class DefaultLoggingStrategy implements LoggingStrategy {
         return new Pair<>(message, consoleMessage);
     }
 
+    /**
+     * Writes a message to the log file asynchronously.
+     * Creates necessary directories if they don't exist.
+     *
+     * @param message The message to write to the file
+     * @throws NullPointerException if message is null
+     */
     @Override
     public void writeToFile(@NotNull String message) {
+        Objects.requireNonNull(message, "message cannot be null");
         if (!plugin.isEnabled()) return;
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
