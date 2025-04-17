@@ -1,5 +1,5 @@
 name: NDCore
-version: '1.0'
+version: '${project.version}'
 main: dev.nelmin.ndcore.NDCore
 api-version: '1.21'
 authors: [ Nelmin ]

@@ -6,7 +6,7 @@
 
     <groupId>dev.nelmin</groupId>
     <artifactId>NDCore</artifactId>
-    <version>1.0</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <name>NDCore</name>
@@ -50,6 +50,17 @@
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
                     <pluginGroupId>dev.nelmin.minecraft</pluginGroupId>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <delimiters>
+                        <delimiter>${*}</delimiter>
+                    </delimiters>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
                 </configuration>
             </plugin>
         </plugins>

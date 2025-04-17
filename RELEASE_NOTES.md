@@ -1,29 +1,25 @@
 ## 🎯 Release Overview
 
-Version 2.2.2 introduces a new menu handling system, updates the package name, and improves plugin instance retrieval.
-Additionally, text handling has been refactored to use Adventure API components.
+Version 3.0.0 introduces an enhanced logging system (merged from the Lumina project), improves plugin instance
+retrieval, and provides better null safety with JetBrains annotations.
 
 ## 🚀 Key Changes
 
-- **Package Rename**:
-  - Renamed package from `spigot` to `minecraft`.
-  - Updated all package declarations and imports.
-  - Adjusted the project group in `gradle.properties` and the main class path in `plugin.yml`.
+- **Enhanced Logging System** (Merged from Lumina):
+  - Integrated the Lumina logging project directly into NDCore for streamlined dependency management.
+  - Introduced `NDLogger` with multiple logging levels (INFO, WARN, ERROR, FATAL).
+  - Implemented `LoggingStrategy` interface for customizable logging behavior.
+  - Added `DefaultLoggingStrategy` with color-coded console output and organized log files.
+  - Deprecated standard `getLogger()` method in favor of the new `logger()` method.
 
 - **Improved Plugin Instance Retrieval**:
-  - Replaced `NDCore.instance()` with `JavaPlugin.getPlugin(NDCore::class.java)` for improved reliability and
-    consistency.
-  - Added utility conversion methods for `Player` to `NDPlayer`, `NDEconomyPlayer`, and `NDSecurityPlayer`.
+  - Added `getNDPlugin(Class<T> clazz)` method for more convenient NDPlugin instance retrieval.
+  - Enhanced type safety with proper casting to NDPlugin.
 
-- **Menu Handling System**:
-  - Introduced a `Menu` system with the `MenuInterface` for custom menu management.
-  - Implemented `MenuClickEvent` and `MenuClickListener` to handle menu interactions, enabling custom actions per slot.
-  - Updated `NDCore` to register the new listener and integrate menu functionalities.
-
-- **Adventure API Text Handling**:
-  - Refactored text handling to use Adventure API components for better text formatting and serialization.
-  - Replaced `String`-based text handling with Adventure's `Component`.
-  - Removed deprecated methods and updated APIs to align with the new component-based approach.
+- **Null Safety Enhancements**:
+  - Added JetBrains annotations (@NotNull) throughout the codebase.
+  - Improved null checking with Objects.requireNonNull() in constructors.
+  - Enhanced parameter validation for better error handling.
 
 ## 📦 Installation
 
@@ -34,18 +30,15 @@ Additionally, text handling has been refactored to use Adventure API components.
 
 ## 💻 For Developers
 
-Developers interested in utilizing NDCore's functionality should look into:
+Developers interested in utilizing NDCore's functionality can now benefit from:
 
-- The [Lumina](https://github.com/NelminDev/Lumina) project for logging capabilities
+- Integrated logging capabilities (formerly from the Lumina project, now merged into NDCore)
 
 Key components:
 - `PersistentProperty` for managing persistent data
-- `PersistentListProperty` and `PersistentMutableListProperty` for managing persistent list data
 - `TextBuilder` for Adventure API-based text formatting
 - `LocalizedMessage` for translation management
-- `NDPlayer` for extensive player data management with conversion methods:
-  - `economy()` for economic functionality
-  - `security()` for secure player management
+- `BasicNDPlayer` for player data management with language preferences and freeze state
 
 To use NDCore as a dependency, add the following to your `plugin.yml`:
 
@@ -59,7 +52,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core:2.2.2'
+implementation 'dev.nelmin:NDCore:3.0.0'
 ```
 
 </details>
@@ -68,7 +61,7 @@ implementation 'dev.nelmin.minecraft:core:2.2.2'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core:2.2.2")
+implementation("dev.nelmin:NDCore:3.0.0")
 ```
 
 </details>
@@ -78,9 +71,9 @@ implementation("dev.nelmin.minecraft:core:2.2.2")
 
 ```xml
 <dependency>
-  <groupId>dev.nelmin.minecraft</groupId>
-  <artifactId>core</artifactId>
-  <version>2.2.2</version>
+  <groupId>dev.nelmin</groupId>
+  <artifactId>NDCore</artifactId>
+  <version>3.0.0</version>
 </dependency>
 ```
 
