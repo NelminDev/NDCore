@@ -1,16 +1,10 @@
-# Players Usage Guide
+# BasicNDPlayer
 
 ## Overview
 
-The Players package provides classes for managing player data and interactions in NDCore. It offers a convenient wrapper around Bukkit's Player class with additional functionality for persistent properties and localized messaging.
+A wrapper class for Bukkit's Player that adds persistent property management and localized messaging capabilities in NDCore.
 
-## Components
-
-### BasicNDPlayer
-
-A wrapper class for Bukkit's Player that adds persistent property management and localized messaging capabilities.
-
-#### Key Features
+## Key Features
 
 - Persistent property management for player data
 - Language preference tracking
@@ -18,7 +12,7 @@ A wrapper class for Bukkit's Player that adds persistent property management and
 - Player freeze/unfreeze functionality with events
 - Integration with NDPlugin system
 
-#### Usage Examples
+## Usage Examples
 
 ```java
 // Creating a BasicNDPlayer instance
@@ -139,78 +133,6 @@ public class PlayerManager {
         public void onPlayerQuit(PlayerQuitEvent event) {
             removePlayer(event.getPlayer().getUniqueId());
         }
-    }
-}
-```
-
-## Integration with NDPlugin
-
-The BasicNDPlayer class is designed to work seamlessly with the NDPlugin system:
-
-```java
-public class MyPlugin extends NDPlugin {
-    private final Map<UUID, BasicNDPlayer> players = new HashMap<>();
-    
-    @Override
-    public void enable() {
-        // Register event listeners
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-    }
-    
-    @Override
-    public @NotNull List<BasicNDPlayer> getBasicNDPlayers() {
-        return new ArrayList<>(players.values());
-    }
-    
-    // Player listener for managing player instances
-    private class PlayerListener implements Listener {
-        @EventHandler
-        public void onPlayerJoin(PlayerJoinEvent event) {
-            Player player = event.getPlayer();
-            BasicNDPlayer ndPlayer = BasicNDPlayer.of(player, MyPlugin.this);
-            players.put(player.getUniqueId(), ndPlayer);
-        }
-        
-        @EventHandler
-        public void onPlayerQuit(PlayerQuitEvent event) {
-            players.remove(event.getPlayer().getUniqueId());
-        }
-    }
-    
-    // Example command that uses BasicNDPlayer
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("This command can only be used by players");
-            return true;
-        }
-        
-        if (command.getName().equalsIgnoreCase("language")) {
-            if (args.length < 1) {
-                player.sendMessage("Usage: /language <code>");
-                return true;
-            }
-            
-            BasicNDPlayer ndPlayer = players.get(player.getUniqueId());
-            if (ndPlayer == null) {
-                ndPlayer = BasicNDPlayer.of(player, this);
-                players.put(player.getUniqueId(), ndPlayer);
-            }
-            
-            try {
-                LanguageCode language = LanguageCode.valueOf(args[0].toUpperCase());
-                ndPlayer.getLanguageCode().set(language.get(), () -> {
-                    player.sendMessage("Language set to: " + language.name());
-                }, e -> {
-                    logger().error("Error setting language", e);
-                });
-            } catch (IllegalArgumentException e) {
-                player.sendMessage("Invalid language code: " + args[0]);
-            }
-            
-            return true;
-        }
-        
-        return false;
     }
 }
 ```

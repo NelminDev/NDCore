@@ -1,71 +1,16 @@
-# Events Usage Guide
+# PlayerUnfreezeEvent
 
 ## Overview
 
-The Events package provides custom Bukkit events for player state changes in NDCore. These events allow developers to respond to specific player actions or state changes within their plugins.
-
-## Components
-
-### PlayerFreezeEvent
-
-An event that is triggered when a player is frozen (prevented from moving).
-
-#### Key Features
-
-- Extends PlayerEvent
-- Implements Cancellable
-- Can be fired asynchronously
-
-#### Usage Examples
-
-```java
-// Registering a listener for PlayerFreezeEvent
-@EventHandler
-public void onPlayerFreeze(PlayerFreezeEvent event) {
-    Player player = event.getPlayer();
-    
-    // Check if the event is cancelled
-    if (event.isCancelled()) {
-        return;
-    }
-    
-    // Cancel the event if the player has a permission
-    if (player.hasPermission("myserver.freeze.bypass")) {
-        event.setCancelled(true);
-        return;
-    }
-    
-    // Notify the player
-    player.sendMessage("You have been frozen!");
-    
-    // Apply additional effects
-    player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1.0f, 1.0f);
-}
-
-// Firing a PlayerFreezeEvent
-public void freezePlayer(Player player) {
-    PlayerFreezeEvent event = new PlayerFreezeEvent(player);
-    Bukkit.getPluginManager().callEvent(event);
-    
-    if (!event.isCancelled()) {
-        // Apply freeze logic here
-        // For example, store the player in a frozen players list
-        frozenPlayers.add(player.getUniqueId());
-    }
-}
-```
-
-### PlayerUnfreezeEvent
-
 An event that is triggered when a player is unfrozen (allowed to move again).
 
-#### Key Features
+## Key Features
 
 - Extends PlayerEvent
 - Implements Cancellable
 - Can be fired asynchronously
 
-#### Usage Examples
+## Usage Examples
 
 ```java
 // Registering a listener for PlayerUnfreezeEvent

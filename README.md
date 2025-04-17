@@ -45,24 +45,20 @@ Explore NDCore's capabilities and integrate it into your projects:
 - `Menu` & `SimpleMenu`: Create custom menu implementations with click handling.
 - `NDLogger`: Integrated logging system with INFO, WARN, ERROR, and FATAL levels.
 
-### Detailed Usage Guides
+### 📚 Documentation & Usage Guides
 
-For detailed usage examples and best practices, check out our comprehensive guides:
+Dive into our magical world of code with our comprehensive documentation:
 
-0. [Integration Guide](usage/00-integration.md) - Learn how to integrate NDCore into your projects
-1. [Builders Usage Guide](usage/01-builders.md) - Create and manipulate items, text, and more with fluent builders
-2. [Events Usage Guide](usage/02-events.md) - Work with custom events for player state changes
-3. [Exceptions Usage Guide](usage/03-exceptions.md) - Handle specific error conditions with custom exceptions
-4. [Listener Usage Guide](usage/04-listener.md) - Implement event listeners for custom menus
-5. [Logger Usage Guide](usage/05-logger.md) - Use the enhanced logging system
-6. [Logger Strategy Usage Guide](usage/06-logger-strategy.md) - Create custom logging strategies
-7. [Menu Usage Guide](usage/07-menu.md) - Build interactive inventories and GUIs
-8. [Objects Usage Guide](usage/08-objects.md) - Work with language codes and localized messages
-9. [Other Utilities Usage Guide](usage/09-other.md) - Use date/time utilities and data structures
-10. [Persistence Usage Guide](usage/10-persistence.md) - Manage persistent data with type safety
-11. [Players Usage Guide](usage/11-players.md) - Work with player data and interactions
-12. [NDCore Usage Guide](usage/12-ndcore.md) - Learn about the core plugin functionality
-13. [NDPlugin Usage Guide](usage/13-ndplugin.md) - Extend the base class to create your plugins
+🔮 [**Explore the Documentation**](usage/Introduction.md) - Your portal to all NDCore knowledge!
+
+Our documentation is organized into themed realms, each containing treasures of information about NDCore's components. The Introduction will guide you through these realms and help you find exactly what you need.
+
+Whether you're a coding wizard or just starting your journey, our documentation provides:
+
+- 🧙‍♂️ **Integration guide for beginners**
+- 🏗️ **Advanced implementation examples**
+- 🧩 **Code snippets for common tasks**
+- 🛠️ **Best practices for optimal performance**
 
 ## ⚙️ System Requirements
 

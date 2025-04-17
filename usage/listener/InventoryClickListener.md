@@ -1,22 +1,16 @@
-# Listener Usage Guide
+# InventoryClickListener
 
 ## Overview
 
-The Listener package provides event listeners for handling various Bukkit events in NDCore. These listeners are automatically registered when using NDCore and handle specific functionality like custom menu interactions.
-
-## Components
-
-### InventoryClickListener
-
 A listener that handles inventory click events for custom menus created with the Menu system.
 
-#### Key Features
+## Key Features
 
 - Implements Bukkit's Listener interface
 - Automatically cancels click events in custom menus
 - Delegates click handling to the appropriate menu implementation
 
-#### Usage Examples
+## Usage Examples
 
 ```java
 // This listener is automatically registered by NDCore

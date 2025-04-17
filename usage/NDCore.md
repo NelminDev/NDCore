@@ -1,4 +1,4 @@
-# NDCore Usage Guide
+# NDCore
 
 ## Overview
 

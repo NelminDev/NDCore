@@ -1,4 +1,4 @@
-# NDPlugin Usage Guide
+# NDPlugin
 
 ## Overview
 
@@ -54,7 +54,7 @@ public class MyPlugin extends NDPlugin {
 
 ### Enhanced Logging
 
-NDPlugin provides an enhanced logging system through [NDLogger](05-logger.md):
+NDPlugin provides an enhanced logging system through NDLogger:
 
 ```java
 public class MyPlugin extends NDPlugin {

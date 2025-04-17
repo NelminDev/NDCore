@@ -1,95 +1,17 @@
-# Menu Usage Guide
+# SimpleMenu
 
 ## Overview
 
-The Menu package provides a flexible system for creating interactive inventories (GUIs) in Minecraft. It simplifies the process of creating menus with clickable items and handling player interactions.
+A convenient implementation of the Menu interface that handles most of the boilerplate code for creating interactive menus in NDCore.
 
-## Components
-
-### Menu Interface
-
-The core interface that defines the contract for creating interactive menus.
-
-#### Key Features
-
-- Extends Bukkit's InventoryHolder
-- Provides click handling functionality
-- Supports setting items with or without click actions
-- Includes a default open method for displaying the menu to players
-
-#### Usage Examples
-
-```java
-// Implementing a custom menu
-public class ShopMenu implements Menu {
-    private final Inventory inventory;
-    private final Map<Integer, Consumer<Player>> actions = new HashMap<>();
-    private final Economy economy;
-    
-    public ShopMenu(Economy economy) {
-        this.economy = economy;
-        this.inventory = Bukkit.createInventory(this, 27, Component.text("Shop Menu"));
-    }
-    
-    @Override
-    public void click(@NotNull Player player, int slot) {
-        Consumer<Player> action = actions.get(slot);
-        if (action != null) {
-            action.accept(player);
-        }
-    }
-    
-    @Override
-    public void setItem(int slot, @NotNull ItemStack item) {
-        inventory.setItem(slot, item);
-    }
-    
-    @Override
-    public void setItem(int slot, @NotNull ItemStack item, @NotNull Consumer<Player> action) {
-        inventory.setItem(slot, item);
-        actions.put(slot, action);
-    }
-    
-    @Override
-    public void onSetItems() {
-        // Set up shop items
-        setItem(10, new ItemBuilder(Material.DIAMOND_SWORD)
-            .name("&bDiamond Sword")
-            .lore("&7Price: &a$1000")
-            .build(), 
-            player -> {
-                if (economy.has(player, 1000)) {
-                    economy.withdrawPlayer(player, 1000);
-                    player.getInventory().addItem(new ItemStack(Material.DIAMOND_SWORD));
-                    player.sendMessage("You purchased a Diamond Sword!");
-                } else {
-                    player.sendMessage("You don't have enough money!");
-                }
-            }
-        );
-        
-        // Add more items...
-    }
-    
-    @Override
-    public @NotNull Inventory getInventory() {
-        return inventory;
-    }
-}
-```
-
-### SimpleMenu
-
-A convenient implementation of the Menu interface that handles most of the boilerplate code.
-
-#### Key Features
+## Key Features
 
 - Pre-implemented click handling
 - Built-in action mapping
 - Enum-based inventory size selection
 - Simplified item setting
 
-#### Usage Examples
+## Usage Examples
 
 ```java
 // Creating a basic menu with SimpleMenu
@@ -157,7 +79,7 @@ public void openWarpMenu(Player player) {
 }
 ```
 
-### Creating Paginated Menus
+## Creating Paginated Menus
 
 For larger collections of items, you can create paginated menus:
 
@@ -223,14 +145,6 @@ public class PaginatedMenu extends SimpleMenu {
     }
 }
 ```
-
-## Integration with InventoryClickListener
-
-The Menu system works in conjunction with the [InventoryClickListener](04-listener.md) to handle click events. The listener automatically:
-
-1. Detects when a player clicks in a menu inventory
-2. Cancels the vanilla click event to prevent item movement
-3. Calls the menu's `click()` method with the player and slot information
 
 ## Best Practices
 

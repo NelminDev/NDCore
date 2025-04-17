@@ -1,26 +1,46 @@
-# Persistence Usage Guide
+# Persistence Package - Introduction
 
 ## Overview
 
-The Persistence package provides utilities for managing persistent data in Bukkit/Paper plugins. It offers a type-safe and convenient way to store and retrieve data that survives server restarts, using Bukkit's PersistentDataContainer API.
+The `persistence` package in NDCore provides a robust system for managing persistent data with type safety and default values. It leverages Bukkit's PersistentDataContainer API to store and retrieve data that persists across server restarts.
+
+## Purpose
+
+The primary purpose of the persistence package is to:
+
+- Provide a type-safe way to store and retrieve persistent data
+- Simplify working with Bukkit's PersistentDataContainer API
+- Support default values for properties that haven't been set
+- Enable asynchronous data operations
+- Provide error handling for data operations
+- Allow for custom value merging behavior
 
 ## Components
 
-### PersistentPropertyManager
+The persistence package includes the following key classes:
 
-A class that manages persistent properties for players, handling creation and validation of persistent properties.
+1. **PersistentDataTypeHelper** - A helper class for managing PersistentDataType conversions using the Singleton pattern
+2. **PersistentProperty** - A class that manages individual persistent data properties with type safety and default values
+3. **PersistentPropertyManager** - A class that manages persistent properties for players, handling creation and validation
 
-#### Key Features
+## How It Works
 
-- Type-safe property creation
-- Default value support
-- Custom value merging behavior
-- Automatic validation of property names and values
-- Integration with NDPlugin system
+The persistence system works as follows:
 
-#### Usage Examples
+1. The PersistentPropertyManager creates and manages PersistentProperty instances
+2. Each PersistentProperty represents a single piece of data (like a player's level or settings)
+3. The PersistentDataTypeHelper handles the conversion between Java types and PersistentDataTypes
+4. Data is stored in the PersistentDataContainer of entities (usually players)
+5. The system provides type safety, default values, and error handling
+
+## Usage Example
+
+Here's an example of how to use the persistence system:
 
 ```java
+import dev.nelmin.ndcore.persistence.PersistentProperty;
+import dev.nelmin.ndcore.persistence.PersistentPropertyManager;
+
 // Getting a property manager for a player
 public void setupPlayerData(Player player) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
@@ -49,30 +69,8 @@ private void setupPlayerProperties(PersistentPropertyManager propertyManager) {
         false,
         (newValue, currentValue) -> newValue || (currentValue != null && currentValue)
     );
-    
-    // Create a long property for timestamps
-    PersistentProperty<Long> lastLoginProperty = propertyManager.create(
-        "player.last_login",
-        System.currentTimeMillis()
-    );
 }
-```
 
-### PersistentProperty
-
-A class that manages individual persistent data properties with type safety and default values.
-
-#### Key Features
-
-- Type-safe get and set operations
-- Default value fallback
-- Asynchronous data operations
-- Error handling support
-- Custom value merging functions
-
-#### Usage Examples
-
-```java
 // Getting a property value
 public int getPlayerLevel(Player player) {
     PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
@@ -114,53 +112,6 @@ public void addPlayerCoins(Player player, int amount) {
         getLogger().severe("Error adding player coins: " + e.getMessage());
     });
 }
-
-// Removing a property
-public void resetPlayerRank(Player player) {
-    PersistentPropertyManager propertyManager = PersistentPropertyManager.of(player, this);
-    PersistentProperty<String> rankProperty = propertyManager.create("player.rank", "Novice");
-    
-    rankProperty.remove(e -> {
-        getLogger().severe("Error removing player rank: " + e.getMessage());
-    });
-    
-    player.sendMessage("Your rank has been reset");
-}
-```
-
-### PersistentDataTypeHelper
-
-A helper class for managing PersistentDataType conversions using the Singleton pattern.
-
-#### Key Features
-
-- Automatic conversion between primitive and complex types
-- Singleton pattern for efficient reuse
-- Support for all standard Bukkit PersistentDataTypes
-
-#### Usage Examples
-
-```java
-// Getting the appropriate PersistentDataType for a class
-public <T> PersistentDataType<?, T> getDataType(Class<T> clazz) {
-    return PersistentDataTypeHelper.instance().type(clazz);
-}
-
-// Using the helper directly with a PersistentDataContainer
-public void storeCustomData(PersistentDataContainer container, String key, Object value) {
-    NamespacedKey namespacedKey = new NamespacedKey(this, key);
-    
-    if (value instanceof Integer intValue) {
-        PersistentDataType<?, Integer> type = PersistentDataTypeHelper.instance().type(Integer.class);
-        container.set(namespacedKey, type, intValue);
-    } else if (value instanceof String stringValue) {
-        container.set(namespacedKey, PersistentDataType.STRING, stringValue);
-    } else if (value instanceof Boolean boolValue) {
-        PersistentDataType<?, Boolean> type = PersistentDataTypeHelper.instance().type(Boolean.class);
-        container.set(namespacedKey, type, boolValue);
-    }
-    // Add more type handling as needed
-}
 ```
 
 ## Integration with NDPlugin
@@ -200,12 +151,7 @@ public class MyPlugin extends NDPlugin {
         );
         
         // Increment login count
-        loginCountProperty.set(1, () -> {
-            int count = loginCountProperty.get(e -> logger().error("Error getting login count", e));
-            player.sendMessage("Welcome back! This is your " + count + " login.");
-        }, e -> {
-            logger().error("Error updating login count", e);
-        });
+        loginCountProperty.set(1);
     }
 }
 ```
@@ -214,10 +160,9 @@ public class MyPlugin extends NDPlugin {
 
 - Use descriptive, namespaced key names for properties (e.g., "player.stats.level")
 - Always provide sensible default values for properties
-- Handle errors in the error handler consumer
 - Use custom merge functions for properties that need to combine values
-- Consider the performance impact of frequent property access
-- Use asynchronous operations for non-critical property updates
+- Handle errors in the error handler consumer
 - Group related properties under a common prefix
 - Cache frequently accessed property values when appropriate
-- Use the type-safe methods rather than direct PersistentDataContainer access
+- Consider the performance impact of frequent property access
+- Use asynchronous operations for non-critical property updates
