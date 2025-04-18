@@ -1,5 +1,6 @@
 package dev.nelmin.ndcore.menu;
 
+import dev.nelmin.ndcore.builders.TextBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
  * This class provides a basic menu implementation with support for click actions and item management.
  * The menu size is determined by the number of rows specified during construction.
  */
-public class SimpleMenu implements Menu {
+public abstract class SimpleMenu implements Menu {
     private final Map<Integer, Consumer<Player>> actions = new HashMap<>();
     private final Inventory inventory;
 
@@ -30,9 +31,20 @@ public class SimpleMenu implements Menu {
      * @throws NullPointerException if title or rows is null
      */
     public SimpleMenu(@NotNull String title, @NotNull Rows rows) {
+        this(new TextBuilder(title).colorize('&'), rows);
+    }
+
+    /**
+     * Creates a new SimpleMenu with the specified title and number of rows
+     *
+     * @param title The title of the menu inventory
+     * @param rows  The number of rows in the menu
+     * @throws NullPointerException if title or rows is null
+     */
+    public SimpleMenu(@NotNull Component title, @NotNull Rows rows) {
         Objects.requireNonNull(title, "Title cannot be null");
         Objects.requireNonNull(rows, "Rows cannot be null");
-        this.inventory = Bukkit.createInventory(this, rows.size, Component.text(title));
+        this.inventory = Bukkit.createInventory(this, rows.size, title);
     }
 
     /**
@@ -82,9 +94,7 @@ public class SimpleMenu implements Menu {
         this.inventory.setItem(slot, item);
     }
 
-    @Override
-    public void onSetItems() {
-    }
+    public abstract void onSetItems();
 
     /**
      * {@inheritDoc}

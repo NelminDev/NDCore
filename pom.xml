@@ -6,7 +6,7 @@
 
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <packaging>jar</packaging>
 
     <name>NDCore</name>
@@ -41,6 +41,7 @@
     </properties>
 
     <build>
+        <finalName>NDCore</finalName>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>
@@ -63,7 +64,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>NDCore</finalName>
                             <artifactSet>
                                 <excludes>
                                     <exclude>io.papermc.paper:paper-api</exclude>
