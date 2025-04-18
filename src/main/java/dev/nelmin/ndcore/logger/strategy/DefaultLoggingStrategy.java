@@ -113,7 +113,7 @@ public class DefaultLoggingStrategy implements LoggingStrategy {
         TextBuilder consoleMessage = new TextBuilder(message.replace(
                 strategyName,
                 String.format("%s%s%s", colorCode, strategyName, "&r")
-        ), false);
+        ));
         return new Pair<>(message, consoleMessage);
     }
 

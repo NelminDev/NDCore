@@ -1,18 +1,29 @@
 ## 🎯 Release Overview
 
-Version 3.0.2 refactors SimpleMenu to be an abstract class, improves title handling with Component support, and updates
-project configuration.
+Version 3.0.3 refactors getters using Lombok annotations, makes the setupProperties method public for flexibility,
+improves builder classes with better documentation, and updates the project version.
 
 ## 🚀 Key Changes
 
-- **Menu System Improvements**:
+- **Code Refactoring and Improvements**:
+  - Applied `@Getter` annotations directly to fields in `BasicNDPlayer`, simplifying code.
+  - Made `setupProperties` method public for increased flexibility.
+  - Improved code maintainability through Lombok annotations.
+  - Enhanced builder classes with better documentation and consistent method naming.
+  - Updated builder documentation to reflect current implementation and best practices.
+  - Enhanced `SkullBuilder` to support both Base64 encoded texture values and direct URLs for custom skull textures.
+
+- **Build Configuration Updates**:
+  - Updated project version to 3.0.3.
+
+- **Menu System Improvements** (from 3.0.2):
   - Refactored `SimpleMenu` to be an abstract class, ensuring `onSetItems()` must be implemented by subclasses.
   - Added overloaded constructors to handle both `String` and `Component` titles.
   - Integrated `TextBuilder` for string colorization in title handling.
   - Improved type safety and null checking in menu implementations.
 
-- **Build Configuration Updates**:
-  - Updated project version to 3.0.2.
+- **Build Configuration Updates** (from 3.0.2):
+  - Updated project version to 3.0.3.
   - Moved `finalName` from plugin configuration to build settings for better Maven compatibility.
 
 - **Enhanced Logging System** (Merged from Lumina):
@@ -44,7 +55,7 @@ project configuration.
 
 ## 📦 Installation
 
-1. Download NDCore-3.0.2.jar
+1. Download NDCore-3.0.3.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
@@ -66,7 +77,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core-paper:3.0.2'
+implementation 'dev.nelmin.minecraft:core-paper:3.0.3'
 ```
 
 </details>
@@ -75,7 +86,7 @@ implementation 'dev.nelmin.minecraft:core-paper:3.0.2'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core-paper:3.0.2")
+implementation("dev.nelmin.minecraft:core-paper:3.0.3")
 ```
 
 </details>
@@ -87,7 +98,7 @@ implementation("dev.nelmin.minecraft:core-paper:3.0.2")
 <dependency>
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 </dependency>
 ```
 

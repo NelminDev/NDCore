@@ -17,7 +17,7 @@ import java.util.Objects;
  * The {@code build()} method returns the constructed {@link PotionEffect} instance.
  */
 public class PotionEffectBuilder {
-    private final @NotNull PotionEffectType type;
+    private @NotNull PotionEffectType type;
     private int duration = 20; // Default duration (1 second)
     private int amplifier = 0; // Default amplifier (level 1)
     private boolean ambient = false;
@@ -32,6 +32,25 @@ public class PotionEffectBuilder {
      */
     public PotionEffectBuilder(@NotNull PotionEffectType type) {
         this.type = Objects.requireNonNull(type, "type cannot be null");
+    }
+
+    /**
+     * Creates a new PotionEffectBuilder with a default GLOWING effect type.
+     */
+    public PotionEffectBuilder() {
+        this(PotionEffectType.GLOWING);
+    }
+
+    /**
+     * Sets the effect type of the potion effect.
+     *
+     * @param type the potion effect type to set
+     * @return this builder instance
+     * @throws NullPointerException if type is null
+     */
+    public PotionEffectBuilder effect(@NotNull PotionEffectType type) {
+        this.type = Objects.requireNonNull(type, "type cannot be null");
+        return this;
     }
 
     /**

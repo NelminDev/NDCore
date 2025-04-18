@@ -1,6 +1,8 @@
 package dev.nelmin.ndcore.builders;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -11,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -81,24 +85,54 @@ public class SkullBuilder extends ItemBuilder {
     }
 
     /**
-     * Sets the skull's texture using a URL
+     * Sets the skull's texture using either a Base64 encoded texture value or a direct URL.
      *
-     * @param texture The URL of the texture to apply
+     * This method accepts two formats:
+     * 1. Base64 encoded texture value (e.g., "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0...")
+     * 2. Direct texture URL (e.g., "http://textures.minecraft.net/texture/...")
+     *
+     * @param texture The texture value or URL to apply
      * @return This builder instance
-     * @throws IllegalArgumentException if texture is null or malformed
+     * @throws IllegalArgumentException if texture is null, malformed, or in an invalid format
      */
     public SkullBuilder texture(@NotNull String texture) throws IllegalArgumentException {
-        Objects.requireNonNull(texture);
+        Objects.requireNonNull(texture, "Texture cannot be null");
+
         PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
         PlayerTextures textures = profile.getTextures();
+
         try {
-            textures.setSkin(new URL(texture));
+            // Check if the texture is a URL or a Base64 encoded value
+            if (texture.startsWith("http")) {
+                // Direct URL format
+                textures.setSkin(new URL(texture));
+            } else {
+                // Try to decode as Base64
+                try {
+                    String decoded = new String(Base64.getDecoder().decode(texture), StandardCharsets.UTF_8);
+                    JsonObject json = JsonParser.parseString(decoded).getAsJsonObject();
+
+                    // Navigate through the JSON structure to extract the URL
+                    if (json.has("textures") && json.getAsJsonObject("textures").has("SKIN")) {
+                        String url = json.getAsJsonObject("textures")
+                                .getAsJsonObject("SKIN")
+                                .get("url")
+                                .getAsString();
+                        textures.setSkin(new URL(url));
+                    } else {
+                        throw new IllegalArgumentException("Invalid texture format: JSON structure doesn't contain texture URL");
+                    }
+                } catch (IllegalStateException | java.lang.IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid Base64 encoded texture value", e);
+                }
+            }
+
+            skullMeta.setPlayerProfile(profile);
+            updateSuper();
+            return this;
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Invalid skin texture URL", e);
         }
-        skullMeta.setPlayerProfile(profile);
-        updateSuper();
-        return this;
     }
 
     /**

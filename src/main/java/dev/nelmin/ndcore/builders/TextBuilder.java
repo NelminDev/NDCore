@@ -17,50 +17,56 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Builder class for creating and manipulating text messages with various formatting options. <p>
- * Supports legacy colors, gradients, MiniMessage format, and common color patterns.
+ * Builder class for creating and manipulating text messages with various formatting options.
+ * <p>
+ * This class provides functionality for:
+ * <ul>
+ *   <li>Legacy color code support</li>
+ *   <li>Gradient effects</li>
+ *   <li>MiniMessage format parsing</li>
+ *   <li>Common color patterns</li>
+ *   <li>Text manipulation (prefix, suffix, replacements)</li>
+ *   <li>Message sending to players and console</li>
+ * </ul>
  */
 public class TextBuilder {
     private final MiniMessage miniMessage;
     @NotNull
     private StringBuilder messageBuilder;
-    private boolean prefixEnabled;
 
     /**
-     * Creates a new TextBuilder with a message and prefix setting
+     * Creates a new TextBuilder with the specified message.
      *
-     * @param message       The message to build from
-     * @param prefixEnabled Whether prefix is enabled
+     * @param message The initial message to build from
+     * @throws NullPointerException if message is null
      */
-    public TextBuilder(@NotNull String message, boolean prefixEnabled) {
+    public TextBuilder(@NotNull String message) {
         this.messageBuilder = new StringBuilder(Objects.requireNonNull(message));
-        this.prefixEnabled = prefixEnabled;
         this.miniMessage = MiniMessage.miniMessage();
     }
 
     /**
-     * Creates a new TextBuilder with a message and prefix enabled by default
-     *
-     * @param message The message to build from
+     * Creates a new empty TextBuilder.
      */
-    public TextBuilder(@NotNull String message) {
-        this(message, true);
+    public TextBuilder() {
+        this("");
     }
 
     /**
-     * Converts a Component to plain text
+     * Converts a Component to plain text.
      *
      * @param component The component to convert
      * @return The plain text representation
+     * @throws NullPointerException if component is null
      */
     public static @NotNull String componentToPlainText(@NotNull Component component) {
         return PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(component));
     }
 
     /**
-     * Converts the message to a colored Component using legacy color codes
+     * Converts the message to a colored Component using legacy color codes.
      *
-     * @param legacyCharacter The character used for color codes
+     * @param legacyCharacter The character used for color codes (typically '&' or '§')
      * @return The colored component
      */
     public @NotNull Component colorize(char legacyCharacter) {
@@ -68,11 +74,12 @@ public class TextBuilder {
     }
 
     /**
-     * Applies a gradient effect between two colors
+     * Applies a gradient effect between two colors.
      *
-     * @param startColor Starting color
-     * @param endColor   Ending color
+     * @param startColor Starting color of the gradient
+     * @param endColor   Ending color of the gradient
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if startColor or endColor is null
      */
     public TextBuilder gradient(@NotNull Color startColor, @NotNull Color endColor) {
         Objects.requireNonNull(startColor);
@@ -85,10 +92,11 @@ public class TextBuilder {
     }
 
     /**
-     * Applies alternating colors to each character
+     * Applies alternating colors to each character in the message.
      *
-     * @param colors The colors to alternate between
+     * @param colors Array of colors to alternate between
      * @return The TextBuilder for chaining
+     * @throws NullPointerException     if colors array is null
      * @throws IllegalArgumentException if less than 2 colors are provided
      */
     public TextBuilder alternate(@NotNull TextColor... colors) throws IllegalArgumentException {
@@ -109,10 +117,11 @@ public class TextBuilder {
     }
 
     /**
-     * Parses and applies MiniMessage formatting
+     * Parses and applies MiniMessage formatting.
      *
      * @param miniMessageFormat The message in MiniMessage format
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if miniMessageFormat is null
      */
     public TextBuilder parseMiniMessage(@NotNull String miniMessageFormat) {
         Component component = miniMessage.deserialize(Objects.requireNonNull(miniMessageFormat));
@@ -121,30 +130,32 @@ public class TextBuilder {
     }
 
     /**
-     * Gets the current message
+     * Gets the current message content.
      *
-     * @return The current message
+     * @return The current message as a string
      */
-    public @NotNull String message() {
+    public @NotNull String content() {
         return messageBuilder.toString();
     }
 
     /**
-     * Sets a new message
+     * Sets a new message content.
      *
      * @param message The new message
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if message is null
      */
-    public TextBuilder message(@NotNull String message) {
+    public TextBuilder content(@NotNull String message) {
         this.messageBuilder = new StringBuilder(Objects.requireNonNull(message));
         return this;
     }
 
     /**
-     * Adds a prefix to the message
+     * Adds a prefix to the message.
      *
      * @param prefix The prefix to add
      * @return The TextBuilder for chaining
+     * @throws NullPointerException     if prefix is null
      * @throws IllegalArgumentException if prefix is empty
      */
     public TextBuilder prefix(@NotNull String prefix) throws IllegalArgumentException {
@@ -156,27 +167,26 @@ public class TextBuilder {
         return this;
     }
 
-    public TextBuilder prefix(@NotNull FileConfiguration fileConfiguration) throws IllegalArgumentException {
-        return this.prefix(Objects.requireNonNull(fileConfiguration.getString("prefix"), "Prefix cannot be empty or null. Please check your config.yml file and try again. If the problem persists, contact an administrator."));
-    }
-
     /**
-     * Sets whether prefix is enabled
+     * Adds a prefix from the provided configuration file.
      *
-     * @param enabled Whether prefix should be enabled
+     * @param fileConfiguration The configuration file containing the prefix
      * @return The TextBuilder for chaining
+     * @throws NullPointerException     if fileConfiguration is null or prefix is not found
+     * @throws IllegalArgumentException if prefix is empty
      */
-    public TextBuilder prefixEnabled(boolean enabled) {
-        this.prefixEnabled = enabled;
-        return this;
+    public TextBuilder prefix(@NotNull FileConfiguration fileConfiguration) throws IllegalArgumentException {
+        return this.prefix(Objects.requireNonNull(fileConfiguration.getString("prefix"),
+                "Prefix cannot be empty or null. Please check your config.yml file and try again. If the problem persists, contact an administrator."));
     }
 
     /**
-     * Replaces all occurrences of search with replacement
+     * Replaces all occurrences of a search string with a replacement.
      *
      * @param search      The string to search for
-     * @param replacement The string to replace with
+     * @param replacement The string to replace with (null values are ignored)
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if search is null
      */
     public TextBuilder replace(@NotNull Object search, @Nullable Object replacement) {
         Objects.requireNonNull(search);
@@ -193,10 +203,11 @@ public class TextBuilder {
     }
 
     /**
-     * Replaces multiple strings using a map of search/replacement pairs
+     * Replaces multiple strings using a map of search/replacement pairs.
      *
      * @param replacements Map of search strings to replacement strings
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if replacements is null
      */
     public TextBuilder replace(@NotNull Map<Object, Object> replacements) {
         Objects.requireNonNull(replacements).forEach(this::replace);
@@ -204,11 +215,12 @@ public class TextBuilder {
     }
 
     /**
-     * Sends the message to a player
+     * Sends the message to a player.
      *
      * @param player    The player to send to
      * @param colorized Whether to apply color codes
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if player is null
      */
     public TextBuilder sendTo(@NotNull Player player, boolean colorized) {
         Objects.requireNonNull(player).sendMessage(colorized ? colorize('&') : Component.text(messageBuilder.toString()));
@@ -216,11 +228,12 @@ public class TextBuilder {
     }
 
     /**
-     * Sends the message to multiple players
+     * Sends the message to multiple players.
      *
-     * @param players   The list of players
+     * @param players   The list of players to send to
      * @param colorized Whether to apply color codes
      * @return The TextBuilder for chaining
+     * @throws NullPointerException if players is null
      */
     public TextBuilder sendTo(@NotNull List<Player> players, boolean colorized) {
         Objects.requireNonNull(players).forEach(player -> sendTo(player, colorized));
@@ -228,7 +241,7 @@ public class TextBuilder {
     }
 
     /**
-     * Sends the message to console with color codes
+     * Sends the message to console with color codes.
      *
      * @return The TextBuilder for chaining
      */
@@ -238,10 +251,11 @@ public class TextBuilder {
     }
 
     /**
-     * Adds a suffix to the message
+     * Adds a suffix to the message.
      *
      * @param suffix The suffix to add
      * @return The TextBuilder for chaining
+     * @throws NullPointerException     if suffix is null
      * @throws IllegalArgumentException if suffix is empty
      */
     public TextBuilder suffix(@NotNull String suffix) throws IllegalArgumentException {
@@ -254,9 +268,11 @@ public class TextBuilder {
     }
 
     /**
-     * Converts legacy color codes and returns the message as a string
+     * Converts legacy color codes and returns the message as a string.
+     * <p>
+     * Supports color codes 0-9, a-f, k-o, r, x using the '&' character.
      *
-     * @return The formatted message string
+     * @return The formatted message string with color codes converted
      */
     @Override
     public @NotNull String toString() {

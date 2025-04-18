@@ -43,6 +43,46 @@ public class ItemBuilder {
     }
 
     /**
+     * Creates a new ItemBuilder for the specified material with amount of 1.
+     *
+     * @param material The material type for the item
+     * @throws NullPointerException if material is null
+     */
+    public ItemBuilder(@NotNull Material material) {
+        this(material, 1);
+    }
+
+    /**
+     * Creates a new ItemBuilder with Material.AIR and amount of 1.
+     */
+    public ItemBuilder() {
+        this(Material.AIR);
+    }
+
+    /**
+     * Sets the material type of the item.
+     *
+     * @param material The material to set
+     * @return This builder instance
+     * @throws NullPointerException if material is null
+     */
+    public ItemBuilder material(@NotNull Material material) {
+        this.rawItemStack = new ItemStack(material, this.rawItemStack.getAmount());
+        return this;
+    }
+
+    /**
+     * Sets the amount of items in the stack.
+     *
+     * @param amount The amount to set
+     * @return This builder instance
+     */
+    public ItemBuilder amount(int amount) {
+        this.rawItemStack.setAmount(amount);
+        return this;
+    }
+
+    /**
      * Sets the display name of the item.
      *
      * @param displayName The display name to set

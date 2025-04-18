@@ -27,9 +27,10 @@ import java.util.function.Consumer;
  * </ul>
  */
 public class BasicNDPlayer {
+    @Getter
     private final Player bukkitPlayer;
+    @Getter
     private final PersistentPropertyManager propertyManager;
-
     @Getter
     private PersistentProperty<String> languageCode;
     @Getter

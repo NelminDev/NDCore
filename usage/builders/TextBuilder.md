@@ -16,10 +16,10 @@ A powerful text formatting utility that leverages Adventure API to create rich t
 
 ## Constructors
 
-| Constructor                                          | Description                                            |
-|------------------------------------------------------|--------------------------------------------------------|
-| `TextBuilder(String message)`                        | Create a TextBuilder with a message                    |
-| `TextBuilder(String message, boolean prefixEnabled)` | Create a TextBuilder with a message and prefix setting |
+| Constructor                   | Description                         |
+|-------------------------------|-------------------------------------|
+| `TextBuilder(String message)` | Create a TextBuilder with a message |
+| `TextBuilder()`               | Create a new empty TextBuilder      |
 
 ## Methods
 
@@ -35,13 +35,13 @@ A powerful text formatting utility that leverages Adventure API to create rich t
 
 ### Content Management
 
-| Method                           | Description              |
-|----------------------------------|--------------------------|
-| `message()`                      | Get the current message  |
-| `message(String message)`        | Set a new message        |
-| `prefix(String prefix)`          | Set a prefix             |
-| `prefixEnabled(boolean enabled)` | Enable or disable prefix |
-| `suffix(String suffix)`          | Add a suffix             |
+| Method                                        | Description              |
+|-----------------------------------------------|--------------------------|
+| `content()`                                   | Get the current message  |
+| `content(String message)`                     | Set a new message        |
+| `prefix(String prefix)`                       | Set a prefix             |
+| `prefix(FileConfiguration fileConfiguration)` | Set a prefix from config |
+| `suffix(String suffix)`                       | Add a suffix             |
 
 ### Text Replacement
 
@@ -89,13 +89,17 @@ message.replace("{amount}", "50");
 message.sendTo(player, true);
 
 // Parse text using MiniMessage format
-TextBuilder miniMessage = new TextBuilder("");
+TextBuilder miniMessage = new TextBuilder();
 miniMessage.parseMiniMessage("<rainbow>This text has rainbow colors</rainbow>");
 
 // Add prefix and suffix to a message
 TextBuilder prefixedMessage = new TextBuilder("Welcome to the server!");
 prefixedMessage.prefix("[Server]");
 prefixedMessage.suffix(" Enjoy your stay!");
+
+// Set content of an existing TextBuilder
+TextBuilder contentExample = new TextBuilder();
+contentExample.content("This is new content");
 
 // Send a message to multiple players
 TextBuilder teamMessage = new TextBuilder("Team objective completed!");
