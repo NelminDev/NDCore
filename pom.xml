@@ -64,6 +64,11 @@
                         </goals>
                         <configuration>
                             <finalName>NDCore</finalName>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>io.papermc.paper:paper-api</exclude>
+                                </excludes>
+                            </artifactSet>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
