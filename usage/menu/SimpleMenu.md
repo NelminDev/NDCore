@@ -2,7 +2,8 @@
 
 ## Overview
 
-A convenient implementation of the Menu interface that handles most of the boilerplate code for creating interactive menus in NDCore.
+An abstract implementation of the Menu interface that handles most of the boilerplate code for creating interactive
+menus in NDCore. This class must be extended, and the `onSetItems()` method must be implemented by subclasses.
 
 ## Key Features
 
@@ -10,17 +11,19 @@ A convenient implementation of the Menu interface that handles most of the boile
 - Built-in action mapping
 - Enum-based inventory size selection
 - Simplified item setting
+- Support for both String and Component titles
+- Automatic colorization of String titles using TextBuilder
 
 ## Usage Examples
 
 ```java
 // Creating a basic menu with SimpleMenu
 public class WarpMenu extends SimpleMenu {
-    
+
     public WarpMenu() {
         super("Teleport Menu", Rows.THREE); // 3 rows (27 slots)
     }
-    
+
     @Override
     public void onSetItems() {
         // Spawn warp
@@ -34,7 +37,7 @@ public class WarpMenu extends SimpleMenu {
                 player.closeInventory();
             }
         );
-        
+
         // Mine warp
         setItem(12, new ItemBuilder(Material.IRON_PICKAXE)
             .name("&eMining World")
@@ -49,7 +52,7 @@ public class WarpMenu extends SimpleMenu {
                 }
             }
         );
-        
+
         // PvP arena warp
         setItem(14, new ItemBuilder(Material.IRON_SWORD)
             .name("&cPvP Arena")
@@ -62,7 +65,7 @@ public class WarpMenu extends SimpleMenu {
                 player.closeInventory();
             }
         );
-        
+
         // Close button
         setItem(26, new ItemBuilder(Material.BARRIER)
             .name("&cClose Menu")
@@ -77,6 +80,19 @@ public void openWarpMenu(Player player) {
     WarpMenu warpMenu = new WarpMenu();
     warpMenu.open(player);
 }
+
+// Example using Component title constructor
+public class ComponentTitleMenu extends SimpleMenu {
+
+    public ComponentTitleMenu() {
+        super(Component.text("Advanced Menu").color(TextColor.color(0x00AAFF)), Rows.THREE);
+    }
+
+    @Override
+    public void onSetItems() {
+        // Set menu items here
+    }
+}
 ```
 
 ## Creating Paginated Menus
@@ -88,29 +104,29 @@ public class PaginatedMenu extends SimpleMenu {
     private final List<ItemStack> items;
     private int page = 0;
     private final int itemsPerPage = 45; // 5 rows of items
-    
+
     public PaginatedMenu(List<ItemStack> items) {
         super("Items - Page 1", Rows.SIX); // 6 rows
         this.items = items;
     }
-    
+
     @Override
     public void onSetItems() {
         // Clear previous items
         for (int i = 0; i < 54; i++) {
             inventory.clear(i);
         }
-        
+
         // Calculate start and end indices
         int start = page * itemsPerPage;
         int end = Math.min(start + itemsPerPage, items.size());
-        
+
         // Set items for current page
         int slot = 0;
         for (int i = start; i < end; i++) {
             setItem(slot++, items.get(i));
         }
-        
+
         // Navigation buttons
         if (page > 0) {
             setItem(45, new ItemBuilder(Material.ARROW)
@@ -124,7 +140,7 @@ public class PaginatedMenu extends SimpleMenu {
                 }
             );
         }
-        
+
         if (end < items.size()) {
             setItem(53, new ItemBuilder(Material.ARROW)
                 .name("&aNext Page")
@@ -136,7 +152,7 @@ public class PaginatedMenu extends SimpleMenu {
                 }
             );
         }
-        
+
         // Page indicator
         setItem(49, new ItemBuilder(Material.PAPER)
             .name("&ePage " + (page + 1) + "/" + ((items.size() - 1) / itemsPerPage + 1))
@@ -148,8 +164,9 @@ public class PaginatedMenu extends SimpleMenu {
 
 ## Best Practices
 
-- Extend SimpleMenu for most use cases to reduce boilerplate code
-- Override onSetItems() to set up your menu items
+- Remember that SimpleMenu is abstract and must be extended
+- Always implement the abstract onSetItems() method in your subclass
+- Choose the appropriate constructor based on your title needs (String or Component)
 - Use ItemBuilder to create visually consistent menu items
 - Keep click handlers simple and focused
 - Consider using constants for slot positions to improve readability

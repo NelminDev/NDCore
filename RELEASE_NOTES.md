@@ -1,9 +1,19 @@
 ## 🎯 Release Overview
 
-Version 3.0.1 introduces an enhanced logging system (merged from the Lumina project), improves plugin instance
-retrieval, and provides better null safety with JetBrains annotations.
+Version 3.0.2 refactors SimpleMenu to be an abstract class, improves title handling with Component support, and updates
+project configuration.
 
 ## 🚀 Key Changes
+
+- **Menu System Improvements**:
+  - Refactored `SimpleMenu` to be an abstract class, ensuring `onSetItems()` must be implemented by subclasses.
+  - Added overloaded constructors to handle both `String` and `Component` titles.
+  - Integrated `TextBuilder` for string colorization in title handling.
+  - Improved type safety and null checking in menu implementations.
+
+- **Build Configuration Updates**:
+  - Updated project version to 3.0.2.
+  - Moved `finalName` from plugin configuration to build settings for better Maven compatibility.
 
 - **Enhanced Logging System** (Merged from Lumina):
   - Integrated the Lumina logging project directly into NDCore for streamlined dependency management.
@@ -34,7 +44,7 @@ retrieval, and provides better null safety with JetBrains annotations.
 
 ## 📦 Installation
 
-1. Download NDCore-3.0.1.jar
+1. Download NDCore-3.0.2.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
@@ -56,7 +66,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core-paper:3.0.1'
+implementation 'dev.nelmin.minecraft:core-paper:3.0.2'
 ```
 
 </details>
@@ -65,7 +75,7 @@ implementation 'dev.nelmin.minecraft:core-paper:3.0.1'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core-paper:3.0.1")
+implementation("dev.nelmin.minecraft:core-paper:3.0.2")
 ```
 
 </details>
@@ -77,7 +87,7 @@ implementation("dev.nelmin.minecraft:core-paper:3.0.1")
 <dependency>
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-    <version>3.0.1</version>
+  <version>3.0.2</version>
 </dependency>
 ```
 
