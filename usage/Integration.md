@@ -28,11 +28,11 @@ Add the following to your `pom.xml`:
     <!-- NDCore dependency -->
     <dependency>
         <groupId>dev.nelmin.minecraft</groupId>
-        <artifactId>core</artifactId>
+        <artifactId>core-paper</artifactId>
         <version>{VERSION}</version>
         <scope>provided</scope>
     </dependency>
-    
+
     <!-- Other dependencies -->
 </dependencies>
 ```
@@ -43,7 +43,7 @@ Add the following to your `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation 'dev.nelmin.minecraft:core:{VERSION}'
+    implementation 'dev.nelmin.minecraft:core-paper:{VERSION}'
     // Other dependencies
 }
 ```
@@ -54,7 +54,7 @@ Add the following to your `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("dev.nelmin.minecraft:core:{VERSION}")
+    implementation("dev.nelmin.minecraft:core-paper:{VERSION}")
     // Other dependencies
 }
 ```
@@ -103,7 +103,7 @@ public class YourPlugin extends NDPlugin {
     public void enable() {
         // Plugin initialization code
         logger().info("YourPlugin has been enabled!");
-        
+
         // Register commands, listeners, etc.
         getServer().getPluginManager().registerEvents(new YourEventListener(this), this);
     }
@@ -112,7 +112,7 @@ public class YourPlugin extends NDPlugin {
     public void disable() {
         // Cleanup code
         logger().info("YourPlugin has been disabled!");
-        
+
         // Clear collections
         propertyManagers.clear();
         players.clear();
@@ -148,34 +148,34 @@ import java.util.UUID;
 
 public class YourEventListener implements Listener {
     private final YourPlugin plugin;
-    
+
     public YourEventListener(YourPlugin plugin) {
         this.plugin = plugin;
     }
-    
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
-        
+
         // Create property manager for the player
         PersistentPropertyManager propertyManager = new PersistentPropertyManager(
             plugin, 
             player.getPersistentDataContainer()
         );
-        
+
         // Store the property manager
         plugin.getPlayerPropertyManagers().put(playerUUID, propertyManager);
-        
+
         // Create and store BasicNDPlayer
         BasicNDPlayer ndPlayer = new BasicNDPlayer(player, propertyManager);
         plugin.getBasicNDPlayers().add(ndPlayer);
     }
-    
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
-        
+
         // Remove player data
         plugin.getBasicNDPlayers().removeIf(p -> p.getUUID().equals(playerUUID));
         // Property managers will be cleaned up automatically by NDPlugin
@@ -215,10 +215,10 @@ public class SimplePlugin extends NDPlugin implements Listener {
     @Override
     public void enable() {
         logger().info("SimplePlugin enabled!");
-        
+
         // Register this class as a listener
         getServer().getPluginManager().registerEvents(this, this);
-        
+
         // Register command
         getCommand("welcome").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player player) {
@@ -233,7 +233,7 @@ public class SimplePlugin extends NDPlugin implements Listener {
     @Override
     public void disable() {
         logger().info("SimplePlugin disabled!");
-        
+
         // Clear collections
         propertyManagers.clear();
         players.clear();
@@ -243,27 +243,27 @@ public class SimplePlugin extends NDPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
-        
+
         // Create property manager
         PersistentPropertyManager propertyManager = new PersistentPropertyManager(
             this, 
             player.getPersistentDataContainer()
         );
-        
+
         // Create a persistent property for visit count
         PersistentProperty<Integer> visitCount = propertyManager.create(
             "visit_count", 
             0, 
             (prev, cur) -> cur + 1
         );
-        
+
         // Store the property manager
         propertyManagers.put(playerUUID, propertyManager);
-        
+
         // Create and store BasicNDPlayer
         BasicNDPlayer ndPlayer = new BasicNDPlayer(player, propertyManager);
         players.add(ndPlayer);
-        
+
         // Send welcome message with visit count
         new TextBuilder("&6Welcome back! This is visit #&e{count}")
             .replace("{count}", visitCount.get())

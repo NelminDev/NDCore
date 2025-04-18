@@ -1,6 +1,6 @@
 ## 🎯 Release Overview
 
-Version 3.0.0 introduces an enhanced logging system (merged from the Lumina project), improves plugin instance
+Version 3.0.1 introduces an enhanced logging system (merged from the Lumina project), improves plugin instance
 retrieval, and provides better null safety with JetBrains annotations.
 
 ## 🚀 Key Changes
@@ -11,6 +11,17 @@ retrieval, and provides better null safety with JetBrains annotations.
   - Implemented `LoggingStrategy` interface for customizable logging behavior.
   - Added `DefaultLoggingStrategy` with color-coded console output and organized log files.
   - Deprecated standard `getLogger()` method in favor of the new `logger()` method.
+
+- **Command Registration System**:
+    - Added new `commands` package with `CommandRegistrar` and `NDCommand` classes.
+    - Implemented reflection-based command registration without requiring plugin.yml entries.
+    - Integrated command registration into the NDPlugin lifecycle.
+    - Added fluent API for registering multiple commands.
+
+- **JSON Configuration Support**:
+    - Added `JSONConfiguration` class for JSON-based configuration files.
+    - Implemented full compatibility with Bukkit's configuration API.
+    - Added pretty printing options for human-readable JSON output.
 
 - **Improved Plugin Instance Retrieval**:
   - Added `getNDPlugin(Class<T> clazz)` method for more convenient NDPlugin instance retrieval.
@@ -23,7 +34,7 @@ retrieval, and provides better null safety with JetBrains annotations.
 
 ## 📦 Installation
 
-1. Download NDCore-v3.0.0.jar
+1. Download NDCore-3.0.1.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
@@ -45,7 +56,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin:NDCore:3.0.0'
+implementation 'dev.nelmin.minecraft:core-paper:3.0.1'
 ```
 
 </details>
@@ -54,7 +65,7 @@ implementation 'dev.nelmin:NDCore:3.0.0'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin:NDCore:3.0.0")
+implementation("dev.nelmin.minecraft:core-paper:3.0.1")
 ```
 
 </details>
@@ -64,9 +75,9 @@ implementation("dev.nelmin:NDCore:3.0.0")
 
 ```xml
 <dependency>
-  <groupId>dev.nelmin</groupId>
-  <artifactId>NDCore</artifactId>
-  <version>3.0.0</version>
+    <groupId>dev.nelmin.minecraft</groupId>
+    <artifactId>core-paper</artifactId>
+    <version>3.0.1</version>
 </dependency>
 ```
 

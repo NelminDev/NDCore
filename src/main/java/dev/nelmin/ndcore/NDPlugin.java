@@ -1,14 +1,17 @@
 package dev.nelmin.ndcore;
 
+import dev.nelmin.ndcore.commands.CommandRegistrar;
 import dev.nelmin.ndcore.logger.NDLogger;
 import dev.nelmin.ndcore.persistence.PersistentPropertyManager;
 import dev.nelmin.ndcore.players.BasicNDPlayer;
+import io.papermc.paper.util.Tick;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,8 @@ public abstract class NDPlugin extends JavaPlugin {
     private final @NotNull Map<UUID, PersistentPropertyManager> playerPropertyManagers = new ConcurrentHashMap<>(512);
     @Getter
     private final @NotNull List<BasicNDPlayer> basicNDPlayers = new ArrayList<>(512);
+    @Getter
+    private final CommandRegistrar commandRegistrar = new CommandRegistrar(this);
     /**
      * Creates a new NDPlugin instance with a default logger.
      * The logger name will be the simple class name with " is loading..." appended.
@@ -78,7 +83,7 @@ public abstract class NDPlugin extends JavaPlugin {
 
     /**
      * Called when the plugin is enabled by the server.
-     * Sets up periodic cleanup of offline player data and calls {@link #enable()}.
+     * Sets up periodic cleanup of offline player data and calls {@link #enable(Runnable)}.
      */
     @Override
     public void onEnable() {
@@ -92,32 +97,44 @@ public abstract class NDPlugin extends JavaPlugin {
                 if (!onlineUUIDs.contains(playerUUID))
                     playerPropertyManagers.remove(playerUUID);
             });
-        }, 0, 6000L); // Runs every 5 Minutes
+        }, 0, Tick.tick().fromDuration(Duration.ofMinutes(5))); // Runs every 5 Minutes
 
-        enable();
+        enable(this::registerCommands, this::registerEvents);
     }
 
     /**
      * Called when the plugin is enabled.
      * Subclasses must implement this method to add custom enable logic.
      */
-    public abstract void enable();
+    public abstract void enable(Runnable commandRegistrarRunnable, Runnable eventRegistrarRunnable);
+
+    /**
+     * Registers commands for this plugin.
+     * Subclasses must implement this method to register plugin commands.
+     */
+    public abstract void registerCommands();
+
+    /**
+     * Registers event listeners for this plugin.
+     * Subclasses must implement this method to register plugin event listeners.
+     */
+    public abstract void registerEvents();
 
     /**
      * Called when the plugin is disabled by the server.
-     * Clears player data and calls {@link #disable()}.
+     * Clears player data and calls {@link #disable(Runnable)}.
      */
     @Override
     public void onDisable() {
         playerPropertyManagers.clear();
-        disable();
+        disable(commandRegistrar::cleanup);
     }
 
     /**
      * Called when the plugin is disabled.
      * Subclasses must implement this method to add custom disable logic.
      */
-    public abstract void disable();
+    public abstract void disable(Runnable runnable);
 
     /**
      * @return The default Bukkit logger for this plugin

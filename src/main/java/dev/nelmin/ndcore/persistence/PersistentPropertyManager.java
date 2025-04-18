@@ -22,7 +22,6 @@ import java.util.function.BiFunction;
  *
  * <p>Thread-safe for property creation and validation.
  *
- * @implNote Uses Bukkit's PersistentDataContainer API for data storage
  * @see PersistentProperty for the individual property implementation
  */
 public final class PersistentPropertyManager {
@@ -54,7 +53,6 @@ public final class PersistentPropertyManager {
      * @param plugin The plugin that owns the manager
      * @return A property manager for the player (never null)
      * @throws NullPointerException If player or plugin is null
-     * @implNote Uses a cache to avoid creating duplicate managers
      */
     @Contract(value = "_, _ -> new", pure = false)
     public static @NotNull PersistentPropertyManager of(
@@ -110,7 +108,6 @@ public final class PersistentPropertyManager {
      * @return A new persistent property (never null)
      * @throws IllegalArgumentException If namespacedKeyName is invalid or defaultValue is empty
      * @throws NullPointerException     If any parameter is null
-     * @implNote The action function receives the previous value as first parameter and current value as second
      */
     @Contract(value = "_, _, _ -> new", pure = true)
     public <C> @NotNull PersistentProperty<C> create(

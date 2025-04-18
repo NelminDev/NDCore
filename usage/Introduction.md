@@ -25,16 +25,18 @@ Additionally, the documentation is organized into subdirectories that mirror the
 library:
 
 1. [**builders/**](builders/Introduction.md) - Documentation for fluent builders (ItemBuilder, TextBuilder, etc.)
-2. [**events/**](events/Introduction.md) - Documentation for custom events (PlayerFreezeEvent, etc.)
-3. [**exceptions/**](exceptions/Introduction.md) - Documentation for specialized exceptions
-4. [**listener/**](listener/Introduction.md) - Documentation for event listeners
-5. [**logger/**](logger/Introduction.md) - Documentation for the logging system
+2. [**commands/**](commands/Introduction.md) - Documentation for command registration and implementation
+3. [**configurations/**](configurations/Introduction.md) - Documentation for configuration management
+4. [**events/**](events/Introduction.md) - Documentation for custom events (PlayerFreezeEvent, etc.)
+5. [**exceptions/**](exceptions/Introduction.md) - Documentation for specialized exceptions
+6. [**listener/**](listener/Introduction.md) - Documentation for event listeners
+7. [**logger/**](logger/Introduction.md) - Documentation for the logging system
    - [**strategy/**](logger/strategy/Introduction.md) - Documentation for logging strategies
-6. [**menu/**](menu/Introduction.md) - Documentation for the menu framework
-7. [**objects/**](objects/Introduction.md) - Documentation for utility objects
-8. [**other/**](other/Introduction.md) - Documentation for general utility classes
-9. [**persistence/**](persistence/Introduction.md) - Documentation for data persistence
-10. [**players/**](players/Introduction.md) - Documentation for player management
+8. [**menu/**](menu/Introduction.md) - Documentation for the menu framework
+9. [**objects/**](objects/Introduction.md) - Documentation for utility objects
+10. [**other/**](other/Introduction.md) - Documentation for general utility classes
+11. [**persistence/**](persistence/Introduction.md) - Documentation for data persistence
+12. [**players/**](players/Introduction.md) - Documentation for player management
 
 ## How to Use This Documentation
 
@@ -51,6 +53,10 @@ library:
 - If you need to create rich text with colors and formatting, check the [TextBuilder documentation](builders/TextBuilder.md)
 - If you want to create custom menus, explore the [menu package documentation](menu/Introduction.md)
 - If you need to store persistent player data, see the [persistence package documentation](persistence/Introduction.md)
+- If you want to use JSON for configuration files, check
+  the [JSONConfiguration documentation](configurations/JSONConfiguration.md)
+- If you need to register commands without plugin.yml, see
+  the [commands package documentation](commands/Introduction.md)
 - If you're using NDCore in your own plugin, refer to the [NDPlugin documentation](NDPlugin.md)
 
 ## Contributing to Documentation

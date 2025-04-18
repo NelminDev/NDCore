@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +60,7 @@ public class TextBuilder {
     /**
      * Converts the message to a colored Component using legacy color codes
      *
-     * @param legacyCharacter The character used for color codes (usually & or §)
+     * @param legacyCharacter The character used for color codes
      * @return The colored component
      */
     public @NotNull Component colorize(char legacyCharacter) {
@@ -153,6 +154,10 @@ public class TextBuilder {
         }
         messageBuilder.insert(0, prefix + " ");
         return this;
+    }
+
+    public TextBuilder prefix(@NotNull FileConfiguration fileConfiguration) throws IllegalArgumentException {
+        return this.prefix(Objects.requireNonNull(fileConfiguration.getString("prefix"), "Prefix cannot be empty or null. Please check your config.yml file and try again. If the problem persists, contact an administrator."));
     }
 
     /**

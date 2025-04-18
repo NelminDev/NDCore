@@ -19,6 +19,8 @@ The plugin architecture is built around two main classes:
 | Feature                           | Description                                                                                        |
 |-----------------------------------|----------------------------------------------------------------------------------------------------|
 | **Plugin Architecture**           | Extendable NDPlugin base class with lifecycle management and enhanced logging                      |
+| **Command Registration System**   | Register commands without plugin.yml entries using the CommandRegistrar                            |
+| **JSON Configuration Support**    | Full-featured JSON configuration with Bukkit API compatibility                                     |
 | **Automatic Resource Management** | Scheduled cleanup of offline player data to optimize memory usage                                  |
 | **Persistent Data Management**    | Robust support for persistent data with type safety and default values                             |
 | **Adventure API Text Handling**   | Advanced text formatting using the Adventure API with support for gradients and MiniMessage format |

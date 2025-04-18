@@ -21,20 +21,37 @@ NDCore is a concrete implementation of NDPlugin that provides the following func
 public final class NDCore extends NDPlugin {
 
     @Override
-    public void enable() {
+    public void enable(Runnable commandRegistrarRunnable, Runnable eventRegistrarRunnable) {
         super.logger(new NDLogger("NDCore", this));
+
+        Objects.requireNonNull(logger(), "logger cannot be null");
+        Objects.requireNonNull(getPluginMeta(), "plugin meta cannot be null");
+        Objects.requireNonNull(getServer(), "server cannot be null");
+
         logger().info("Loading NDCore", getPluginMeta().getVersion(), "by NelminDev");
-        logger().info("Registering event listeners...");
-        getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
-        logger().info("Successfully registered event listeners!");
+        logger().info("Registering event listeners and commands...");
+        commandRegistrarRunnable.run();
+        eventRegistrarRunnable.run();
+        logger().info("Successfully registered event listeners and commands!");
 
         logger().info("Successfully loaded NDCore!");
     }
 
     @Override
-    public void disable() {
+    public void disable(Runnable runnable) {
+        Objects.requireNonNull(logger(), "logger cannot be null");
         logger().info("Disabling NDCore...");
         logger().info("Goodbye, have a nice day! - NelminDev");
+    }
+
+    @Override
+    public void registerCommands() {
+        // NDCore doesn't register any commands by default
+    }
+
+    @Override
+    public void registerEvents() {
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
     }
 }
 ```

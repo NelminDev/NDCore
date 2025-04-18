@@ -37,7 +37,7 @@ public final class NDCore extends NDPlugin {
      * @throws NullPointerException if any required dependencies are null
      */
     @Override
-    public void enable() {
+    public void enable(Runnable commandRegistrarRunnable, Runnable eventRegistrarRunnable) {
         super.logger(new NDLogger("NDCore", this));
 
         Objects.requireNonNull(logger(), "logger cannot be null");
@@ -45,9 +45,10 @@ public final class NDCore extends NDPlugin {
         Objects.requireNonNull(getServer(), "server cannot be null");
 
         logger().info("Loading NDCore", getPluginMeta().getVersion(), "by NelminDev");
-        logger().info("Registering event listeners...");
-        getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
-        logger().info("Successfully registered event listeners!");
+        logger().info("Registering event listeners and commands...");
+        commandRegistrarRunnable.run();
+        eventRegistrarRunnable.run();
+        logger().info("Successfully registered event listeners and commands!");
 
         logger().info("Successfully loaded NDCore!");
     }
@@ -63,9 +64,26 @@ public final class NDCore extends NDPlugin {
      * @throws NullPointerException if logger is null
      */
     @Override
-    public void disable() {
+    public void disable(Runnable runnable) {
         Objects.requireNonNull(logger(), "logger cannot be null");
         logger().info("Disabling NDCore...");
         logger().info("Goodbye, have a nice day! - NelminDev");
+    }
+
+    /**
+     * Registers commands for this plugin.
+     * Subclasses must implement this method to register plugin commands.
+     */
+    @Override
+    public void registerCommands() {
+    }
+
+    /**
+     * Registers event listeners for this plugin.
+     * Subclasses must implement this method to register plugin event listeners.
+     */
+    @Override
+    public void registerEvents() {
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
     }
 }

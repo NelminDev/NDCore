@@ -13,7 +13,6 @@ import java.util.Objects;
  *
  * <p>Thread-safe implementation using double-checked locking.
  *
- * @implNote Uses volatile field and synchronized block to ensure thread safety
  * @since 1.0.0
  */
 public final class PersistentDataTypeHelper {
@@ -29,7 +28,6 @@ public final class PersistentDataTypeHelper {
      * Gets the singleton instance of PersistentDataTypeHelper.
      *
      * @return The singleton instance
-     * @implNote Uses double-checked locking for thread safety
      */
     public static @NotNull PersistentDataTypeHelper instance() {
         if (null == instance) {
