@@ -6,7 +6,7 @@
 
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-    <version>3.0.4</version>
+    <version>3.0.5</version>
     <packaging>jar</packaging>
 
     <name>NDCore</name>
