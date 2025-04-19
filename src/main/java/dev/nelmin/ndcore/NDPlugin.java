@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * Base plugin class providing core functionality for NelminDev plugins.
  * <p>
  * Handles player data persistence, cleanup of offline players, and enhanced logging.
- * Subclasses must implement {@link #enable()} and {@link #disable()} methods.
+ * Subclasses must implement {@link #enable(Runnable, Runnable)} and {@link #disable(Runnable)} methods.
  *
  * @implNote Uses async cleanup task for offline player data
  */
@@ -37,6 +37,8 @@ public abstract class NDPlugin extends JavaPlugin {
     private final @NotNull List<BasicNDPlayer> basicNDPlayers = new ArrayList<>(512);
     @Getter
     private final CommandRegistrar commandRegistrar = new CommandRegistrar(this);
+    private @NotNull NDLogger ndLogger;
+
     /**
      * Creates a new NDPlugin instance with a default logger.
      * The logger name will be the simple class name with " is loading..." appended.
@@ -44,7 +46,6 @@ public abstract class NDPlugin extends JavaPlugin {
     protected NDPlugin() {
         ndLogger = new NDLogger(getClass().getSimpleName() + " is loading...", this);
     }
-    private @NotNull NDLogger ndLogger;
 
     /**
      * Gets an NDPlugin instance from a JavaPlugin class.
@@ -83,7 +84,7 @@ public abstract class NDPlugin extends JavaPlugin {
 
     /**
      * Called when the plugin is enabled by the server.
-     * Sets up periodic cleanup of offline player data and calls {@link #enable(Runnable)}.
+     * Sets up periodic cleanup of offline player data and calls {@link #enable(Runnable, Runnable)}.
      */
     @Override
     public void onEnable() {

@@ -86,7 +86,7 @@ public class SkullBuilder extends ItemBuilder {
 
     /**
      * Sets the skull's texture using either a Base64 encoded texture value or a direct URL.
-     *
+     * <p>
      * This method accepts two formats:
      * 1. Base64 encoded texture value (e.g., "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0...")
      * 2. Direct texture URL (e.g., "http://textures.minecraft.net/texture/...")

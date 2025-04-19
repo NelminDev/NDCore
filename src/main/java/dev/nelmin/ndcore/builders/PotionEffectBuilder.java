@@ -42,6 +42,17 @@ public class PotionEffectBuilder {
     }
 
     /**
+     * Creates a new PotionEffectBuilder with the specified effect type.
+     *
+     * @param type the potion effect type
+     * @return a new PotionEffectBuilder instance
+     * @throws NullPointerException if type is null
+     */
+    public static @NotNull PotionEffectBuilder of(@NotNull PotionEffectType type) {
+        return new PotionEffectBuilder(type);
+    }
+
+    /**
      * Sets the effect type of the potion effect.
      *
      * @param type the potion effect type to set
@@ -51,17 +62,6 @@ public class PotionEffectBuilder {
     public PotionEffectBuilder effect(@NotNull PotionEffectType type) {
         this.type = Objects.requireNonNull(type, "type cannot be null");
         return this;
-    }
-
-    /**
-     * Creates a new PotionEffectBuilder with the specified effect type.
-     *
-     * @param type the potion effect type
-     * @return a new PotionEffectBuilder instance
-     * @throws NullPointerException if type is null
-     */
-    public static @NotNull PotionEffectBuilder of(@NotNull PotionEffectType type) {
-        return new PotionEffectBuilder(type);
     }
 
     /**

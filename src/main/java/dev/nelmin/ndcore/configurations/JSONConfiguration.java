@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.jetbrains.annotations.NotNull;
 
@@ -163,17 +162,17 @@ public class JSONConfiguration extends FileConfiguration {
      */
     @Override
     @NotNull
-    public JSONConfigurationOptions options() {
+    public JSONConfiguration.Options options() {
         if (this.options == null) {
-            this.options = new JSONConfigurationOptions(this);
+            this.options = new Options(this);
         }
-        return (JSONConfigurationOptions) this.options;
+        return (Options) this.options;
     }
 
     /**
      * Options class for JSON configuration
      */
-    public static class JSONConfigurationOptions extends FileConfigurationOptions {
+    public static class Options extends FileConfigurationOptions {
         private boolean prettyPrinting = true;
 
         /**
@@ -181,7 +180,7 @@ public class JSONConfiguration extends FileConfiguration {
          *
          * @param configuration The configuration
          */
-        protected JSONConfigurationOptions(JSONConfiguration configuration) {
+        protected Options(JSONConfiguration configuration) {
             super(configuration);
         }
 
@@ -191,7 +190,7 @@ public class JSONConfiguration extends FileConfiguration {
          * @param value True to enable pretty printing
          * @return This object
          */
-        public JSONConfigurationOptions prettyPrinting(boolean value) {
+        public Options prettyPrinting(boolean value) {
             this.prettyPrinting = value;
             return this;
         }
@@ -224,7 +223,7 @@ public class JSONConfiguration extends FileConfiguration {
          */
         @Override
         @NotNull
-        public JSONConfigurationOptions copyDefaults(boolean value) {
+        public JSONConfiguration.Options copyDefaults(boolean value) {
             super.copyDefaults(value);
             return this;
         }
@@ -237,7 +236,7 @@ public class JSONConfiguration extends FileConfiguration {
          */
         @Override
         @NotNull
-        public JSONConfigurationOptions pathSeparator(char value) {
+        public JSONConfiguration.Options pathSeparator(char value) {
             super.pathSeparator(value);
             return this;
         }

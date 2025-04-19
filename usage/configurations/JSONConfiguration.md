@@ -9,7 +9,7 @@ for configuration storage.
 ## Class Declaration
 
 ```java
-public class JSONConfiguration extends FileConfiguration
+public class JSONConfiguration extends dev.nelmin.ndcore.configurations.FileConfiguration
 ```
 
 ## Key Features
@@ -17,6 +17,8 @@ public class JSONConfiguration extends FileConfiguration
 - Load and save configuration data in JSON format
 - Convert between Bukkit's ConfigurationSection objects and JSON structures
 - Control JSON formatting with pretty printing options
+- Robust error handling with getOrThrow methods
+- Validation for empty values with ConfigurationValueNullOrEmptyException
 - Seamless integration with Bukkit's configuration API
 
 ## Properties
@@ -40,7 +42,6 @@ Creates a new JSONConfiguration with default settings.
 #### saveToString
 
 ```java
-
 @NotNull
 @Override
 public String saveToString()
@@ -51,7 +52,6 @@ Converts the configuration to a JSON string.
 #### loadFromString
 
 ```java
-
 @Override
 public void loadFromString(@NotNull String contents) throws InvalidConfigurationException
 ```
@@ -61,13 +61,134 @@ Loads the configuration from a JSON string.
 #### options
 
 ```java
-
 @Override
 @NotNull
-public JSONConfigurationOptions options()
+public JSONConfiguration.Options options()
 ```
 
 Gets the options for this configuration.
+
+### Value Retrieval Methods with Exception Handling
+
+These methods provide robust error handling by throwing exceptions when values are null, empty, or invalid.
+
+#### getOrThrow
+
+```java
+public @NotNull Object getOrThrow(@NotNull String key) throws NullPointerException
+```
+
+Gets any value for a given key or throws an exception if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The value object, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
+#### getStringOrThrow
+
+```java
+public @NotNull String getStringOrThrow(@NotNull String key) throws NullPointerException, ConfigurationValueNullOrEmptyException
+```
+
+Gets a string value for a given key or throws exceptions if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The non-empty string value
+
+**Throws:**
+
+- `NullPointerException` if key is null or value is null
+- `ConfigurationValueNullOrEmptyException` if value is empty or blank
+
+#### getIntOrThrow
+
+```java
+public @NotNull Integer getIntOrThrow(@NotNull String key) throws NullPointerException
+```
+
+Gets an integer value for a given key or throws an exception if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The integer value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
+#### getBooleanOrThrow
+
+```java
+public @NotNull Boolean getBooleanOrThrow(@NotNull String key) throws NullPointerException
+```
+
+Gets a boolean value for a given key or throws an exception if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The boolean value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
+#### getDoubleOrThrow
+
+```java
+public @NotNull Double getDoubleOrThrow(@NotNull String key) throws NullPointerException
+```
+
+Gets a double value for a given key or throws an exception if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The double value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
+#### getLongOrThrow
+
+```java
+public @NotNull Long getLongOrThrow(@NotNull String key) throws NullPointerException
+```
+
+Gets a long value for a given key or throws an exception if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The long value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
+#### getListOrThrow
+
+```java
+public @NotNull List<?> getListOrThrow(@NotNull String key) throws ConfigurationValueNullOrEmptyException, NullPointerException
+```
+
+Gets a list value for a given key or throws exceptions if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The non-empty list value
+
+**Throws:**
+
+- `NullPointerException` if key is null or value is null
+- `ConfigurationValueNullOrEmptyException` if the list is empty
 
 ### Static Factory Methods
 
@@ -101,7 +222,7 @@ Loads a JSON configuration from a reader.
 
 ## Inner Classes
 
-### JSONConfigurationOptions
+### Options
 
 Extends `FileConfigurationOptions` to provide JSON-specific configuration options.
 
@@ -110,7 +231,7 @@ Extends `FileConfigurationOptions` to provide JSON-specific configuration option
 ##### prettyPrinting(boolean)
 
 ```java
-public JSONConfigurationOptions prettyPrinting(boolean value)
+public Options prettyPrinting(boolean value)
 ```
 
 Sets whether the JSON output should be formatted with pretty printing.
@@ -122,6 +243,39 @@ public boolean prettyPrinting()
 ```
 
 Gets whether pretty printing is enabled.
+
+##### configuration()
+
+```java
+
+@Override
+@NotNull
+public JSONConfiguration configuration()
+```
+
+Gets the configuration instance.
+
+##### copyDefaults(boolean)
+
+```java
+
+@Override
+@NotNull
+public JSONConfiguration.Options copyDefaults(boolean value)
+```
+
+Sets whether to copy defaults.
+
+##### pathSeparator(char)
+
+```java
+
+@Override
+@NotNull
+public JSONConfiguration.Options pathSeparator(char value)
+```
+
+Sets the path separator character.
 
 ## Example Usage
 

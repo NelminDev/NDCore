@@ -66,7 +66,7 @@ public class TextBuilder {
     /**
      * Converts the message to a colored Component using legacy color codes.
      *
-     * @param legacyCharacter The character used for color codes (typically '&' or '§')
+     * @param legacyCharacter The character used for color codes (typically '&amp;' or '§')
      * @return The colored component
      */
     public @NotNull Component colorize(char legacyCharacter) {
@@ -270,7 +270,7 @@ public class TextBuilder {
     /**
      * Converts legacy color codes and returns the message as a string.
      * <p>
-     * Supports color codes 0-9, a-f, k-o, r, x using the '&' character.
+     * Supports color codes 0-9, a-f, k-o, r, x using the '&amp;' character.
      *
      * @return The formatted message string with color codes converted
      */

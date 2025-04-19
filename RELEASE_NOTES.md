@@ -1,6 +1,6 @@
 ## 🎯 Release Overview
 
-Version 3.0.3 refactors getters using Lombok annotations, makes the setupProperties method public for flexibility,
+Version 3.0.4 refactors getters using Lombok annotations, makes the setupProperties method public for flexibility,
 improves builder classes with better documentation, and updates the project version.
 
 ## 🚀 Key Changes
@@ -14,7 +14,7 @@ improves builder classes with better documentation, and updates the project vers
   - Enhanced `SkullBuilder` to support both Base64 encoded texture values and direct URLs for custom skull textures.
 
 - **Build Configuration Updates**:
-  - Updated project version to 3.0.3.
+  - Updated project version to 3.0.4.
 
 - **Menu System Improvements** (from 3.0.2):
   - Refactored `SimpleMenu` to be an abstract class, ensuring `onSetItems()` must be implemented by subclasses.
@@ -23,7 +23,7 @@ improves builder classes with better documentation, and updates the project vers
   - Improved type safety and null checking in menu implementations.
 
 - **Build Configuration Updates** (from 3.0.2):
-  - Updated project version to 3.0.3.
+  - Updated project version to 3.0.4.
   - Moved `finalName` from plugin configuration to build settings for better Maven compatibility.
 
 - **Enhanced Logging System** (Merged from Lumina):
@@ -39,7 +39,10 @@ improves builder classes with better documentation, and updates the project vers
     - Integrated command registration into the NDPlugin lifecycle.
     - Added fluent API for registering multiple commands.
 
-- **JSON Configuration Support**:
+- **Enhanced Configuration System**:
+  - Added `FileConfiguration` abstract class with robust error handling and validation.
+  - Implemented `getOrThrow` methods for type-safe value retrieval with clear error messages.
+  - Added validation for empty values with `ConfigurationValueNullOrEmptyException`.
     - Added `JSONConfiguration` class for JSON-based configuration files.
     - Implemented full compatibility with Bukkit's configuration API.
     - Added pretty printing options for human-readable JSON output.
@@ -55,7 +58,7 @@ improves builder classes with better documentation, and updates the project vers
 
 ## 📦 Installation
 
-1. Download NDCore-3.0.3.jar
+1. Download NDCore-3.0.4.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
@@ -77,7 +80,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core-paper:3.0.3'
+implementation 'dev.nelmin.minecraft:core-paper:3.0.4'
 ```
 
 </details>
@@ -86,7 +89,7 @@ implementation 'dev.nelmin.minecraft:core-paper:3.0.3'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core-paper:3.0.3")
+implementation("dev.nelmin.minecraft:core-paper:3.0.4")
 ```
 
 </details>
@@ -98,7 +101,7 @@ implementation("dev.nelmin.minecraft:core-paper:3.0.3")
 <dependency>
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-  <version>3.0.3</version>
+  <version>3.0.4</version>
 </dependency>
 ```
 

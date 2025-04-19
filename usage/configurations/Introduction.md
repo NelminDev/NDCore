@@ -8,21 +8,31 @@ and data persistence.
 
 ## Key Components
 
+### FileConfiguration
+
+`FileConfiguration` is an abstract base class that extends Bukkit's `FileConfiguration` to provide enhanced error
+handling and validation:
+
+- **Robust Error Handling**: Methods like `getOrThrow`, `getStringOrThrow`, etc. that provide strong validation and
+  clear error messages
+- **Type-Safe Value Retrieval**: Methods that ensure values are not null and of the expected type
+- **Empty Value Validation**: Checks for empty strings and lists, throwing appropriate exceptions
+
 ### JSONConfiguration
 
-The primary class in this package is `JSONConfiguration`, which extends Bukkit's `FileConfiguration` to provide
-JSON-specific functionality:
+A concrete implementation of `FileConfiguration` that provides JSON-specific functionality:
 
 - **Loading and Saving**: Methods to load JSON from files or readers and save configuration data as JSON
 - **Conversion Utilities**: Tools to convert between Bukkit's ConfigurationSection objects and JSON structures
 - **Pretty Printing**: Options to format JSON output for better readability
 
-### JSONConfigurationOptions
+### Options
 
 An inner class of `JSONConfiguration` that provides configuration options specific to JSON:
 
 - **Pretty Printing Control**: Enable or disable formatted JSON output
 - **Path Separator Configuration**: Customize the character used to separate paths in the configuration
+- **Default Value Handling**: Control whether default values are copied when accessing missing keys
 
 ## Common Use Cases
 
