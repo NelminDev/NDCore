@@ -263,6 +263,45 @@ Gets a list value for a given key or throws exceptions if not valid, with custom
 - `NullPointerException` if key is null or value is null
 - `ConfigurationValueNullOrEmptyException` if the list is empty
 
+#### getStringListOrThrow
+
+```java
+public @NotNull List<String> getStringListOrThrow(@NotNull String key) throws ConfigurationValueNullOrEmptyException, NullPointerException
+```
+
+Gets a string list value for a given key or throws exceptions if not valid.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+
+**Returns:** The non-empty string list value
+
+**Throws:**
+
+- `NullPointerException` if key is null or value is null
+- `ConfigurationValueNullOrEmptyException` if the list is empty
+
+```java
+public @NotNull List<String> getStringListOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull, @NotNull String valueCannotBeEmpty) throws ConfigurationValueNullOrEmptyException, NullPointerException
+```
+
+Gets a string list value for a given key or throws exceptions if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+- `valueCannotBeEmpty` - Error message when list is empty
+
+**Returns:** The non-empty string list value
+
+**Throws:**
+
+- `NullPointerException` if key is null or value is null
+- `ConfigurationValueNullOrEmptyException` if the list is empty
+
 ## Example Usage
 
 ```java
@@ -275,6 +314,7 @@ String serverName = config.getStringOrThrow("server.name");
 int maxPlayers = config.getIntOrThrow("server.max-players");
 boolean enableFeature = config.getBooleanOrThrow("features.new-feature");
 List<?> allowedWorlds = config.getListOrThrow("worlds.allowed");
+List<String> allowedCommands = config.getStringListOrThrow("commands.allowed");
 
 // Process the configuration values
     System.out.
@@ -289,6 +329,9 @@ println("Feature enabled: "+enableFeature);
     System.out.
 
 println("Allowed worlds: "+allowedWorlds);
+    System.out.
+
+println("Allowed commands: "+allowedCommands);
 }catch(
 NullPointerException e){
         // Handle missing values

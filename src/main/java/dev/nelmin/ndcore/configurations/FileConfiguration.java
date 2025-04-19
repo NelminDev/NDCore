@@ -206,4 +206,36 @@ public abstract class FileConfiguration extends org.bukkit.configuration.file.Fi
             throw new ConfigurationValueNullOrEmptyException(valueCannotBeEmpty);
         return value;
     }
+
+    /**
+     * Gets a string list value for a given key or throws exceptions if not valid
+     *
+     * @param key The key to get the value for
+     * @return The non-empty list of strings
+     * @throws NullPointerException                   if key is null or value is null
+     * @throws ConfigurationValueNullOrEmptyException if the string list is empty
+     */
+    public @NotNull List<String> getStringListOrThrow(@NotNull String key) throws ConfigurationValueNullOrEmptyException, NullPointerException {
+        return getStringListOrThrow(key, "Key cannot be null", "Value for key " + key + " cannot be null", "Value for key " + key + " cannot be empty");
+    }
+
+    /**
+     * Gets a string list value for a given key or throws exceptions if not valid
+     *
+     * @param key                The key to get the value for
+     * @param keyCannotBeNull    Error message when key is null
+     * @param valueCannotBeNull  Error message when value is null
+     * @param valueCannotBeEmpty Error message when string list is empty
+     * @return The non-empty list of strings
+     * @throws NullPointerException                   if key is null or value is null
+     * @throws ConfigurationValueNullOrEmptyException if the string list is empty
+     */
+    public @NotNull List<String> getStringListOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull, @NotNull String valueCannotBeEmpty) throws ConfigurationValueNullOrEmptyException, NullPointerException {
+        Objects.requireNonNull(key, keyCannotBeNull);
+        List<String> value = getStringList(key);
+        Objects.requireNonNull(value, valueCannotBeNull);
+        if (value.isEmpty())
+            throw new ConfigurationValueNullOrEmptyException(valueCannotBeEmpty);
+        return value;
+    }
 }

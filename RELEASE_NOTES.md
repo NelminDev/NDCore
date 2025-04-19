@@ -1,6 +1,6 @@
 ## 🎯 Release Overview
 
-Version 3.0.5 enhances documentation for the configurations package, providing comprehensive guides for
+Version 3.0.6 enhances documentation for the configurations package, providing comprehensive guides for
 FileConfiguration and JSONConfiguration classes, and updates the project version.
 
 ## 🚀 Key Changes
@@ -10,6 +10,7 @@ FileConfiguration and JSONConfiguration classes, and updates the project version
   - Created detailed guides for `FileConfiguration` and `JSONConfiguration` classes.
   - Enhanced documentation structure with clear examples and method descriptions.
   - Improved readability with consistent formatting and organization.
+  - Updated documentation for `getStringListOrThrow` methods in `FileConfiguration`.
 
 - **Code Refactoring and Improvements** (from 3.0.4):
   - Applied `@Getter` annotations directly to fields in `BasicNDPlayer`, simplifying code.
@@ -64,7 +65,7 @@ FileConfiguration and JSONConfiguration classes, and updates the project version
 
 ## 📦 Installation
 
-1. Download NDCore-3.0.5.jar
+1. Download NDCore.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
@@ -86,7 +87,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core-paper:3.0.5'
+implementation 'dev.nelmin.minecraft:core-paper:3.0.6'
 ```
 
 </details>
@@ -95,7 +96,7 @@ implementation 'dev.nelmin.minecraft:core-paper:3.0.5'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core-paper:3.0.5")
+implementation("dev.nelmin.minecraft:core-paper:3.0.6")
 ```
 
 </details>
@@ -107,7 +108,7 @@ implementation("dev.nelmin.minecraft:core-paper:3.0.5")
 <dependency>
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-  <version>3.0.5</version>
+  <version>3.0.6</version>
 </dependency>
 ```
 
