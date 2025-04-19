@@ -1,11 +1,17 @@
 ## 🎯 Release Overview
 
-Version 3.0.4 refactors getters using Lombok annotations, makes the setupProperties method public for flexibility,
-improves builder classes with better documentation, and updates the project version.
+Version 3.0.5 enhances documentation for the configurations package, providing comprehensive guides for
+FileConfiguration and JSONConfiguration classes, and updates the project version.
 
 ## 🚀 Key Changes
 
-- **Code Refactoring and Improvements**:
+- **Documentation Improvements**:
+  - Added comprehensive documentation for the `configurations` package.
+  - Created detailed guides for `FileConfiguration` and `JSONConfiguration` classes.
+  - Enhanced documentation structure with clear examples and method descriptions.
+  - Improved readability with consistent formatting and organization.
+
+- **Code Refactoring and Improvements** (from 3.0.4):
   - Applied `@Getter` annotations directly to fields in `BasicNDPlayer`, simplifying code.
   - Made `setupProperties` method public for increased flexibility.
   - Improved code maintainability through Lombok annotations.
@@ -58,7 +64,7 @@ improves builder classes with better documentation, and updates the project vers
 
 ## 📦 Installation
 
-1. Download NDCore-3.0.4.jar
+1. Download NDCore-3.0.5.jar
 2. Place the JAR file in your server's `plugins` folder
 3. Restart your server
 4. The plugin will load automatically as a dependency
@@ -80,7 +86,7 @@ and import it via maven central:
 <summary>Gradle</summary>
 
 ```gradle
-implementation 'dev.nelmin.minecraft:core-paper:3.0.4'
+implementation 'dev.nelmin.minecraft:core-paper:3.0.5'
 ```
 
 </details>
@@ -89,7 +95,7 @@ implementation 'dev.nelmin.minecraft:core-paper:3.0.4'
 <summary>Gradle (Kotlin)</summary>
 
 ```kts
-implementation("dev.nelmin.minecraft:core-paper:3.0.4")
+implementation("dev.nelmin.minecraft:core-paper:3.0.5")
 ```
 
 </details>
@@ -101,7 +107,7 @@ implementation("dev.nelmin.minecraft:core-paper:3.0.4")
 <dependency>
     <groupId>dev.nelmin.minecraft</groupId>
     <artifactId>core-paper</artifactId>
-  <version>3.0.4</version>
+  <version>3.0.5</version>
 </dependency>
 ```
 
