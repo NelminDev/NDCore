@@ -17,7 +17,7 @@ public class JSONConfiguration extends dev.nelmin.ndcore.configurations.FileConf
 - Load and save configuration data in JSON format
 - Convert between Bukkit's ConfigurationSection objects and JSON structures
 - Control JSON formatting with pretty printing options
-- Robust error handling with getOrThrow methods
+- Robust error handling with getOrThrow methods (inherited from FileConfiguration)
 - Validation for empty values with ConfigurationValueNullOrEmptyException
 - Seamless integration with Bukkit's configuration API
 
@@ -67,128 +67,6 @@ public JSONConfiguration.Options options()
 ```
 
 Gets the options for this configuration.
-
-### Value Retrieval Methods with Exception Handling
-
-These methods provide robust error handling by throwing exceptions when values are null, empty, or invalid.
-
-#### getOrThrow
-
-```java
-public @NotNull Object getOrThrow(@NotNull String key) throws NullPointerException
-```
-
-Gets any value for a given key or throws an exception if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The value object, never null
-
-**Throws:** `NullPointerException` if key is null or value is null
-
-#### getStringOrThrow
-
-```java
-public @NotNull String getStringOrThrow(@NotNull String key) throws NullPointerException, ConfigurationValueNullOrEmptyException
-```
-
-Gets a string value for a given key or throws exceptions if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The non-empty string value
-
-**Throws:**
-
-- `NullPointerException` if key is null or value is null
-- `ConfigurationValueNullOrEmptyException` if value is empty or blank
-
-#### getIntOrThrow
-
-```java
-public @NotNull Integer getIntOrThrow(@NotNull String key) throws NullPointerException
-```
-
-Gets an integer value for a given key or throws an exception if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The integer value, never null
-
-**Throws:** `NullPointerException` if key is null or value is null
-
-#### getBooleanOrThrow
-
-```java
-public @NotNull Boolean getBooleanOrThrow(@NotNull String key) throws NullPointerException
-```
-
-Gets a boolean value for a given key or throws an exception if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The boolean value, never null
-
-**Throws:** `NullPointerException` if key is null or value is null
-
-#### getDoubleOrThrow
-
-```java
-public @NotNull Double getDoubleOrThrow(@NotNull String key) throws NullPointerException
-```
-
-Gets a double value for a given key or throws an exception if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The double value, never null
-
-**Throws:** `NullPointerException` if key is null or value is null
-
-#### getLongOrThrow
-
-```java
-public @NotNull Long getLongOrThrow(@NotNull String key) throws NullPointerException
-```
-
-Gets a long value for a given key or throws an exception if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The long value, never null
-
-**Throws:** `NullPointerException` if key is null or value is null
-
-#### getListOrThrow
-
-```java
-public @NotNull List<?> getListOrThrow(@NotNull String key) throws ConfigurationValueNullOrEmptyException, NullPointerException
-```
-
-Gets a list value for a given key or throws exceptions if not valid.
-
-**Parameters:**
-
-- `key` - The key to get the value for
-
-**Returns:** The non-empty list value
-
-**Throws:**
-
-- `NullPointerException` if key is null or value is null
-- `ConfigurationValueNullOrEmptyException` if the list is empty
 
 ### Static Factory Methods
 
@@ -291,28 +169,15 @@ String serverName = config.getString("server.name", "Default Server");
 int maxPlayers = config.getInt("server.max-players", 20);
 
 // Modify values
-config.
-
-set("server.name","My JSON Server");
-config.
-
-set("server.max-players",50);
+config.set("server.name", "My JSON Server");
+config.set("server.max-players", 50);
 
 // Save with pretty printing
-config.
-
-options().
-
-prettyPrinting(true);
-try{
-        config.
-
-save(configFile);
-}catch(
-IOException e){
-        e.
-
-printStackTrace();
+config.options().prettyPrinting(true);
+try {
+    config.save(configFile);
+} catch (IOException e) {
+    e.printStackTrace();
 }
 ```
 
@@ -323,21 +188,33 @@ printStackTrace();
 JSONConfiguration config = new JSONConfiguration();
 
 // Add some nested values
-config.
-
-set("database.host","localhost");
-config.
-
-set("database.port",3306);
-config.
-
-set("database.credentials.username","admin");
+config.set("database.host", "localhost");
+config.set("database.port", 3306);
+config.set("database.credentials.username", "admin");
 
 // Save to string
 String jsonString = config.saveToString();
-System.out.
+System.out.println(jsonString);
+```
 
-println(jsonString);
+### Using Inherited getOrThrow Methods
+
+```java
+// Load configuration
+JSONConfiguration config = JSONConfiguration.loadConfiguration(configFile);
+
+try {
+    // Get required values with validation
+    String serverName = config.getStringOrThrow("server.name");
+    int maxPlayers = config.getIntOrThrow("server.max-players");
+    
+    // Use the values
+    System.out.println("Server: " + serverName + ", Max Players: " + maxPlayers);
+} catch (NullPointerException e) {
+    System.err.println("Missing required configuration: " + e.getMessage());
+} catch (ConfigurationValueNullOrEmptyException e) {
+    System.err.println("Empty configuration value: " + e.getMessage());
+}
 ```
 
 ## Notes
@@ -345,3 +222,4 @@ println(jsonString);
 - JSON configurations support all the same operations as YAML configurations in Bukkit
 - The implementation uses Google's Gson library for JSON processing
 - When loading invalid JSON, an InvalidConfigurationException will be thrown
+- For detailed documentation on the getOrThrow methods, see the FileConfiguration class

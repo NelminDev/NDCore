@@ -41,6 +41,22 @@ Gets any value for a given key or throws an exception if not valid.
 
 **Throws:** `NullPointerException` if key is null or value is null
 
+```java
+public @NotNull Object getOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull) throws NullPointerException
+```
+
+Gets any value for a given key or throws an exception if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+
+**Returns:** The value object, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
 #### getStringOrThrow
 
 ```java
@@ -52,6 +68,26 @@ Gets a string value for a given key or throws exceptions if not valid.
 **Parameters:**
 
 - `key` - The key to get the value for
+
+**Returns:** The non-empty string value
+
+**Throws:**
+
+- `NullPointerException` if key is null or value is null
+- `ConfigurationValueNullOrEmptyException` if value is empty or blank
+
+```java
+public @NotNull String getStringOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull, @NotNull String valueCannotBeEmpty) throws NullPointerException, ConfigurationValueNullOrEmptyException
+```
+
+Gets a string value for a given key or throws exceptions if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+- `valueCannotBeEmpty` - Error message when value is empty
 
 **Returns:** The non-empty string value
 
@@ -76,6 +112,22 @@ Gets an integer value for a given key or throws an exception if not valid.
 
 **Throws:** `NullPointerException` if key is null or value is null
 
+```java
+public @NotNull Integer getIntOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull) throws NullPointerException
+```
+
+Gets an integer value for a given key or throws an exception if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+
+**Returns:** The integer value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
 #### getBooleanOrThrow
 
 ```java
@@ -87,6 +139,22 @@ Gets a boolean value for a given key or throws an exception if not valid.
 **Parameters:**
 
 - `key` - The key to get the value for
+
+**Returns:** The boolean value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
+```java
+public @NotNull Boolean getBooleanOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull) throws NullPointerException
+```
+
+Gets a boolean value for a given key or throws an exception if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
 
 **Returns:** The boolean value, never null
 
@@ -108,6 +176,22 @@ Gets a double value for a given key or throws an exception if not valid.
 
 **Throws:** `NullPointerException` if key is null or value is null
 
+```java
+public @NotNull Double getDoubleOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull) throws NullPointerException
+```
+
+Gets a double value for a given key or throws an exception if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+
+**Returns:** The double value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
 #### getLongOrThrow
 
 ```java
@@ -124,6 +208,22 @@ Gets a long value for a given key or throws an exception if not valid.
 
 **Throws:** `NullPointerException` if key is null or value is null
 
+```java
+public @NotNull Long getLongOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull) throws NullPointerException
+```
+
+Gets a long value for a given key or throws an exception if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+
+**Returns:** The long value, never null
+
+**Throws:** `NullPointerException` if key is null or value is null
+
 #### getListOrThrow
 
 ```java
@@ -135,6 +235,26 @@ Gets a list value for a given key or throws exceptions if not valid.
 **Parameters:**
 
 - `key` - The key to get the value for
+
+**Returns:** The non-empty list value
+
+**Throws:**
+
+- `NullPointerException` if key is null or value is null
+- `ConfigurationValueNullOrEmptyException` if the list is empty
+
+```java
+public @NotNull List<?> getListOrThrow(@NotNull String key, @NotNull String keyCannotBeNull, @NotNull String valueCannotBeNull, @NotNull String valueCannotBeEmpty) throws ConfigurationValueNullOrEmptyException, NullPointerException
+```
+
+Gets a list value for a given key or throws exceptions if not valid, with custom error messages.
+
+**Parameters:**
+
+- `key` - The key to get the value for
+- `keyCannotBeNull` - Error message when key is null
+- `valueCannotBeNull` - Error message when value is null
+- `valueCannotBeEmpty` - Error message when list is empty
 
 **Returns:** The non-empty list value
 
