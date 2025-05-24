@@ -1,67 +1,26 @@
 ## 🎯 Release Overview
 
-Version 3.0.6 enhances documentation for the configurations package, providing comprehensive guides for
-FileConfiguration and JSONConfiguration classes, and updates the project version.
+Version 3.0.8 introduces expanded ItemBuilder capabilities, updated coding guidelines, and Minecraft 1.21.5 compatibility.
 
 ## 🚀 Key Changes
 
-- **Documentation Improvements**:
-  - Added comprehensive documentation for the `configurations` package.
-  - Created detailed guides for `FileConfiguration` and `JSONConfiguration` classes.
-  - Enhanced documentation structure with clear examples and method descriptions.
-  - Improved readability with consistent formatting and organization.
-  - Updated documentation for `getStringListOrThrow` methods in `FileConfiguration`.
+- **ItemBuilder Enhancements**:
+  - Added advanced customization options for item creation
+  - Improved method documentation and examples
+  - Enhanced parameter validation for better error handling
+  - Added support for component-based display names and lore
 
-- **Code Refactoring and Improvements** (from 3.0.4):
-  - Applied `@Getter` annotations directly to fields in `BasicNDPlayer`, simplifying code.
-  - Made `setupProperties` method public for increased flexibility.
-  - Improved code maintainability through Lombok annotations.
-  - Enhanced builder classes with better documentation and consistent method naming.
-  - Updated builder documentation to reflect current implementation and best practices.
-  - Enhanced `SkullBuilder` to support both Base64 encoded texture values and direct URLs for custom skull textures.
+- **Coding Guidelines**:
+  - Updated guidelines to enforce consistent Lombok usage
+  - Added new sections for Java 21 features utilization
+  - Enhanced documentation requirements
+  - Improved null safety protocols
 
-- **Build Configuration Updates**:
-  - Updated project version to 3.0.4.
-
-- **Menu System Improvements** (from 3.0.2):
-  - Refactored `SimpleMenu` to be an abstract class, ensuring `onSetItems()` must be implemented by subclasses.
-  - Added overloaded constructors to handle both `String` and `Component` titles.
-  - Integrated `TextBuilder` for string colorization in title handling.
-  - Improved type safety and null checking in menu implementations.
-
-- **Build Configuration Updates** (from 3.0.2):
-  - Updated project version to 3.0.4.
-  - Moved `finalName` from plugin configuration to build settings for better Maven compatibility.
-
-- **Enhanced Logging System** (Merged from Lumina):
-  - Integrated the Lumina logging project directly into NDCore for streamlined dependency management.
-  - Introduced `NDLogger` with multiple logging levels (INFO, WARN, ERROR, FATAL).
-  - Implemented `LoggingStrategy` interface for customizable logging behavior.
-  - Added `DefaultLoggingStrategy` with color-coded console output and organized log files.
-  - Deprecated standard `getLogger()` method in favor of the new `logger()` method.
-
-- **Command Registration System**:
-    - Added new `commands` package with `CommandRegistrar` and `NDCommand` classes.
-    - Implemented reflection-based command registration without requiring plugin.yml entries.
-    - Integrated command registration into the NDPlugin lifecycle.
-    - Added fluent API for registering multiple commands.
-
-- **Enhanced Configuration System**:
-  - Added `FileConfiguration` abstract class with robust error handling and validation.
-  - Implemented `getOrThrow` methods for type-safe value retrieval with clear error messages.
-  - Added validation for empty values with `ConfigurationValueNullOrEmptyException`.
-    - Added `JSONConfiguration` class for JSON-based configuration files.
-    - Implemented full compatibility with Bukkit's configuration API.
-    - Added pretty printing options for human-readable JSON output.
-
-- **Improved Plugin Instance Retrieval**:
-  - Added `getNDPlugin(Class<T> clazz)` method for more convenient NDPlugin instance retrieval.
-  - Enhanced type safety with proper casting to NDPlugin.
-
-- **Null Safety Enhancements**:
-  - Added JetBrains annotations (@NotNull) throughout the codebase.
-  - Improved null checking with Objects.requireNonNull() in constructors.
-  - Enhanced parameter validation for better error handling.
+- **Dependency Updates**:
+  - Updated to support Minecraft 1.21.5
+  - Updated Paper API to 1.21.5-R0.1-SNAPSHOT
+  - Updated Lombok to version 1.18.38
+  - Updated GSON to version 2.13.0
 
 ## 📦 Installation
 

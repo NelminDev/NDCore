@@ -200,7 +200,7 @@ logUnknownCause();
 ## SOLID Principles
 
 | Principle                 | Implementation                              |  
-|---------------------------|---------------------------------------------|  
+|----------------ற்றிய-------------|---------------------------------------------|  
 | **Single Responsibility** | `PlayerMoveHandler` ≠ `PlayerDamageHandler` |  
 | **Open/Closed**           | `sealed interface EventResponse`            |  
 | **Liskov**                | `@Override` methods honor parent contracts  |  
@@ -426,3 +426,24 @@ public final class TradeSystem implements Listener {
 - [ ] Java 21 features used where applicable
 - [ ] Every class/method fully documented
 - [ ] Package introductions updated
+
+### Lombok Usage
+
+- Use `@Accessors(fluent = true)` for all builder classes
+- Apply `@Data` for DTOs and value objects
+- Use `@Builder` for complex object construction
+- Prefer `@RequiredArgsConstructor` over manual constructor creation
+- Use `@NonNull` in conjunction with `@NotNull` for complete null safety
+
+Example:
+```java
+@Data
+@Accessors(fluent = true)
+public class ConfigurationEntry {
+    private final @NonNull String key; private @NonNull String value;
+    public ConfigurationEntry update(@NonNull String newValue) {
+        this.value = newValue;
+        return this;
+    }
+}
+```

@@ -53,7 +53,7 @@ The documentation includes:
 ## ⚙️ System Requirements
 
 - ☕ Java 21 or higher
-- 🧱 Compatible with the latest PaperMC version (1.21.4)
+- 🧱 Compatible with the latest PaperMC version (1.21.5)
 
 ## 🔧 Installation
 
