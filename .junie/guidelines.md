@@ -422,6 +422,7 @@ public final class TradeSystem implements Listener {
 - [ ] Yoda conditions for null/literal checks
 - [ ] `@NotNull`/`@Nullable` on all declarations
 - [ ] SOLID principles validated
+- [ ] Using @Accessors(fluent = true) everywhere where lombok is used
 - [ ] Java 21 features used where applicable
 - [ ] Every class/method fully documented
 - [ ] Package introductions updated

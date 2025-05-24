@@ -35,7 +35,7 @@ The builders package includes the following key classes:
 Here's a simple example of how the builders can be used together:
 
 ```java
-import dev.nelmin.ndcore.builders.ItemBuilder;
+import dev.nelmin.ndcore.builders.item.ItemBuilder;
 import dev.nelmin.ndcore.builders.PotionEffectBuilder;
 import dev.nelmin.ndcore.builders.TextBuilder;
 import net.kyori.adventure.text.Component;
@@ -50,7 +50,7 @@ import java.util.List;
 // Create a custom item with the ItemBuilder
 ItemStack healingPotion = new ItemBuilder(Material.POTION)
         .displayName(new TextBuilder("Healing Potion")
-        .gradient(Color.RED, Color.PINK)
+                .gradient(Color.RED, Color.PINK)
                 .colorize('&'))
         .lore(List.of(
                 Component.text("Instantly restores health"),
@@ -58,12 +58,12 @@ ItemStack healingPotion = new ItemBuilder(Material.POTION)
         ))
         .toItem();
 
-// Create a potion effect with the PotionEffectBuilder
-PotionEffect regeneration = new PotionEffectBuilder(PotionEffectType.REGENERATION)
-        .durationSeconds(10)  // 10 seconds
-        .amplifier(1)         // Level II
-    .ambient(true)
-    .build();
+        // Create a potion effect with the PotionEffectBuilder
+        PotionEffect regeneration = new PotionEffectBuilder(PotionEffectType.REGENERATION)
+                .durationSeconds(10)  // 10 seconds
+                .amplifier(1)         // Level II
+                .ambient(true)
+                .build();
 
 // These objects can now be used in your plugin
 // For example, in a click event handler
