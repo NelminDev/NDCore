@@ -1,5 +1,3 @@
-# This project has ben discontinued for now (EU: 27.05.2025, US: 07/25/2025)
-
 # ⚙️ NDCore
 
 NDCore is a core dependency plugin developed by nelmin to enhance Minecraft plugin development. It provides essential
