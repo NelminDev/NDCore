@@ -1,5 +1,4 @@
-# I've changed my name, so has the name of the project.
-Check the new repo out here: [Rahmenwerk](https://github.com/mtctx/Rahmenwerk)
+# This project has ben discontinued for now (27.05.2025 - 07/25/2025)
 
 # ⚙️ NDCore
 
