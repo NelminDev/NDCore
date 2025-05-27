@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.nelmin.minecraft</groupId>
+    <groupId>dev.mtctx.minecraft</groupId>
     <artifactId>core-paper</artifactId>
     <version>3.0.8+mc1.21.5</version>
     <packaging>jar</packaging>
 
     <name>NDCore</name>
     <description>Core library for Minecraft plugins development</description>
-    <url>https://github.com/NelminDev/NDCore</url>
+    <url>https://github.com/mtctx/NDCore</url>
 
     <licenses>
         <license>
@@ -22,17 +22,17 @@
 
     <developers>
         <developer>
-            <name>NelminDev</name>
-            <email>me@nelmin.dev</email>
-            <organization>NelminDev</organization>
-            <organizationUrl>https://github.com/NelminDev/</organizationUrl>
+            <name>Empty Context (mtctx)</name>
+            <email>me@mtctx.dev</email>
+            <organization>mtctx</organization>
+            <organizationUrl>https://github.com/mtctx/</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/NelminDev/NDCore.git</connection>
-        <developerConnection>scm:git:ssh://github.com:NelminDev/NDCore.git</developerConnection>
-        <url>https://github.com/NelminDev/NDCore</url>
+        <connection>scm:git:git://github.com/mtctx/NDCore.git</connection>
+        <developerConnection>scm:git:ssh://github.com:mtctx/NDCore.git</developerConnection>
+        <url>https://github.com/mtctx/NDCore</url>
     </scm>
 
     <properties>
