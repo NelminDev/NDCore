@@ -1,4 +1,4 @@
-# This project has ben discontinued for now (27.05.2025 - 07/25/2025)
+# This project has ben discontinued for now (EU: 27.05.2025, US: 07/25/2025)
 
 # ⚙️ NDCore
 
