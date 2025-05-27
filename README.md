@@ -1,3 +1,6 @@
+# I've changed my name, so has the name of the project.
+Check the new repo out here: [Rahmenwerk](https://github.com/mtctx/Rahmenwerk)
+
 # ⚙️ NDCore
 
 NDCore is a core dependency plugin developed by nelmin to enhance Minecraft plugin development. It provides essential
