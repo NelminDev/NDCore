@@ -1,3 +1,5 @@
+# THIS PLUGIN/LIBRARY IS CURRENTLY UNMAINTAINED!
+
 # ⚙️ NDCore
 
 NDCore is a core dependency plugin developed by mtctx to enhance Minecraft plugin development. It provides essential
